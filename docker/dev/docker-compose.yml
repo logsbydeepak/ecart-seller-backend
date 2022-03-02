@@ -1,0 +1,42 @@
+version: "3"
+services:
+  mongo_container:
+    image: mongo:5.0.5
+    ports:
+      - 27017:27017
+    networks:
+      - dev_network
+    container_name: ecart_seller_dev_backend_mongo_container
+
+  ecart_seller_backend:
+    links:
+      - mongo_container
+    tty: true
+    ports:
+      - 4000:4000
+    build:
+      context: ../../
+      dockerfile: ./docker/dev/Dockerfile.dev
+    volumes:
+      - ../../:/home/node/ecart-seller-backend
+    depends_on:
+      - mongo_container
+    networks:
+      - dev_network
+    container_name: ecart_seller_dev_backend_api
+
+  mongo_express:
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongo_container
+    image: mongo-express:0.54.0
+    depends_on:
+      - mongo_container
+    ports:
+      - 8888:8081
+    networks:
+      - dev_network
+    container_name: ecart_seller_dev_backend_mongo_express
+
+networks:
+  dev_network:
+    name: ecart_seller_dev_backend_network

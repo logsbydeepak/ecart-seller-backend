@@ -1,0 +1,5 @@
+FROM node:16.13.1-alpine3.14
+RUN apk add --no-cache git
+WORKDIR /home/node/ecart-seller-backend
+USER node
+ADD . .
