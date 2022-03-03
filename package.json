@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-      "dev:start": "tsnd --rs --cache-directory \"./dist\" -- src/server.ts"
+    "format": "prettier --write .",
+    "format:watch": "onchange \"**/*\" --exclude-path .prettierignore -- prettier --write {{changed}}",
+    "dev:start": "tsnd --rs --cache-directory \"./dist\" -- src/server.ts"
   },
   "repository": {
     "type": "git",
@@ -18,6 +20,8 @@
   },
   "homepage": "https://github.com/logsbydeepak/ecart-seller-backend#readme",
   "devDependencies": {
+    "onchange": "^7.1.0",
+    "prettier": "^2.5.1",
     "ts-node-dev": "^1.1.8",
     "typescript": "^4.6.2"
   }

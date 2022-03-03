@@ -1,1 +1,1 @@
-console.log("ts setup is working")
+console.log("ts setup is working");
