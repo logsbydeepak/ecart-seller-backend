@@ -11,4 +11,4 @@ if (NODE_ENV !== "prod") {
 }
 
 // export const PORT = env.PORT as string;
-export const { DB_URL } = env;
+export const { PORT, DB_URL } = env;
