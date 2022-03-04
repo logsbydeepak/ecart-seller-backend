@@ -10,5 +10,4 @@ if (NODE_ENV !== "prod") {
   config({ path: `${rootPath}/${NODE_ENV}.env` });
 }
 
-// export const PORT = env.PORT as string;
 export const { PORT, DB_URL } = env;

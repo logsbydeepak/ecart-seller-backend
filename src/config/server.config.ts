@@ -6,7 +6,6 @@ import { checkEnv } from "../helper/env.helper";
 import { gqlResolver } from "../gql/gql.resolver";
 import { gqlSchema } from "../gql/gql.schema";
 
-checkEnv();
 const schemaWithResolvers = addResolversToSchema({
   schema: gqlSchema,
   resolvers: gqlResolver,
