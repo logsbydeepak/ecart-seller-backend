@@ -1,17 +1,18 @@
 import express, { Express } from "express";
 import { ApolloServer } from "apollo-server-express";
+import { addResolversToSchema } from "@graphql-tools/schema";
 
 import { checkEnv } from "../helper/env.helper";
-import { userTypeDefs } from "../graphql/user/user.typeDefs";
-import { userResolver } from "../graphql/user/user.resolver";
-
-const typeDefs = [userTypeDefs];
-const resolvers = [userResolver];
+import { gqlResolver } from "../gql/gql.resolver";
+import { gqlSchema } from "../gql/gql.schema";
 
 checkEnv();
+const schemaWithResolvers = addResolversToSchema({
+  schema: gqlSchema,
+  resolvers: gqlResolver,
+});
 
 export const server: Express = express();
 export const apolloServer = new ApolloServer({
-  typeDefs,
-  resolvers,
+  schema: schemaWithResolvers,
 });
