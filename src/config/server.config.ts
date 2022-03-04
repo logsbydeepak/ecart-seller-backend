@@ -1,42 +1,17 @@
-import express, { Express, json } from "express";
-import { ApolloServer, gql } from "apollo-server-express";
+import express, { Express } from "express";
+import { ApolloServer } from "apollo-server-express";
+
 import { checkEnv } from "../helper/env.helper";
+import { userTypeDefs } from "../graphql/user/user.typeDefs";
+import { userResolver } from "../graphql/user/user.resolver";
 
-const typeDefs = gql`
-  # Comments in GraphQL strings (such as this one) start with the hash (#) symbol.
-
-  # This "Book" type defines the queryable fields for every book in our data source.
-  type Book {
-    title: String
-    author: String
-  }
-
-  # The "Query" type is special: it lists all of the available queries that
-  # clients can execute, along with the return type for each. In this
-  # case, the "books" query returns an array of zero or more Books (defined above).
-  type Query {
-    books: [Book]
-  }
-`;
-
-const books = [
-  {
-    title: "The Awakening",
-    author: "Kate Chopin",
-  },
-  {
-    title: "City of Glass",
-    author: "Paul Auster",
-  },
-];
-
-const resolvers = {
-  Query: {
-    books: () => books,
-  },
-};
+const typeDefs = [userTypeDefs];
+const resolvers = [userResolver];
 
 checkEnv();
 
 export const server: Express = express();
-export const apolloServer = new ApolloServer({ typeDefs, resolvers });
+export const apolloServer = new ApolloServer({
+  typeDefs,
+  resolvers,
+});
