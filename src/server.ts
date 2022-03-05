@@ -1,3 +1,6 @@
+import { checkEnv } from "./helper/env.helper";
+checkEnv();
+
 import { dbConnect } from "./config/db.config";
 import { connection } from "mongoose";
 import { server, apolloServer } from "./config/server.config";

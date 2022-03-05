@@ -2,7 +2,6 @@ import express, { Express } from "express";
 import { ApolloServer } from "apollo-server-express";
 import { addResolversToSchema } from "@graphql-tools/schema";
 
-import { checkEnv } from "../helper/env.helper";
 import { gqlResolver } from "../gql/gql.resolver";
 import { gqlSchema } from "../gql/gql.schema";
 
