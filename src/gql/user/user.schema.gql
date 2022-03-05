@@ -17,8 +17,18 @@ type Query {
   readUser: GetUser
 }
 
+type Error {
+  message: String!
+}
+
+union CreateUserResponse = CreateUser | Error
+
 type Mutation {
-  createUser(name: String!, email: String!, password: String!): CreateUser!
+  createUser(
+    name: String!
+    email: String!
+    password: String
+  ): CreateUserResponse
 
   deleteUser(currentPassword: String): Response
 
