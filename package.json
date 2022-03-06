@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=dev run-s clean dev:start",
     "dev:start": "tsnd --rs --cache-directory \"./dist\" -- src/server.ts",
+    "build": "run-s clean build:start",
+    "build:start": "tsc",
     "clean": "rimraf dist",
     "format": "prettier --write .",
     "format:watch": "onchange \"**/*\" --exclude-path .prettierignore -- prettier --write {{changed}}"
