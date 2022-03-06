@@ -1,42 +1,31 @@
-type CreateUser {
-  name: String
-  email: String
-}
-
-type GetUser {
-  name: String
-  email: String
-}
-
-type Response {
-  message: String
-  status: String
-}
-
 type Query {
-  readUser: GetUser
+  readUser: User
 }
-
-type Error {
-  message: String!
-}
-
-union CreateUserResponse = CreateUser | Error
 
 type Mutation {
-  createUser(
-    name: String!
-    email: String!
-    password: String
-  ): CreateUserResponse
-
-  deleteUser(currentPassword: String): Response
-
+  createUser(name: String, email: String, password: String): CreateUserResponse
+  deleteUser(currentPassword: String): SuccessResponse
   updateUser(
-    toUpdate: String!
+    toUpdate: String
     email: String
     password: String
     name: String
     currentPassword: String
-  ): CreateUser
+  ): User
 }
+
+type User {
+  name: String
+  email: String
+}
+
+type ErrorResponse {
+  title: String
+  message: String
+}
+
+type SuccessResponse {
+  message: String
+}
+
+union CreateUserResponse = User | ErrorResponse

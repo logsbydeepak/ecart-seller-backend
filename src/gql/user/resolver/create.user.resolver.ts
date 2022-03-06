@@ -6,7 +6,11 @@ export const createUser = async (
 ) => {
   try {
     if (!args.name || !args.email || !args.password) {
-      return { __typename: "Error", message: "Invalid args" };
+      return {
+        __typename: "ErrorResponse",
+        title: "INVALID_DATA",
+        message: "Invalid args",
+      };
     }
 
     const newUser = await new UserModel(args);
@@ -17,6 +21,10 @@ export const createUser = async (
       email: args.email,
     };
   } catch (e: any) {
-    return { __typename: "Error", message: "Something went wrong" };
+    return {
+      __typename: "ErrorResponse",
+      title: "INTERNAL_SERVER",
+      message: "Something went wrong",
+    };
   }
 };
