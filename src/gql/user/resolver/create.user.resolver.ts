@@ -1,4 +1,4 @@
-import { UserModel } from "../../../model";
+import { UserModel } from "@model";
 
 export const createUser = async (
   _: any,

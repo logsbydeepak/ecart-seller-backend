@@ -3,26 +3,15 @@
     "baseUrl": "./src",
     "paths": {
       "@model": ["./model"],
-      "@types": ["./types"],
-      "@router": ["./router"],
-      "@middleware": ["./middleware"],
 
-      "@response": ["./response"],
-      "@response/data/error": ["./response/data/error.data.json"],
-      "@response/data/success": ["./response/data/success.data.json"],
-
-      "@helper/cookie": ["./helper/cookie.helper"],
-      "@helper/db": ["./helper/db/index"],
-      "@helper/env": ["./helper/env.helper"],
-      "@helper/security": ["./helper/security.helper"],
-      "@helper/server": ["./helper/server.helper"],
-      "@helper/token": ["./helper/token.helper"],
-      "@helper/validator": ["./helper/validator.helper"],
-
-      "@config/db": ["./config/db.config"],
+      "@config/db": ["./config/env.db"],
+      "@config/server": ["./config/env.db"],
       "@config/env": ["./config/env.config"],
-      "@config/logger": ["./config/logger.config"],
-      "@config/server": ["./config/server.config"]
+
+      "@gql/schema": ["./gql/gql.schema"],
+      "@gql/resolver": ["./gql/gql.schema"],
+
+      "@helper/env": ["./helper/env.helper"]
     }
   }
 }
