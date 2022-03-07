@@ -4,12 +4,12 @@
     "paths": {
       "@model": ["./model"],
 
-      "@config/db": ["./config/env.db"],
-      "@config/server": ["./config/env.db"],
+      "@config/db": ["./config/db.config"],
       "@config/env": ["./config/env.config"],
+      "@config/server": ["./config/server.config"],
 
       "@gql/schema": ["./gql/gql.schema"],
-      "@gql/resolver": ["./gql/gql.schema"],
+      "@gql/resolver": ["./gql/gql.resolver"],
 
       "@helper/env": ["./helper/env.helper"]
     }

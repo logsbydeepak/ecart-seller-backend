@@ -2,8 +2,8 @@ import express, { Express } from "express";
 import { ApolloServer } from "apollo-server-express";
 import { addResolversToSchema } from "@graphql-tools/schema";
 
-import { gqlResolver } from "../gql/gql.resolver";
-import { gqlSchema } from "../gql/gql.schema";
+import { gqlSchema } from "@gql/schema";
+import { gqlResolver } from "@gql/resolver";
 
 const schemaWithResolvers = addResolversToSchema({
   schema: gqlSchema,

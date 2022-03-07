@@ -1,10 +1,11 @@
-import { checkEnv } from "./helper/env.helper";
+import { connection } from "mongoose";
+
+import { checkEnv } from "@helper/env";
 checkEnv();
 
-import { dbConnect } from "./config/db.config";
-import { connection } from "mongoose";
-import { server, apolloServer } from "./config/server.config";
-import { PORT } from "./config/env.config";
+import { PORT } from "@config/env";
+import { dbConnect } from "@config/db";
+import { server, apolloServer } from "@config/server";
 
 dbConnect();
 connection.on("open", async () => {
