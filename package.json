@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=dev run-s clean dev:start",
-    "dev:start": "tsnd --rs --cache-directory \"./dist\" -- src/server.ts",
+    "dev:start": "tsnd -r tsconfig-paths/register --rs --cache-directory \"./dist\" -- src/server.ts",
     "build": "run-s clean build:start copy:gql",
     "build:start": "tsc",
     "clean": "rimraf dist",
@@ -43,6 +43,7 @@
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "graphql": "^16.3.0",
-    "mongoose": "^6.2.4"
+    "mongoose": "^6.2.4",
+    "tsconfig-paths": "^3.13.0"
   }
 }
