@@ -11,7 +11,8 @@
       "@gql/schema": ["./gql/gql.schema"],
       "@gql/resolver": ["./gql/gql.resolver"],
 
-      "@helper/env": ["./helper/env.helper"]
+      "@helper/env": ["./helper/env.helper"],
+      "@helper/security": ["./helper/security.helper"]
     }
   }
 }
