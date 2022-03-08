@@ -1,4 +1,4 @@
-import { validateEmail } from "@helper/validator";
+import { validateBody, validateEmail } from "@helper/validator";
 import { UserModel } from "@model";
 
 export const createUser = async (
@@ -6,15 +6,8 @@ export const createUser = async (
   args: { name: string; email: string; password: string }
 ) => {
   try {
-    if (!args.name || !args.email || !args.password) {
-      return {
-        __typename: "ErrorResponse",
-        title: "INVALID_DATA",
-        message: "Invalid args",
-      };
-    }
-
-    const email = validateEmail(args.email);
+    const reqData = validateBody(args, 3);
+    const email = validateEmail(reqData.email);
 
     const newUser = await new UserModel(args);
     newUser.save();
