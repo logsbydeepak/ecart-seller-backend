@@ -12,7 +12,8 @@
       "@gql/resolver": ["./gql/gql.resolver"],
 
       "@helper/env": ["./helper/env.helper"],
-      "@helper/security": ["./helper/security.helper"]
+      "@helper/security": ["./helper/security.helper"],
+      "@helper/validator": ["./helper/validator.helper"]
     }
   }
 }

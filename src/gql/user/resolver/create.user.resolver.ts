@@ -1,3 +1,4 @@
+import { validateEmail } from "@helper/validator";
 import { UserModel } from "@model";
 
 export const createUser = async (
@@ -13,14 +14,20 @@ export const createUser = async (
       };
     }
 
+    const email = validateEmail(args.email);
+
     const newUser = await new UserModel(args);
     newUser.save();
     return {
-      __typename: "CreateUser",
+      __typename: "User",
       name: newUser.name,
       email: args.email,
     };
-  } catch (e: any) {
+  } catch (error: any) {
+    if (error.__typename === "ErrorResponse") {
+      return error;
+    }
+
     return {
       __typename: "ErrorResponse",
       title: "INTERNAL_SERVER",
