@@ -5,6 +5,7 @@ import {
   validatePassword,
 } from "@helper/validator";
 import { UserModel } from "@model";
+import { dbEmailExist } from "helper/db,helper";
 
 export const createUser = async (
   _: any,
@@ -15,6 +16,8 @@ export const createUser = async (
     const name = validateEmpty(reqData.name, "name is requried");
     const email = validateEmail(reqData.email);
     const password = validatePassword(reqData.password);
+
+    await dbEmailExist(email);
 
     const newUser = await new UserModel(args);
     newUser.save();
