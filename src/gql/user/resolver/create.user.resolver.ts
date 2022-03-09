@@ -19,8 +19,9 @@ export const createUser = async (
 
     await dbEmailExist(email);
 
-    const newUser = await new UserModel(args);
-    newUser.save();
+    const newUser = await new UserModel({ name, email, password });
+    await newUser.save();
+
     return {
       __typename: "User",
       name: newUser.name,
