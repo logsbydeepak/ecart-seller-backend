@@ -1,4 +1,9 @@
-import { validateBody, validateEmail } from "@helper/validator";
+import {
+  validateBody,
+  validateEmail,
+  validateEmpty,
+  validatePassword,
+} from "@helper/validator";
 import { UserModel } from "@model";
 
 export const createUser = async (
@@ -7,7 +12,9 @@ export const createUser = async (
 ) => {
   try {
     const reqData = validateBody(args, 3);
+    const name = validateEmpty(reqData.name, "name is requried");
     const email = validateEmail(reqData.email);
+    const password = validatePassword(reqData.password);
 
     const newUser = await new UserModel(args);
     newUser.save();

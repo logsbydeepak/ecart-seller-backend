@@ -1,4 +1,16 @@
 import isEmail from "validator/lib/isEmail";
+import isStrongPassword from "validator/lib/isStrongPassword";
+
+export const validateEmpty = (rawData: string, message: string): string => {
+  if (!rawData) {
+    throw {
+      __typename: "ErrorResponse",
+      title: "INVALID_DATA",
+      message: message,
+    };
+  }
+  return rawData.trim();
+};
 
 export const validateBody = (bodyData: any, bodyDataCount: number) => {
   if (bodyData.length >= 0) {
@@ -40,4 +52,26 @@ export const validateEmail = (email: string) => {
   }
 
   return formatedEmail;
+};
+
+export const validatePassword = (password: string): string => {
+  if (!password) {
+    throw {
+      __typename: "ErrorResponse",
+      title: "INVALID_DATA",
+      message: "password is required",
+    };
+  }
+
+  const formatedPassword = password.trim();
+  if (!isStrongPassword(formatedPassword)) {
+    throw {
+      __typename: "ErrorResponse",
+      title: "INVALID_DATA",
+      message:
+        "password must be a minimum of 8 characters long and have an of 1 lower case, upper case, symbol, number",
+    };
+  }
+
+  return formatedPassword;
 };
