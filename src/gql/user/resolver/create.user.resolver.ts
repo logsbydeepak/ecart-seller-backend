@@ -8,9 +8,13 @@ import { TokenModel, UserModel } from "@model";
 import { dbEmailExist } from "helper/db,helper";
 import { accessTokenGenerator, refreshTokenGenerator } from "@helper/token";
 
+import { Response } from "express";
+import { setAccessTokenCookie, setRefreshTokenCookie } from "@helper/cookie";
+
 export const createUser = async (
   _: any,
-  args: { name: string; email: string; password: string }
+  args: { name: string; email: string; password: string },
+  { res }: { res: Response }
 ) => {
   try {
     const reqData = validateBody(args, 3);
@@ -32,6 +36,9 @@ export const createUser = async (
 
     await newUser.save();
     await newToken.save();
+
+    setAccessTokenCookie(res, accessToken);
+    setRefreshTokenCookie(res, refreshToken);
 
     return {
       __typename: "User",

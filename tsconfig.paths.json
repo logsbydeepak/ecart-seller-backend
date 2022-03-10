@@ -14,6 +14,8 @@
       "@helper/db": ["./helper/db.helper"],
       "@helper/env": ["./helper/env.helper"],
       "@helper/token": ["./helper/token.helper"],
+      "@helper/cookie": ["./helper/cookie.helper"],
+      "@helper/server": ["./helper/server.helper"],
       "@helper/security": ["./helper/security.helper"],
       "@helper/validator": ["./helper/validator.helper"]
     }

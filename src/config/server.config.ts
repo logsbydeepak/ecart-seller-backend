@@ -13,4 +13,7 @@ const schemaWithResolvers = addResolversToSchema({
 export const server: Express = express();
 export const apolloServer = new ApolloServer({
   schema: schemaWithResolvers,
+  context: ({ req, res }) => {
+    return { res };
+  },
 });
