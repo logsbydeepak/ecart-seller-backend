@@ -4,8 +4,9 @@ import {
   validateEmpty,
   validatePassword,
 } from "@helper/validator";
-import { UserModel } from "@model";
+import { TokenModel, UserModel } from "@model";
 import { dbEmailExist } from "helper/db,helper";
+import { accessTokenGenerator, refreshTokenGenerator } from "@helper/token";
 
 export const createUser = async (
   _: any,
@@ -20,7 +21,17 @@ export const createUser = async (
     await dbEmailExist(email);
 
     const newUser = await new UserModel({ name, email, password });
+    const accessToken = accessTokenGenerator(newUser._id);
+    const refreshToken = refreshTokenGenerator(newUser._id, 3);
+
+    const newToken = await new TokenModel({
+      owner: newUser._id,
+      refreshToken,
+      accessToken,
+    });
+
     await newUser.save();
+    await newToken.save();
 
     return {
       __typename: "User",

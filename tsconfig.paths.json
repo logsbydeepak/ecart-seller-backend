@@ -13,6 +13,7 @@
 
       "@helper/db": ["./helper/db.helper"],
       "@helper/env": ["./helper/env.helper"],
+      "@helper/token": ["./helper/token.helper"],
       "@helper/security": ["./helper/security.helper"],
       "@helper/validator": ["./helper/validator.helper"]
     }
