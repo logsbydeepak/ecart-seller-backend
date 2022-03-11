@@ -42,7 +42,7 @@
     "@graphql-tools/graphql-file-loader": "^7.3.4",
     "@graphql-tools/load": "^7.5.2",
     "@graphql-tools/schema": "^8.3.2",
-    "apollo-server-express": "^3.6.3",
+    "apollo-server-express": "^3.6.4",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
     "cross-env": "^7.0.3",
@@ -51,7 +51,7 @@
     "graphql": "^16.3.0",
     "helmet": "^5.0.2",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.2.4",
+    "mongoose": "^6.2.5",
     "tsconfig-paths": "^3.13.0",
     "validator": "^13.7.0"
   }
