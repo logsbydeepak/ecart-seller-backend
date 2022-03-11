@@ -4,6 +4,8 @@ import { addResolversToSchema } from "@graphql-tools/schema";
 
 import { gqlSchema } from "@gql/schema";
 import { gqlResolver } from "@gql/resolver";
+import cookieParser from "cookie-parser";
+import helmet from "helmet";
 
 const schemaWithResolvers = addResolversToSchema({
   schema: gqlSchema,
@@ -11,9 +13,13 @@ const schemaWithResolvers = addResolversToSchema({
 });
 
 export const server: Express = express();
+
+server.use(helmet());
+server.use(cookieParser());
 export const apolloServer = new ApolloServer({
   schema: schemaWithResolvers,
   context: ({ req, res }) => {
+    console.log(req.cookies);
     return { res };
   },
 });
