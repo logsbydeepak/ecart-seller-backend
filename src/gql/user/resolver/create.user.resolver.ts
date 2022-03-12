@@ -8,14 +8,23 @@ import { TokenModel, UserModel } from "@model";
 import { dbEmailExist } from "helper/db,helper";
 import { accessTokenGenerator, refreshTokenGenerator } from "@helper/token";
 
-import { Response } from "express";
 import { setAccessTokenCookie, setRefreshTokenCookie } from "@helper/cookie";
+import {
+  Maybe,
+  MutationCreateUserArgs,
+  Resolver,
+  ResolversTypes,
+} from "types/graphql";
+import { GQLContext } from "@gql/resolver";
 
-export const createUser = async (
-  _: any,
-  args: { name: string; email: string; password: string },
-  { res }: { res: Response }
-) => {
+type CreateUserType = Resolver<
+  Maybe<ResolversTypes["CreateUserResponse"]>,
+  {},
+  GQLContext,
+  Partial<MutationCreateUserArgs>
+>;
+
+export const createUser: CreateUserType = async (_, args, { res }) => {
   try {
     const reqData = validateBody(args, 3);
     const name = validateEmpty(reqData.name, "name is requried");
@@ -47,7 +56,12 @@ export const createUser = async (
     };
   } catch (error: any) {
     if (error.__typename === "ErrorResponse") {
-      return error;
+      return {
+        __typename: "ErrorResponse",
+        title: "INTERNAL_SERVER",
+        message: "Something went wrong",
+      };
+      // return error;
     }
 
     return {
