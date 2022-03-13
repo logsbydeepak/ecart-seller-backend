@@ -1,11 +1,10 @@
-import { NODE_ENV } from "@config/env";
 import { CookieOptions, Response } from "express";
 
 const defaultConfig: CookieOptions = {
   httpOnly: true,
   maxAge: 86400000 * 90,
-  secure: NODE_ENV === "prod",
-  sameSite: NODE_ENV === "prod" ? "none" : false,
+  secure: true,
+  sameSite: "none",
 };
 
 export const setAccessTokenCookie = (
