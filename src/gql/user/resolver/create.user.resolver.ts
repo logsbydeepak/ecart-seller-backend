@@ -4,10 +4,9 @@ import {
   validateEmpty,
   validatePassword,
 } from "@helper/validator";
-import { TokenModel, UserModel } from "@model";
-import { dbEmailExist } from "helper/db,helper";
+import { UserModel } from "@model";
+import { dbCreateToken, dbEmailExist } from "helper/db,helper";
 import { MutationResolvers } from "types/graphql";
-import { accessTokenGenerator, refreshTokenGenerator } from "@helper/token";
 import { setAccessTokenCookie, setRefreshTokenCookie } from "@helper/cookie";
 
 export const createUser: MutationResolvers["createUser"] = async (
@@ -23,21 +22,14 @@ export const createUser: MutationResolvers["createUser"] = async (
 
     await dbEmailExist(email);
 
-    const newUser = await new UserModel({ name, email, password });
-    const accessToken = accessTokenGenerator(newUser._id);
-    const refreshToken = refreshTokenGenerator(newUser._id, 3);
-
-    const newToken = await new TokenModel({
-      owner: newUser._id,
-      refreshToken,
-      accessToken,
-    });
+    const newUser = new UserModel({ name, email, password });
+    const newToken = dbCreateToken(newUser._id, 3);
 
     await newUser.save();
     await newToken.save();
 
-    setAccessTokenCookie(res, accessToken);
-    setRefreshTokenCookie(res, refreshToken);
+    setAccessTokenCookie(res, newToken.accessToken);
+    setRefreshTokenCookie(res, newToken.refreshToken);
 
     return {
       __typename: "User",

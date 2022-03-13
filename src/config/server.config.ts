@@ -6,7 +6,6 @@ import { gqlSchema } from "@gql/schema";
 import { gqlResolver } from "@gql/resolver";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
-import { NODE_ENV } from "./env.config";
 import { helmetOption } from "@helper/server";
 
 const schemaWithResolvers = addResolversToSchema({
@@ -22,6 +21,7 @@ server.use(cookieParser());
 export const apolloServer = new ApolloServer({
   schema: schemaWithResolvers,
   context: ({ req, res }) => {
+    // console.log(req.cookies);
     return { res };
   },
 });
