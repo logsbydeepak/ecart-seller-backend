@@ -6,25 +6,15 @@ import {
 } from "@helper/validator";
 import { TokenModel, UserModel } from "@model";
 import { dbEmailExist } from "helper/db,helper";
+import { MutationResolvers } from "types/graphql";
 import { accessTokenGenerator, refreshTokenGenerator } from "@helper/token";
-
 import { setAccessTokenCookie, setRefreshTokenCookie } from "@helper/cookie";
-import {
-  Maybe,
-  MutationCreateUserArgs,
-  Resolver,
-  ResolversTypes,
-} from "types/graphql";
-import { GQLContext } from "@gql/resolver";
 
-type CreateUserType = Resolver<
-  Maybe<ResolversTypes["CreateUserResponse"]>,
-  {},
-  GQLContext,
-  Partial<MutationCreateUserArgs>
->;
-
-export const createUser: CreateUserType = async (_, args, { res }) => {
+export const createUser: MutationResolvers["createUser"] = async (
+  _,
+  args,
+  { res }
+) => {
   try {
     const reqData = validateBody(args, 3);
     const name = validateEmpty(reqData.name, "name is requried");
@@ -56,12 +46,7 @@ export const createUser: CreateUserType = async (_, args, { res }) => {
     };
   } catch (error: any) {
     if (error.__typename === "ErrorResponse") {
-      return {
-        __typename: "ErrorResponse",
-        title: "INTERNAL_SERVER",
-        message: "Something went wrong",
-      };
-      // return error;
+      return error;
     }
 
     return {
