@@ -1,9 +1,9 @@
 type Query {
-  readUser: User
+  readUser: UserInfo
 }
 
 type Mutation {
-  createUser(name: String, email: String, password: String): CreateUserResponse
+  createUser(name: String, email: String, password: String): UserInfo
   deleteUser(currentPassword: String): SuccessResponse
   updateUser(
     toUpdate: String
@@ -11,7 +11,7 @@ type Mutation {
     password: String
     name: String
     currentPassword: String
-  ): User
+  ): UserInfo
 }
 
 type User {
@@ -28,4 +28,4 @@ type SuccessResponse {
   message: String
 }
 
-union CreateUserResponse = User | ErrorResponse
+union UserInfo = User | ErrorResponse
