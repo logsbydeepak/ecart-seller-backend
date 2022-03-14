@@ -13,11 +13,8 @@ import { GQLContext } from "types";
 export const createUser: MutationResolvers<GQLContext>["createUser"] = async (
   _,
   args,
-  { res, user }
+  { req, res }
 ) => {
-  if (!user.id) {
-    console.log(user.error);
-  }
   try {
     const reqData = validateBody(args, 3);
     const name = validateEmpty(reqData.name, "name is requried");
