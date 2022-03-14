@@ -7,6 +7,7 @@ import { gqlResolver } from "@gql/resolver";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import { helmetOption } from "@helper/server";
+import { checkAccessToken } from "helper/accessToken";
 
 const schemaWithResolvers = addResolversToSchema({
   schema: gqlSchema,
@@ -21,7 +22,7 @@ server.use(cookieParser());
 export const apolloServer = new ApolloServer({
   schema: schemaWithResolvers,
   context: ({ req, res }) => {
-    // console.log(req.cookies);
-    return { res };
+    const user = checkAccessToken(req);
+    return { res, user };
   },
 });

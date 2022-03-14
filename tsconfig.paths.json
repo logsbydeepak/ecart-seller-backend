@@ -17,7 +17,8 @@
       "@helper/cookie": ["./helper/cookie.helper"],
       "@helper/server": ["./helper/server.helper"],
       "@helper/security": ["./helper/security.helper"],
-      "@helper/validator": ["./helper/validator.helper"]
+      "@helper/validator": ["./helper/validator.helper"],
+      "@helper/accessToken": ["./helper/accessToken.helper"]
     }
   }
 }

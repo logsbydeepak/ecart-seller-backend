@@ -8,12 +8,16 @@ import { UserModel } from "@model";
 import { dbCreateToken, dbEmailExist } from "helper/db,helper";
 import { MutationResolvers } from "types/graphql";
 import { setAccessTokenCookie, setRefreshTokenCookie } from "@helper/cookie";
+import { GQLContext } from "types";
 
-export const createUser: MutationResolvers["createUser"] = async (
+export const createUser: MutationResolvers<GQLContext>["createUser"] = async (
   _,
   args,
-  { res }
+  { res, user }
 ) => {
+  if (!user.id) {
+    console.log(user.error);
+  }
   try {
     const reqData = validateBody(args, 3);
     const name = validateEmpty(reqData.name, "name is requried");
