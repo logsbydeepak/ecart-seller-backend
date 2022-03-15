@@ -1,3 +1,4 @@
+import { ErrorObject } from "@response";
 import isEmail from "validator/lib/isEmail";
 import isStrongPassword from "validator/lib/isStrongPassword";
 
@@ -14,20 +15,12 @@ export const validateEmpty = (rawData: string, message: string): string => {
 
 export const validateBody = (bodyData: any, bodyDataCount: number) => {
   if (bodyData.length >= 0) {
-    throw {
-      __typename: "ErrorResponse",
-      title: "INVALID_DATA",
-      message: "Invalid body data",
-    };
+    throw ErrorObject("BP", 10);
   }
 
   const bodyDataLength: number = Object.keys(bodyData).length;
   if (bodyDataLength !== bodyDataCount) {
-    throw {
-      __typename: "ErrorResponse",
-      title: "INVALID_DATA",
-      message: "Body data missing",
-    };
+    throw ErrorObject("BP", 11);
   }
 
   return bodyData;

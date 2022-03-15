@@ -9,5 +9,21 @@
         "statusCode": 500
       }
     ]
+  },
+  {
+    "messageTypeCode": "BP",
+    "messageType": "BODY_PARSE",
+    "response": [
+      {
+        "messageCode": 10,
+        "message": "invalid body data",
+        "statusCode": 400
+      },
+      {
+        "messageCode": 11,
+        "message": "body data missing",
+        "statusCode": 400
+      }
+    ]
   }
 ]

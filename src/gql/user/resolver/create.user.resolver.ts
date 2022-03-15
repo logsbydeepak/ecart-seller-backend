@@ -9,6 +9,7 @@ import { dbCreateToken, dbEmailExist } from "helper/db,helper";
 import { MutationResolvers } from "types/graphql";
 import { setAccessTokenCookie, setRefreshTokenCookie } from "@helper/cookie";
 import { GQLContext } from "types";
+import { ErrorResponse, handleCatchError } from "@response";
 
 export const createUser: MutationResolvers<GQLContext>["createUser"] = async (
   _,
@@ -38,14 +39,6 @@ export const createUser: MutationResolvers<GQLContext>["createUser"] = async (
       email: args.email,
     };
   } catch (error: any) {
-    if (error.__typename === "ErrorResponse") {
-      return error;
-    }
-
-    return {
-      __typename: "ErrorResponse",
-      title: "INTERNAL_SERVER",
-      message: "Something went wrong",
-    };
+    return handleCatchError(error);
   }
 };
