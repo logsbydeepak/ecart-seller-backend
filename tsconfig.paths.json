@@ -4,6 +4,8 @@
     "paths": {
       "@model": ["./model"],
 
+      "@response": ["./response"],
+
       "@config/db": ["./config/db.config"],
       "@config/env": ["./config/env.config"],
       "@config/server": ["./config/server.config"],
