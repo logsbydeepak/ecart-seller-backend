@@ -19,3 +19,13 @@ export const setRefreshTokenCookie = (
   res.cookie("refreshToken", refreshToken, {
     ...defaultConfig,
   });
+
+export const removeAccessTokenCookie = (res: Response): Response =>
+  res.clearCookie("accessToken", {
+    ...defaultConfig,
+  });
+
+export const removeRefreshTokenCookie = (res: Response): Response =>
+  res.clearCookie("refreshToken", {
+    ...defaultConfig,
+  });

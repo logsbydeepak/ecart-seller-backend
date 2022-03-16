@@ -4,7 +4,7 @@ type Query {
 
 type Mutation {
   createUser(name: String, email: String, password: String): UserInfo
-  deleteUser(currentPassword: String): SuccessResponse
+  deleteUser(currentPassword: String): DeleteData
   updateUser(
     toUpdate: String
     email: String
@@ -30,3 +30,4 @@ type SuccessResponse {
 }
 
 union UserInfo = User | ErrorResponse
+union DeleteData = SuccessResponse | ErrorResponse
