@@ -1,17 +1,7 @@
-import { ErrorObject } from "@response";
 import isEmail from "validator/lib/isEmail";
 import isStrongPassword from "validator/lib/isStrongPassword";
 
-export const validateEmpty = (rawData: string, message: string): string => {
-  if (!rawData) {
-    throw {
-      __typename: "ErrorResponse",
-      title: "INVALID_DATA",
-      message: message,
-    };
-  }
-  return rawData.trim();
-};
+import { ErrorObject } from "@response";
 
 export const validateBody = (bodyData: any, bodyDataCount: number) => {
   if (bodyData.length >= 0) {
@@ -26,22 +16,25 @@ export const validateBody = (bodyData: any, bodyDataCount: number) => {
   return bodyData;
 };
 
-export const validateEmail = (email: string) => {
+export const validateEmpty = (
+  rawData: string,
+  messageTypeCode: string,
+  messageCode: number
+): string => {
+  if (!rawData) {
+    throw ErrorObject(messageTypeCode, messageCode);
+  }
+  return rawData.trim();
+};
+
+export const validateEmail = (email: string): string => {
   if (!email) {
-    throw {
-      __typename: "ErrorResponse",
-      title: "INVALID_DATA",
-      message: "Email is required",
-    };
+    throw ErrorObject("BP", 14);
   }
 
   const formatedEmail = email.trim().toLowerCase();
   if (!isEmail(formatedEmail)) {
-    throw {
-      __typename: "ErrorResponse",
-      title: "INVALID_DATA",
-      message: "Invalid email",
-    };
+    throw ErrorObject("BP", 15);
   }
 
   return formatedEmail;
@@ -49,22 +42,25 @@ export const validateEmail = (email: string) => {
 
 export const validatePassword = (password: string): string => {
   if (!password) {
-    throw {
-      __typename: "ErrorResponse",
-      title: "INVALID_DATA",
-      message: "password is required",
-    };
+    throw ErrorObject("BP", 16);
   }
 
   const formatedPassword = password.trim();
   if (!isStrongPassword(formatedPassword)) {
-    throw {
-      __typename: "ErrorResponse",
-      title: "INVALID_DATA",
-      message:
-        "password must be a minimum of 8 characters long and have an of 1 lower case, upper case, symbol, number",
-    };
+    throw ErrorObject("BP", 17);
   }
 
   return formatedPassword;
+};
+
+export const validateTask = (rawData: boolean): boolean => {
+  if (typeof rawData === "boolean") {
+    return rawData;
+  }
+
+  if (!rawData) {
+    throw ErrorObject("BP", 23);
+  }
+
+  throw ErrorObject("BP", 24);
 };

@@ -1,4 +1,4 @@
-import { checkAccessToken } from "helper/accessToken";
+// import { checkAccessToken } from "helper/token";
 import { GQLContext } from "types";
 import { QueryResolvers } from "types/graphql";
 
@@ -8,7 +8,7 @@ export const readUser: QueryResolvers<GQLContext>["readUser"] = (
   { req, res }
 ) => {
   try {
-    const id = checkAccessToken(req);
+    // const id = checkAccessToken(req);
     return { name: "", email: "" };
   } catch (error: any) {
     if (error.__typename === "ErrorResponse") {

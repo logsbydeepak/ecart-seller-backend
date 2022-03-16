@@ -5,7 +5,7 @@ import {
   validatePassword,
 } from "@helper/validator";
 import { UserModel } from "@model";
-import { dbCreateToken, dbEmailExist } from "helper/db,helper";
+import { dbCreateToken, dbEmailExist } from "@helper/db";
 import { MutationResolvers } from "types/graphql";
 import { setAccessTokenCookie, setRefreshTokenCookie } from "@helper/cookie";
 import { GQLContext } from "types";
@@ -18,7 +18,7 @@ export const createUser: MutationResolvers<GQLContext>["createUser"] = async (
 ) => {
   try {
     const reqData = validateBody(args, 3);
-    const name = validateEmpty(reqData.name, "name is requried");
+    const name = validateEmpty(reqData.name, "BP", 11);
     const email = validateEmail(reqData.email);
     const password = validatePassword(reqData.password);
 

@@ -13,14 +13,17 @@
       "@gql/schema": ["./gql/gql.schema"],
       "@gql/resolver": ["./gql/gql.resolver"],
 
-      "@helper/db": ["./helper/db.helper"],
+      "@helper/db": ["./helper/db"],
       "@helper/env": ["./helper/env.helper"],
+      "@helper/checkAccessToken": ["./helper/checkAccessToken.helper"],
       "@helper/token": ["./helper/token.helper"],
       "@helper/cookie": ["./helper/cookie.helper"],
       "@helper/server": ["./helper/server.helper"],
       "@helper/security": ["./helper/security.helper"],
       "@helper/validator": ["./helper/validator.helper"],
-      "@helper/accessToken": ["./helper/accessToken.helper"]
+      "@helper/accessToken": ["./helper/accessToken.helper"],
+
+      "@types": ["./types"]
     }
   }
 }
