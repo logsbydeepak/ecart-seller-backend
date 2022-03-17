@@ -3,31 +3,13 @@ type Query {
 }
 
 type Mutation {
-  createUser(name: String, email: String, password: String): UserInfo
-  deleteUser(currentPassword: String): DeleteData
+  createUser(name: String!, email: String!, password: String!): UserInfo
+  deleteUser(currentPassword: String!): DeleteData
   updateUser(
-    toUpdate: String
+    toUpdate: String!
     email: String
     password: String
     name: String
-    currentPassword: String
+    currentPassword: String!
   ): UserInfo
 }
-
-type User {
-  name: String
-  email: String
-}
-
-type ErrorResponse {
-  title: String
-  message: String
-  statusCode: Int
-}
-
-type SuccessResponse {
-  message: String
-}
-
-union UserInfo = User | ErrorResponse
-union DeleteData = SuccessResponse | ErrorResponse
