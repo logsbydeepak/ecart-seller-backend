@@ -10,6 +10,7 @@ import { ErrorResponse, handleCatchError } from "@response";
 import { UserModelType, UpdateUserBodyType, GQLContext } from "@types";
 import { MutationResolvers } from "types/graphql";
 import checkAccessToken from "@helper/checkAccessToken";
+import checkPassword from "helper/checkPassword.helper";
 
 export const updateUser: MutationResolvers<GQLContext>["updateUser"] = async (
   parent,
@@ -19,6 +20,7 @@ export const updateUser: MutationResolvers<GQLContext>["updateUser"] = async (
   try {
     // @ts-ignore
     const { id: userId } = await checkAccessToken(req);
+    await checkPassword(args.currentPassword!, userId);
 
     const bodyData: UpdateUserBodyType = validateBody(args, 3);
     const toUpdate: string = validateEmpty(bodyData.toUpdate, "BP", 18);
