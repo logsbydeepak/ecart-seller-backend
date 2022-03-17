@@ -12,8 +12,8 @@ export const readUser: QueryResolvers<GQLContext>["readUser"] = async (
   try {
     // @ts-expect-error
     const { id: userId } = await checkAccessToken(req);
-    const dbUser: UserModelType = await dbReadUserById(userId);
 
+    const dbUser: UserModelType = await dbReadUserById(userId);
     return {
       __typename: "User",
       name: dbUser.name,

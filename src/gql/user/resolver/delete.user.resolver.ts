@@ -16,7 +16,7 @@ export const deleteUser: MutationResolvers<GQLContext>["deleteUser"] = async (
 ) => {
   try {
     // @ts-ignore
-    const id: string = await checkAccessToken(req);
+    const { id } = await checkAccessToken(req);
 
     await UserModel.findByIdAndRemove(id);
     await TokenModel.findByIdAndRemove(id);
