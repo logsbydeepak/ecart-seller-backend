@@ -1,6 +1,6 @@
-import { Request, Response } from "express";
+import { Request } from "express";
 
-import { ErrorObject, ErrorResponse, handleCatchError } from "@response";
+import { ErrorObject, handleCatchError } from "@response";
 import { validateEmpty } from "@helper/validator";
 import { accessTokenValidator } from "@helper/token";
 import { generateDecryption } from "@helper/security";
@@ -24,23 +24,23 @@ const checkAccessToken = async (req: Request) => {
     const accessTokenData = accessTokenValidator(accessTokenDecryption);
 
     if (!accessTokenData) {
-      return ErrorObject("TP", 15);
+      throw ErrorObject("TP", 15);
     }
 
     if (accessTokenData === "TokenExpiredError") {
-      return ErrorObject("TP", 16);
+      throw ErrorObject("TP", 16);
     }
 
     const userId: string = accessTokenData.id;
     if (!userId) {
-      return ErrorObject("TP", 15);
+      throw ErrorObject("TP", 15);
     }
 
     await dbUserExist(userId);
 
-    return { id: userId };
+    return userId;
   } catch (error: any) {
-    return handleCatchError(error);
+    throw handleCatchError(error);
   }
 };
 

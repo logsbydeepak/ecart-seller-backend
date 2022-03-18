@@ -5,32 +5,13 @@ import { __TypeKind } from "graphql";
 import { GQLContext, UserModelType } from "types";
 import { QueryResolvers } from "types/graphql";
 
-// export const readUser: QueryResolvers<GQLContext>["readUser"] = async (
-//   _,
-//   __,
-//   { req, res }
-// ) => {
-//   try {
-//     // @ts-expect-error
-//     const { id: userId } = await checkAccessToken(req);
-
-//     const dbUser: UserModelType = await dbReadUserById(userId);
-//     return {
-//       __typename: "User",
-//       name: dbUser.name,
-//       email: dbUser.email,
-//     };
-//   } catch (error: any) {
-//     console.log(error);
-//     return handleCatchError(error);
-//   }
-// };
-
-export const readUser: QueryResolvers<GQLContext>["readUser"] = async () => {
+export const readUser: QueryResolvers<GQLContext>["readUser"] = async (
+  parent,
+  args,
+  { req, res }
+) => {
   try {
-    // @ts-expect-error
-    const { id: userId } = await checkAccessToken(req);
-
+    const userId = await checkAccessToken(req);
     const dbUser: UserModelType = await dbReadUserById(userId);
     return {
       __typename: "User",
@@ -38,7 +19,6 @@ export const readUser: QueryResolvers<GQLContext>["readUser"] = async () => {
       email: dbUser.email,
     };
   } catch (error: any) {
-    console.log(error);
     return handleCatchError(error);
   }
 };

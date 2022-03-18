@@ -13,8 +13,7 @@ import { handleCatchError } from "@response";
 export const deleteAllSession: MutationResolvers<GQLContext>["deleteAllSession"] =
   async (parent, args, { req, res }) => {
     try {
-      // @ts-ignore
-      const { id: userId } = await checkAccessToken(req);
+      const userId = await checkAccessToken(req);
       await checkPassword(args.currentPassword, userId);
 
       await TokenModel.deleteMany({ owner: userId });
