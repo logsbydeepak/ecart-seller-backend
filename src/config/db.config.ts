@@ -1,6 +1,6 @@
 import { connection, connect } from "mongoose";
 
-import { DB_URL } from "./env.config";
+import { DB_URL } from "config";
 
 export const dbConnect = (): void => {
   connect(DB_URL as string);

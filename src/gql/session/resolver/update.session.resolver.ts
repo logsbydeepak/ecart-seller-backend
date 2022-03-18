@@ -1,32 +1,26 @@
 import moment from "moment";
+import { GQLContext, TokenModelType } from "types";
 
 import {
   accessTokenGenerator,
   accessTokenValidator,
   refreshTokenValidator,
-} from "@helper/token";
-
-import {
   removeAccessTokenCookie,
   removeRefreshTokenCookie,
   setAccessTokenCookie,
   setRefreshTokenCookie,
-} from "@helper/cookie";
-
-import { GQLContext, TokenModelType } from "@types";
-
-import {
   dbCreateToken,
   dbReadToken,
   dbTokenExist,
   dbUserExist,
-} from "@helper/db";
+  validateEmpty,
+  generateDecryption,
+  generateEncryption,
+} from "helper";
 
-import { TokenModel } from "@model";
-import { ErrorObject, handleCatchError } from "@response";
-import { validateEmpty } from "@helper/validator";
-import { generateDecryption, generateEncryption } from "@helper/security";
+import { TokenModel } from "model";
 import { MutationResolvers } from "types/graphql";
+import { ErrorObject, handleCatchError } from "response";
 
 export const updateSession: MutationResolvers<GQLContext>["updateSession"] =
   async (parent, args, { req, res }) => {

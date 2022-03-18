@@ -1,12 +1,11 @@
+import helmet from "helmet";
 import express, { Express } from "express";
 import { ApolloServer } from "apollo-server-express";
 import { addResolversToSchema } from "@graphql-tools/schema";
 
-import { gqlSchema } from "@gql/schema";
-import { gqlResolver } from "@gql/resolver";
+import { helmetOption } from "helper";
 import cookieParser from "cookie-parser";
-import helmet from "helmet";
-import { helmetOption } from "@helper/server";
+import { gqlSchema, gqlResolver } from "gql";
 
 const schemaWithResolvers = addResolversToSchema({
   schema: gqlSchema,

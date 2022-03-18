@@ -1,12 +1,10 @@
 import { connection } from "mongoose";
 
-import { checkEnv } from "@helper/env";
+import { checkEnv } from "helper";
 checkEnv();
 
-import { PORT } from "@config/env";
-import { dbConnect } from "@config/db";
-import { server, apolloServer } from "@config/server";
-import { corsOption } from "@helper/server";
+import { corsOption } from "helper";
+import { PORT, dbConnect, server, apolloServer } from "config";
 
 dbConnect();
 connection.on("open", async () => {

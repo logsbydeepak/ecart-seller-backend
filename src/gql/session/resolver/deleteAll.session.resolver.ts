@@ -1,14 +1,11 @@
-import {
-  removeAccessTokenCookie,
-  removeRefreshTokenCookie,
-} from "@helper/cookie";
-
-import { TokenModel } from "@model";
 import { MutationResolvers } from "types/graphql";
-import { GQLContext } from "@types";
-import checkAccessToken from "@helper/checkAccessToken";
-import checkPassword from "helper/checkPassword.helper";
-import { handleCatchError } from "@response";
+
+import { removeAccessTokenCookie, removeRefreshTokenCookie } from "helper";
+
+import { TokenModel } from "model";
+import { GQLContext } from "types";
+import { handleCatchError } from "response";
+import { checkAccessToken, checkPassword } from "validateRequest";
 
 export const deleteAllSession: MutationResolvers<GQLContext>["deleteAllSession"] =
   async (parent, args, { req, res }) => {

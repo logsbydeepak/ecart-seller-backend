@@ -1,7 +1,7 @@
 import isEmail from "validator/lib/isEmail";
 import isStrongPassword from "validator/lib/isStrongPassword";
 
-import { ErrorObject } from "@response";
+import { ErrorObject } from "response";
 
 export const validateBody = (bodyData: any, bodyDataCount: number) => {
   if (bodyData.length >= 0) {

@@ -1,16 +1,17 @@
+import { MutationResolvers } from "types/graphql";
+
 import {
   validateBody,
   validateEmail,
   validateEmpty,
   validatePassword,
-} from "@helper/validator";
+  dbReadUserById,
+  dbEmailExist,
+} from "helper";
 
-import { dbReadUserById, dbEmailExist } from "@helper/db";
-import { ErrorResponse, handleCatchError } from "@response";
-import { UserModelType, UpdateUserBodyType, GQLContext } from "@types";
-import { MutationResolvers } from "types/graphql";
-import checkAccessToken from "@helper/checkAccessToken";
-import checkPassword from "helper/checkPassword.helper";
+import { ErrorResponse, handleCatchError } from "response";
+import { checkAccessToken, checkPassword } from "validateRequest";
+import { UserModelType, UpdateUserBodyType, GQLContext } from "types";
 
 export const updateUser: MutationResolvers<GQLContext>["updateUser"] = async (
   parent,

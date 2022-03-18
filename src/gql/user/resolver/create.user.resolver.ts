@@ -1,20 +1,25 @@
-import {
-  validateBody,
-  validateEmail,
-  validateEmpty,
-  validatePassword,
-} from "@helper/validator";
-import { UserModel } from "@model";
-import { dbCreateToken, dbEmailExist } from "@helper/db";
 import { MutationResolvers } from "types/graphql";
-import { setAccessTokenCookie, setRefreshTokenCookie } from "@helper/cookie";
+
 import {
   CreateUserBodyType,
   GQLContext,
   TokenModelType,
   UserModelType,
 } from "types";
-import { handleCatchError } from "@response";
+
+import {
+  validateBody,
+  validateEmail,
+  validateEmpty,
+  validatePassword,
+  dbCreateToken,
+  dbEmailExist,
+  setAccessTokenCookie,
+  setRefreshTokenCookie,
+} from "helper";
+
+import { UserModel } from "model";
+import { handleCatchError } from "response";
 
 export const createUser: MutationResolvers<GQLContext>["createUser"] = async (
   _,

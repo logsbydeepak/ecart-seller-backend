@@ -1,12 +1,15 @@
 import { Request } from "express";
 
-import { ErrorObject, handleCatchError } from "@response";
-import { validateEmpty } from "@helper/validator";
-import { accessTokenValidator } from "@helper/token";
-import { generateDecryption } from "@helper/security";
-import { dbTokenExist, dbUserExist } from "@helper/db";
+import { ErrorObject, handleCatchError } from "response";
+import {
+  validateEmpty,
+  accessTokenValidator,
+  generateDecryption,
+  dbTokenExist,
+  dbUserExist,
+} from "helper";
 
-const checkAccessToken = async (req: Request) => {
+export const checkAccessToken = async (req: Request) => {
   try {
     const accessToken: string = validateEmpty(
       req.cookies.accessToken,
@@ -43,5 +46,3 @@ const checkAccessToken = async (req: Request) => {
     throw handleCatchError(error);
   }
 };
-
-export default checkAccessToken;

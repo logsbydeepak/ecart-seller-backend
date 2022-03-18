@@ -1,6 +1,6 @@
-import { UserModel } from "@model";
-import { UserModelType } from "@types";
-import { ErrorObject } from "@response";
+import { UserModel } from "model";
+import { UserModelType } from "types";
+import { ErrorObject } from "response";
 
 export const dbEmailExist = async (email: string): Promise<void> => {
   const emailCount = await UserModel.count({ email });

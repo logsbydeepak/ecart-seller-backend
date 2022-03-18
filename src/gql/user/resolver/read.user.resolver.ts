@@ -1,9 +1,8 @@
-import checkAccessToken from "@helper/checkAccessToken";
-import { dbReadUserById } from "@helper/db";
-import { handleCatchError } from "@response";
-import { __TypeKind } from "graphql";
-import { GQLContext, UserModelType } from "types";
+import { dbReadUserById } from "helper";
+import { handleCatchError } from "response";
 import { QueryResolvers } from "types/graphql";
+import { GQLContext, UserModelType } from "types";
+import { checkAccessToken } from "validateRequest";
 
 export const readUser: QueryResolvers<GQLContext>["readUser"] = async (
   parent,

@@ -1,4 +1,4 @@
-import { ALLOW_ORIGIN, NODE_ENV } from "@config/env";
+import { ALLOW_ORIGIN, NODE_ENV } from "config";
 import { CorsOptions } from "apollo-server-express";
 import { HelmetOptions } from "helmet";
 
