@@ -15,10 +15,17 @@ export interface UserModelType extends Document {
 }
 
 export interface TokenModelType extends Document {
-  id: string;
+  _id: string;
   owner: string;
   accessToken: string;
   refreshToken: string;
+}
+
+export interface ProductModelType extends Document {
+  _id: string;
+  owner: string;
+  name: string;
+  description: string;
 }
 
 export interface CreateUserBodyType extends Object, Array<string> {

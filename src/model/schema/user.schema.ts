@@ -2,10 +2,7 @@ import { Schema } from "mongoose";
 
 import { generateHashAndSalt } from "helper";
 
-const defaultProperty: {
-  required: boolean;
-  type: StringConstructor;
-} = {
+const defaultProperty = {
   required: true,
   type: String,
 };

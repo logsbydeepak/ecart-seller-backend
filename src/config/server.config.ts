@@ -14,7 +14,7 @@ const schemaWithResolvers = addResolversToSchema({
 
 export const server: Express = express();
 
-server.use(helmet(helmetOption));
+// server.use(helmet(helmetOption));
 server.use(cookieParser());
 
 export const apolloServer = new ApolloServer({
