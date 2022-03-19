@@ -1,14 +1,23 @@
 type Query {
-  readProduct(category: String!, pagination: Int!): ProductInfo
+  readProduct(
+    category: String!
+    pagination: Int!
+    isPublic: Boolean!
+  ): ProductInfo
 }
 
 type Mutation {
-  createProduct(name: String!, description: String!): ProductInfo
+  createProduct(
+    name: String!
+    description: String!
+    isPublic: Boolean!
+  ): ProductInfo
   updateProduct(
     id: String!
     toUpdate: String!
     name: String
     description: String
+    isPublic: Boolean
   ): ProductInfo
   deleteProduct(id: String!): DeleteData
 }
@@ -16,10 +25,12 @@ type Mutation {
 type Product {
   name: String!
   description: String!
-  seller: Seller
+  isPublic: String!
+  seller: Seller!
 }
 
 type Seller {
+  id: String!
   name: String!
 }
 
