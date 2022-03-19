@@ -1,0 +1,26 @@
+type Query {
+  readProduct(category: String!, pagination: Int!): ProductInfo
+}
+
+type Mutation {
+  createProduct(name: String!, description: String!): ProductInfo
+  updateProduct(
+    id: String!
+    toUpdate: String!
+    name: String
+    description: String
+  ): ProductInfo
+  deleteProduct(id: String!): DeleteData
+}
+
+type Product {
+  name: String!
+  description: String!
+  seller: Seller
+}
+
+type Seller {
+  name: String!
+}
+
+union ProductInfo = Product | ErrorResponse
