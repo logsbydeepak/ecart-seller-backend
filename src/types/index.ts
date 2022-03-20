@@ -27,6 +27,7 @@ export interface ProductModelType extends Document {
   category: "Electronics" | "Home";
   name: string;
   description: string;
+  isPublic: boolean;
 }
 
 export interface CreateUserBodyType extends Object, Array<string> {

@@ -11,6 +11,7 @@ type Mutation {
     name: String!
     description: String!
     isPublic: Boolean!
+    category: String!
   ): ProductInfo
   updateProduct(
     id: String!
@@ -25,13 +26,8 @@ type Mutation {
 type Product {
   name: String!
   description: String!
-  isPublic: String!
-  seller: Seller!
-}
-
-type Seller {
-  id: String!
-  name: String!
+  isPublic: Boolean!
+  category: String!
 }
 
 union ProductInfo = Product | ErrorResponse
