@@ -1,6 +1,6 @@
 import { MutationResolvers } from "types/graphql";
 
-import { GQLContext, TokenModelType, UserModelType } from "types";
+import { GQLContext } from "types";
 
 import {
   validateBody,
@@ -13,7 +13,7 @@ import { UserModel } from "model";
 import { handleCatchError } from "response";
 
 export const createUser: MutationResolvers<GQLContext>["createUser"] = async (
-  _,
+  parent,
   args,
   { req, res }
 ) => {

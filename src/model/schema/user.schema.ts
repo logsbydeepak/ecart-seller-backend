@@ -3,7 +3,6 @@ import { Schema } from "mongoose";
 import {
   dbEmailExist,
   generateHashAndSalt,
-  validateBody,
   validateEmail,
   validateEmpty,
   validatePassword,
@@ -20,13 +19,7 @@ const UserSchema: Schema = new Schema({
   password: defaultProperty,
 });
 
-UserSchema.pre("validate", function () {
-  console.log(this);
-  console.log("this gets printed first");
-});
-
-UserSchema.post("validate", async function (next: any) {
-  validateBody(this, 4);
+UserSchema.post("validate", async function (next) {
   this.name = validateEmpty(this.name, "BP", 13);
   this.email = validateEmail(this.email);
   this.password = validatePassword(this.password);
