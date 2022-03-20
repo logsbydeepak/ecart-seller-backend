@@ -1,6 +1,13 @@
 import { Schema } from "mongoose";
 
-import { generateHashAndSalt } from "helper";
+import {
+  dbEmailExist,
+  generateHashAndSalt,
+  validateBody,
+  validateEmail,
+  validateEmpty,
+  validatePassword,
+} from "helper";
 
 const defaultProperty = {
   required: true,
@@ -13,7 +20,18 @@ const UserSchema: Schema = new Schema({
   password: defaultProperty,
 });
 
-UserSchema.pre("save", async function managePassword(next: any) {
+UserSchema.pre("validate", function () {
+  console.log(this);
+  console.log("this gets printed first");
+});
+
+UserSchema.post("validate", async function (next: any) {
+  validateBody(this, 4);
+  this.name = validateEmpty(this.name, "BP", 13);
+  this.email = validateEmail(this.email);
+  this.password = validatePassword(this.password);
+  await dbEmailExist(this.email);
+
   if (!this.isModified("password")) return next();
   this.password = await generateHashAndSalt(this.password);
   return next();

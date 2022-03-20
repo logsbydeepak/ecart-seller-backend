@@ -1,17 +1,10 @@
 import { MutationResolvers } from "types/graphql";
 
-import {
-  validateBody,
-  validateEmail,
-  validateEmpty,
-  validatePassword,
-  dbReadUserById,
-  dbEmailExist,
-} from "helper";
+import { validateEmpty, dbReadUserById, validateBody } from "helper";
 
 import { ErrorResponse, handleCatchError } from "response";
 import { checkAccessToken, checkPassword } from "validateRequest";
-import { UserModelType, UpdateUserBodyType, GQLContext } from "types";
+import { UserModelType, GQLContext } from "types";
 
 export const updateUser: MutationResolvers<GQLContext>["updateUser"] = async (
   parent,
@@ -22,31 +15,20 @@ export const updateUser: MutationResolvers<GQLContext>["updateUser"] = async (
     const userId = await checkAccessToken(req);
     await checkPassword(args.currentPassword!, userId);
 
-    const bodyData: UpdateUserBodyType = validateBody(args, 3);
+    const bodyData = validateBody(req.body, 3);
     const toUpdate: string = validateEmpty(bodyData.toUpdate, "BP", 18);
 
     const dbUser: UserModelType = await dbReadUserById(userId);
-    let toUpdateValue: string;
 
-    switch (toUpdate) {
-      case "name":
-        toUpdateValue = validateEmpty(bodyData.name, "BP", 13);
-        break;
-
-      case "email":
-        toUpdateValue = validateEmail(bodyData.email);
-        await dbEmailExist(validateEmail(toUpdateValue));
-        break;
-
-      case "password":
-        toUpdateValue = validatePassword(bodyData.password);
-        break;
-
-      default:
-        return ErrorResponse("BP", 19);
+    if (
+      toUpdate !== "name" &&
+      toUpdate !== "email" &&
+      toUpdate !== "password"
+    ) {
+      return ErrorResponse("BP", 19);
     }
 
-    dbUser[toUpdate] = toUpdateValue;
+    dbUser[toUpdate] = bodyData[toUpdate];
     await dbUser.save();
 
     return {

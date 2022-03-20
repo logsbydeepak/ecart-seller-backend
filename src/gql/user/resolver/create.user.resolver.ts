@@ -1,19 +1,10 @@
 import { MutationResolvers } from "types/graphql";
 
-import {
-  CreateUserBodyType,
-  GQLContext,
-  TokenModelType,
-  UserModelType,
-} from "types";
+import { GQLContext, TokenModelType, UserModelType } from "types";
 
 import {
   validateBody,
-  validateEmail,
-  validateEmpty,
-  validatePassword,
   dbCreateToken,
-  dbEmailExist,
   setAccessTokenCookie,
   setRefreshTokenCookie,
 } from "helper";
@@ -27,16 +18,10 @@ export const createUser: MutationResolvers<GQLContext>["createUser"] = async (
   { req, res }
 ) => {
   try {
-    const bodyData: CreateUserBodyType = validateBody(args, 3);
-    const name: string = validateEmpty(bodyData.name, "BP", 13);
-    const email: string = validateEmail(bodyData.email);
-    const password: string = validatePassword(bodyData.password);
-
-    await dbEmailExist(email);
-
-    const newUser: UserModelType = new UserModel({ name, email, password });
+    const bodyData = validateBody(req.body, 3);
+    const newUser = new UserModel(bodyData);
     const newUserId: string = newUser._id;
-    const newToken: TokenModelType = dbCreateToken(newUserId, 1);
+    const newToken = dbCreateToken(newUserId, 1);
 
     await newUser.save();
     await newToken.save();
