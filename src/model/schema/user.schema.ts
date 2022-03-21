@@ -24,7 +24,6 @@ UserSchema.post("validate", async function (next) {
   this.email = validateEmail(this.email);
   this.password = validatePassword(this.password);
   await dbEmailExist(this.email);
-
   if (!this.isModified("password")) return next();
   this.password = await generateHashAndSalt(this.password);
   return next();
