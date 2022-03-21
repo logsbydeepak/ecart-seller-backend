@@ -24,7 +24,7 @@ export interface TokenModelType extends Document {
 export interface ProductModelType extends Document {
   _id: string;
   owner: string;
-  category: "Electronics" | "Home";
+  category: "electronics" | "home";
   name: string;
   description: string;
   isPublic: boolean;

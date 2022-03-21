@@ -2,6 +2,9 @@ import isEmail from "validator/lib/isEmail";
 import isStrongPassword from "validator/lib/isStrongPassword";
 
 import { ErrorObject } from "response";
+import isBoolean from "validator/lib/isBoolean";
+
+const category = ["electronics", "home"];
 
 export const validateBody = (bodyData: any, bodyDataCount: number) => {
   if (bodyData.length >= 0) {
@@ -63,4 +66,31 @@ export const validateTask = (rawData: boolean): boolean => {
   }
 
   throw ErrorObject("BP", 24);
+};
+
+export const validateCatergory = (rawCategory: string): string => {
+  if (!rawCategory) {
+    throw ErrorObject("BP", 28);
+  }
+
+  const modeCatergory = rawCategory.trim().toLocaleLowerCase();
+  const validCategory = category.find((value) => value === modeCatergory);
+
+  if (!validCategory) {
+    throw ErrorObject("BP", 29);
+  }
+
+  return validCategory;
+};
+
+export const validateIsPublic = (rawIsPublic: boolean): boolean => {
+  if (!rawIsPublic) {
+    throw ErrorObject("BP", 30);
+  }
+
+  if (typeof rawIsPublic !== "boolean") {
+    throw ErrorObject("BP", 30);
+  }
+
+  return rawIsPublic;
 };

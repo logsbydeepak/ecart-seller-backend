@@ -74,6 +74,26 @@
         "messageCode": 27,
         "message": "wrong email",
         "statusCode": 400
+      },
+      {
+        "messageCode": 28,
+        "message": "catergory is required",
+        "statusCode": 400
+      },
+      {
+        "messageCode": 29,
+        "message": "invalid catergory",
+        "statusCode": 400
+      },
+      {
+        "messageCode": 30,
+        "message": "isPublic is required",
+        "statusCode": 400
+      },
+      {
+        "messageCode": 31,
+        "message": "invalid isPublic",
+        "statusCode": 400
       }
     ]
   },
