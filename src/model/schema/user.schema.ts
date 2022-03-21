@@ -19,14 +19,14 @@ const UserSchema: Schema = new Schema({
   password: defaultProperty,
 });
 
-UserSchema.post("validate", async function (next) {
+UserSchema.post("validate", async function () {
   this.name = validateEmpty(this.name, "BP", 13);
   this.email = validateEmail(this.email);
   this.password = validatePassword(this.password);
   await dbEmailExist(this.email);
-  if (!this.isModified("password")) return next();
+  if (!this.isModified("password")) return;
   this.password = await generateHashAndSalt(this.password);
-  return next();
+  return;
 });
 
 export default UserSchema;
