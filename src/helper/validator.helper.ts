@@ -94,3 +94,31 @@ export const validateIsPublic = (rawIsPublic: boolean): boolean => {
 
   return rawIsPublic;
 };
+
+export const validateProductName = (rawProductName: string): string => {
+  if (!rawProductName) {
+    throw ErrorObject("BP", 32);
+  }
+
+  const modProductName = rawProductName.trim();
+  if (modProductName.length >= 10) {
+    throw ErrorObject("BP", 33);
+  }
+
+  return modProductName;
+};
+
+export const validateProductDescription = (
+  rawProductDescription: string
+): string => {
+  if (!rawProductDescription) {
+    throw ErrorObject("BP", 34);
+  }
+
+  const modProductDescription = rawProductDescription.trim();
+  if (modProductDescription.length >= 20) {
+    throw ErrorObject("BP", 35);
+  }
+
+  return modProductDescription;
+};

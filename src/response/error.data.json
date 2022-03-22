@@ -94,6 +94,26 @@
         "messageCode": 31,
         "message": "invalid isPublic",
         "statusCode": 400
+      },
+      {
+        "messageCode": 32,
+        "message": "product name is required",
+        "statusCode": 400
+      },
+      {
+        "messageCode": 33,
+        "message": "invalid product name",
+        "statusCode": 400
+      },
+      {
+        "messageCode": 34,
+        "message": "product description is required",
+        "statusCode": 400
+      },
+      {
+        "messageCode": 35,
+        "message": "invalid product description",
+        "statusCode": 400
       }
     ]
   },
