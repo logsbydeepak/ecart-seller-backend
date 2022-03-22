@@ -18,7 +18,7 @@ export const updateUser: MutationResolvers<GQLContext>["updateUser"] = async (
     const bodyData = validateBody(args, 3);
     const toUpdate: string = validateEmpty(bodyData.toUpdate, "BP", 18);
 
-    const dbUser: UserModelType = await dbReadUserById(userId);
+    const dbUser = await dbReadUserById(userId);
 
     if (
       toUpdate !== "name" &&

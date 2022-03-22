@@ -114,6 +114,16 @@
         "messageCode": 35,
         "message": "invalid product description",
         "statusCode": 400
+      },
+      {
+        "messageCode": 36,
+        "message": "product id required",
+        "statusCode": 400
+      },
+      {
+        "messageCode": 37,
+        "message": "invalid product id",
+        "statusCode": 400
       }
     ]
   },
