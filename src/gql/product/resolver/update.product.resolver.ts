@@ -1,7 +1,7 @@
 import { validateBody, validateEmpty } from "helper";
 import { ProductModel } from "model";
 import { ErrorObject, ErrorResponse, handleCatchError } from "response";
-import { GQLContext, ProductModelType } from "types";
+import { GQLContext } from "types";
 import { MutationResolvers } from "types/graphql";
 import { checkAccessToken } from "validateRequest";
 

@@ -6,7 +6,6 @@ type User {
 type ErrorResponse {
   title: String!
   message: String!
-  statusCode: Int!
 }
 
 type SuccessResponse {

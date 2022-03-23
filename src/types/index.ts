@@ -56,3 +56,10 @@ export interface ErrorObjectType {
 export interface MyErrorRequestHandler
   extends ErrorRequestHandler,
     ErrorObjectType {}
+
+export type ErrorMessageTitle =
+  | "INTERNAL_SERVER"
+  | "BODY_PARSE"
+  | "TOKEN_PARSE"
+  | "AUTHENTICATION"
+  | "QUERY_PARSE";

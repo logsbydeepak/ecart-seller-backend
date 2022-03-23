@@ -1,39 +1,35 @@
+import { ErrorMessageTitle } from "types";
 import { ErrorResponse as ErrorResponseType } from "types/graphql";
-import errorData from "./error.data.json";
 
-export const ErrorObject = (messageTypeCode: string, messageCode: number) => ({
-  ErrorObject: {
-    messageTypeCode,
-    messageCode,
-  },
-});
+export const ThrowErrorObject = (
+  messageTitle: ErrorMessageTitle,
+  message: number
+) => {
+  throw {
+    ErrorObject: {
+      messageTitle,
+      message,
+    },
+  };
+};
 
 export const ErrorResponse = (
-  messageTypeCode: string,
-  messageCode: number
+  messageTitle: string,
+  message: string
 ): ErrorResponseType => {
-  const responseData = errorData.find(
-    (data: any) => data.messageTypeCode === messageTypeCode
-  )!;
-
-  const responseMessage = responseData.response.find(
-    (data) => data.messageCode === messageCode
-  )!;
-
   return {
     __typename: "ErrorResponse",
-    title: responseData.messageType,
-    message: responseMessage.message,
-    statusCode: responseMessage.statusCode,
+    title: messageTitle,
+    message,
   };
 };
 
 export const handleCatchError = (error: any) => {
   if (error.ErrorObject) {
     return ErrorResponse(
-      error.ErrorObject.messageTypeCode,
-      error.ErrorObject.messageCode
+      error.ErrorObject.messageTitle,
+      error.ErrorObject.message
     );
   }
-  return ErrorResponse("IS", 10);
+  return ErrorResponse("INTERNAL_SERVER", "Something went wrong");
 };
