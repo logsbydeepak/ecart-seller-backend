@@ -1,17 +1,15 @@
 import { ErrorMessageTitle } from "types";
 import { ErrorResponse as ErrorResponseType } from "types/graphql";
 
-export const ThrowErrorObject = (
+export const ErrorObject = (
   messageTitle: ErrorMessageTitle,
   message: string
-) => {
-  throw {
-    ErrorObject: {
-      messageTitle,
-      message,
-    },
-  };
-};
+) => ({
+  ErrorObject: {
+    messageTitle,
+    message,
+  },
+});
 
 export const ErrorResponse = (
   messageTitle: string,

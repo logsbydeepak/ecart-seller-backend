@@ -5,7 +5,7 @@ import {
 } from "helper";
 
 import { TokenModel } from "model";
-import { TokenModelType } from "types";
+import { ErrorMessageTitle, TokenModelType } from "types";
 import { ErrorObject } from "response";
 
 export const dbCreateToken = (
@@ -28,13 +28,13 @@ export const dbCreateToken = (
 
 export const dbTokenExist = async (
   data: { accessToken: string } | { refreshToken: string },
-  messageTypeCode: string,
-  messageCode: number
+  messageTitle: ErrorMessageTitle,
+  message: string
 ): Promise<void> => {
   const dbTokenCount: number = await TokenModel.count(data);
 
   if (dbTokenCount === 0) {
-    throw ErrorObject(messageTypeCode, messageCode);
+    throw ErrorObject(messageTitle, message);
   }
 };
 
@@ -44,7 +44,7 @@ export const dbReadToken = async (
   const dbToken: TokenModelType | null = await TokenModel.findOne(data);
 
   if (!dbToken) {
-    throw ErrorObject("TP", 13);
+    throw ErrorObject("TOKEN_PARSE", "invalid token");
   }
   return dbToken;
 };

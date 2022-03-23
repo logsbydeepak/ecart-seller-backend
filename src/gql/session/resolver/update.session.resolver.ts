@@ -27,48 +27,58 @@ export const updateSession: MutationResolvers<GQLContext>["updateSession"] =
     try {
       const accessToken: string = validateEmpty(
         req.cookies.accessToken,
-        "TP",
-        14
+        "TOKEN_PARSE",
+        "access token is required"
       );
+
       const refreshToken: string = validateEmpty(
         req.cookies.refreshToken,
-        "TP",
-        14
+        "TOKEN_PARSE",
+        "access token is required"
       );
-      await dbTokenExist({ accessToken }, "TP", 15);
-      await dbTokenExist({ refreshToken }, "TP", 11);
+
+      await dbTokenExist(
+        { accessToken },
+        "TOKEN_PARSE",
+        "invalid access token"
+      );
+      await dbTokenExist(
+        { refreshToken },
+        "TOKEN_PARSE",
+        "invalid refresh token"
+      );
 
       const accessTokenDecryption: string = generateDecryption(
         accessToken,
-        "TP",
-        15
+        "TOKEN_PARSE",
+        "invalid access token"
       );
 
       const refreshTokenDecryption: string = generateDecryption(
         refreshToken,
-        "TP",
-        11
+        "TOKEN_PARSE",
+        "invalid refresh token"
       );
 
       const accessTokenData = accessTokenValidator(accessTokenDecryption);
       const refreshTokenData = refreshTokenValidator(refreshTokenDecryption);
 
       if (accessTokenData === null) {
-        throw ErrorObject("TP", 15);
+        throw ErrorObject("TOKEN_PARSE", "invalid access token");
       }
 
       if (refreshTokenData === null) {
-        throw ErrorObject("TP", 11);
+        throw ErrorObject("TOKEN_PARSE", "invalid refresh token");
       }
 
       if (accessTokenData !== "TokenExpiredError") {
-        throw ErrorObject("TP", 12);
+        throw ErrorObject("TOKEN_PARSE", "access token is not expired");
       }
 
       if (refreshTokenData === "TokenExpiredError") {
         removeAccessTokenCookie(res);
         removeRefreshTokenCookie(res);
-        throw ErrorObject("TP", 13);
+        throw ErrorObject("TOKEN_PARSE", "refresh token expired");
       }
 
       await dbUserExist(refreshTokenData.id);
@@ -103,7 +113,7 @@ export const updateSession: MutationResolvers<GQLContext>["updateSession"] =
         await TokenModel.deleteOne({ refreshToken });
         removeAccessTokenCookie(res);
         removeRefreshTokenCookie(res);
-        throw ErrorObject("TP", 17);
+        throw ErrorObject("TOKEN_PARSE", "refresh token expired");
       }
 
       if (accessTokenData === "TokenExpiredError") {
@@ -129,7 +139,7 @@ export const updateSession: MutationResolvers<GQLContext>["updateSession"] =
 
       removeAccessTokenCookie(res);
       removeRefreshTokenCookie(res);
-      throw ErrorObject("TP", 18);
+      throw ErrorObject("TOKEN_PARSE", "cannot update access token");
     } catch (error: any) {
       return handleCatchError(error);
     }

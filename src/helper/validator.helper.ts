@@ -1,19 +1,19 @@
 import isEmail from "validator/lib/isEmail";
 import isStrongPassword from "validator/lib/isStrongPassword";
 
-import { ThrowErrorObject } from "response";
+import { ErrorObject } from "response";
 import { ErrorMessageTitle } from "types";
 
 const productCategoryList = ["electronics", "home"];
 
 export const validateBody = (bodyData: any, bodyDataCount: number) => {
   if (bodyData.length >= 0) {
-    ThrowErrorObject("BODY_PARSE", "invalid data");
+    throw ErrorObject("BODY_PARSE", "invalid data");
   }
 
   const bodyDataLength: number = Object.keys(bodyData).length;
   if (bodyDataLength !== bodyDataCount) {
-    ThrowErrorObject("BODY_PARSE", "invalid data");
+    throw ErrorObject("BODY_PARSE", "invalid data");
   }
 
   return bodyData;
@@ -25,7 +25,7 @@ export const validateEmpty = (
   message: string
 ): string => {
   if (!rawData) {
-    ThrowErrorObject(messageTitle, message);
+    throw ErrorObject(messageTitle, message);
   }
 
   return rawData.trim();
@@ -33,12 +33,12 @@ export const validateEmpty = (
 
 export const validateEmail = (email: string): string => {
   if (!email) {
-    ThrowErrorObject("BODY_PARSE", "email is required");
+    throw ErrorObject("BODY_PARSE", "email is required");
   }
 
   const formattedEmail = email.trim().toLowerCase();
   if (!isEmail(formattedEmail)) {
-    ThrowErrorObject("BODY_PARSE", "invalid email");
+    throw ErrorObject("BODY_PARSE", "invalid email");
   }
 
   return formattedEmail;
@@ -46,12 +46,12 @@ export const validateEmail = (email: string): string => {
 
 export const validatePassword = (password: string): string => {
   if (!password) {
-    ThrowErrorObject("BODY_PARSE", "password is required");
+    throw ErrorObject("BODY_PARSE", "password is required");
   }
 
   const formattedPassword = password.trim();
   if (!isStrongPassword(formattedPassword)) {
-    ThrowErrorObject("BODY_PARSE", "invalid password");
+    throw ErrorObject("BODY_PARSE", "invalid password");
   }
 
   return formattedPassword;
@@ -59,7 +59,7 @@ export const validatePassword = (password: string): string => {
 
 export const validateCategory = (rawCategory: string): string => {
   if (!rawCategory) {
-    ThrowErrorObject("BODY_PARSE", "category is required");
+    throw ErrorObject("BODY_PARSE", "category is required");
   }
 
   const formattedCategory = rawCategory.trim().toLocaleLowerCase();
@@ -68,7 +68,7 @@ export const validateCategory = (rawCategory: string): string => {
   );
 
   if (!isValidCategory) {
-    ThrowErrorObject("BODY_PARSE", "invalid category");
+    throw ErrorObject("BODY_PARSE", "invalid category");
   }
 
   return formattedCategory;
@@ -76,11 +76,11 @@ export const validateCategory = (rawCategory: string): string => {
 
 export const validateIsPublic = (rawIsPublic: boolean): boolean => {
   if (!rawIsPublic) {
-    ThrowErrorObject("BODY_PARSE", "is public is required");
+    throw ErrorObject("BODY_PARSE", "isPublic is required");
   }
 
   if (typeof rawIsPublic !== "boolean") {
-    ThrowErrorObject("BODY_PARSE", "invalid is public");
+    throw ErrorObject("BODY_PARSE", "invalid isPublic");
   }
 
   return rawIsPublic;
@@ -88,12 +88,12 @@ export const validateIsPublic = (rawIsPublic: boolean): boolean => {
 
 export const validateProductName = (rawProductName: string): string => {
   if (!rawProductName) {
-    ThrowErrorObject("BODY_PARSE", "product name is required");
+    throw ErrorObject("BODY_PARSE", "product name is required");
   }
 
   const formattedProductName = rawProductName.trim();
   if (formattedProductName.length >= 10) {
-    ThrowErrorObject("BODY_PARSE", "invalid product name");
+    throw ErrorObject("BODY_PARSE", "invalid product name");
   }
 
   return formattedProductName;
@@ -103,12 +103,12 @@ export const validateProductDescription = (
   rawProductDescription: string
 ): string => {
   if (!rawProductDescription) {
-    ThrowErrorObject("BODY_PARSE", "product description is required");
+    throw ErrorObject("BODY_PARSE", "product description is required");
   }
 
   const formattedProductDescription = rawProductDescription.trim();
   if (formattedProductDescription.length >= 20) {
-    ThrowErrorObject("BODY_PARSE", "invalid product description");
+    throw ErrorObject("BODY_PARSE", "invalid product description");
   }
 
   return formattedProductDescription;

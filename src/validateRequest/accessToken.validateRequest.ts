@@ -1,6 +1,6 @@
 import { Request } from "express";
 
-import { ErrorObject, handleCatchError } from "response";
+import { handleCatchError, ErrorObject } from "response";
 import {
   validateEmpty,
   accessTokenValidator,
@@ -13,30 +13,31 @@ export const checkAccessToken = async (req: Request) => {
   try {
     const accessToken: string = validateEmpty(
       req.cookies.accessToken,
-      "TP",
-      14
-    );
-    const accessTokenDecryption: string = generateDecryption(
-      accessToken,
-      "TP",
-      15
+      "TOKEN_PARSE",
+      "access token is required"
     );
 
-    await dbTokenExist({ accessToken }, "TP", 15);
+    const accessTokenDecryption: string = generateDecryption(
+      accessToken,
+      "TOKEN_PARSE",
+      "invalid access token"
+    );
+
+    await dbTokenExist({ accessToken }, "TOKEN_PARSE", "invalid access token");
 
     const accessTokenData = accessTokenValidator(accessTokenDecryption);
 
     if (!accessTokenData) {
-      throw ErrorObject("TP", 15);
+      throw ErrorObject("TOKEN_PARSE", "invalid access token");
     }
 
     if (accessTokenData === "TokenExpiredError") {
-      throw ErrorObject("TP", 16);
+      throw ErrorObject("TOKEN_PARSE", "token expired");
     }
 
     const userId: string = accessTokenData.id;
     if (!userId) {
-      throw ErrorObject("TP", 15);
+      throw ErrorObject("TOKEN_PARSE", "invalid access token");
     }
 
     await dbUserExist(userId);

@@ -3,6 +3,7 @@ import { compare, hash } from "bcryptjs";
 
 import { ErrorObject } from "response";
 import { ENCRYPT_SECRET } from "config";
+import { ErrorMessageTitle } from "types";
 
 const cryptr = new Cryptr(ENCRYPT_SECRET as string);
 
@@ -16,13 +17,13 @@ export const generateEncryption = (token: string): string =>
 
 export const generateDecryption = (
   token: string,
-  messageCodeType: string,
-  messageCode: number
-): string => {
+  messageTitle: ErrorMessageTitle,
+  message: string
+) => {
   try {
     return cryptr.decrypt(token);
   } catch (error: any) {
-    throw ErrorObject(messageCodeType, messageCode);
+    throw ErrorObject(messageTitle, message);
   }
 };
 
@@ -33,6 +34,6 @@ export const validateHashAndSalt = async (
   const comparePassword = await compare(rawPassword, dbPassword);
 
   if (!comparePassword) {
-    throw ErrorObject("BP", 20);
+    throw ErrorObject("BODY_PARSE", "invalid password");
   }
 };

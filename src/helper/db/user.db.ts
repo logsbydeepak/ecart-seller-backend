@@ -5,7 +5,7 @@ import { ErrorObject } from "response";
 export const dbEmailExist = async (email: string): Promise<void> => {
   const emailCount = await UserModel.count({ email });
   if (emailCount !== 0) {
-    throw ErrorObject("AU", 11);
+    throw ErrorObject("AUTHENTICATION", "user already exist");
   }
 };
 
@@ -15,7 +15,7 @@ export const dbUserExist = async (userId: string): Promise<void> => {
   });
 
   if (idCount === 0) {
-    throw ErrorObject("AU", 10);
+    throw ErrorObject("AUTHENTICATION", "user do not exist");
   }
 };
 
@@ -25,7 +25,7 @@ export const dbReadUserById = async (
   const dbUser: UserModelType | null = await UserModel.findById(userId);
 
   if (!dbUser) {
-    throw ErrorObject("AU", 10);
+    throw ErrorObject("AUTHENTICATION", "user do not exist");
   }
 
   return dbUser;
@@ -37,7 +37,7 @@ export const dbReadUserByEmail = async (
   const dbUser: UserModelType | null = await UserModel.findOne({ email });
 
   if (!dbUser) {
-    throw ErrorObject("AU", 10);
+    throw ErrorObject("AUTHENTICATION", "user do not exist");
   }
 
   return dbUser;

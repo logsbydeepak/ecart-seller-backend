@@ -2,7 +2,7 @@ import { MutationResolvers } from "types/graphql";
 
 import { validateEmpty, dbReadUserById, validateBody } from "helper";
 
-import { ErrorResponse, handleCatchError } from "response";
+import { ErrorObject, ErrorResponse, handleCatchError } from "response";
 import { checkAccessToken, checkPassword } from "validateRequest";
 import { UserModelType, GQLContext } from "types";
 
@@ -16,7 +16,11 @@ export const updateUser: MutationResolvers<GQLContext>["updateUser"] = async (
     await checkPassword(args.currentPassword!, userId);
 
     const bodyData = validateBody(args, 3);
-    const toUpdate: string = validateEmpty(bodyData.toUpdate, "BP", 18);
+    const toUpdate: string = validateEmpty(
+      bodyData.toUpdate,
+      "BODY_PARSE",
+      "toUpdate is required"
+    );
 
     const dbUser = await dbReadUserById(userId);
 
@@ -25,7 +29,7 @@ export const updateUser: MutationResolvers<GQLContext>["updateUser"] = async (
       toUpdate !== "email" &&
       toUpdate !== "password"
     ) {
-      return ErrorResponse("BP", 19);
+      throw ErrorObject("BODY_PARSE", "invalid toUpdate");
     }
 
     dbUser[toUpdate] = bodyData[toUpdate];

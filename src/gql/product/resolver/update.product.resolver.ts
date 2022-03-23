@@ -1,6 +1,6 @@
 import { validateBody, validateEmpty } from "helper";
 import { ProductModel } from "model";
-import { ErrorObject, ErrorResponse, handleCatchError } from "response";
+import { ErrorObject, handleCatchError } from "response";
 import { GQLContext } from "types";
 import { MutationResolvers } from "types/graphql";
 import { checkAccessToken } from "validateRequest";
@@ -11,7 +11,11 @@ export const updateProduct: MutationResolvers<GQLContext>["updateProduct"] =
       const userId = await checkAccessToken(req);
 
       const bodyDate = validateBody(args, 3);
-      const toUpdate = validateEmpty(bodyDate.toUpdate, "BP", 18);
+      const toUpdate = validateEmpty(
+        bodyDate.toUpdate,
+        "BODY_PARSE",
+        "toUpdate is required"
+      );
 
       if (
         toUpdate !== "name" &&
@@ -19,14 +23,18 @@ export const updateProduct: MutationResolvers<GQLContext>["updateProduct"] =
         toUpdate !== "isPublic" &&
         toUpdate !== "category"
       ) {
-        throw ErrorResponse("BP", 37);
+        throw ErrorObject("BODY_PARSE", "invalid toUpdate");
       }
 
-      const productId = validateEmpty(args.toUpdate, "BP", 36);
+      const productId = validateEmpty(
+        args.toUpdate,
+        "BODY_PARSE",
+        "product id is required"
+      );
 
       const dbProduct = await ProductModel.findById(productId);
       if (!dbProduct || dbProduct.owner !== userId) {
-        throw ErrorObject("BP", 37);
+        throw ErrorObject("BODY_PARSE", "invalid product id");
       }
 
       // @ts-ignore
