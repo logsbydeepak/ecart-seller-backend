@@ -20,7 +20,7 @@ const UserSchema: Schema = new Schema({
 });
 
 UserSchema.post("validate", async function () {
-  this.name = validateEmpty(this.name, "BP", 13);
+  this.name = validateEmpty(this.name, "BODY_PARSE", "name is required");
   this.email = validateEmail(this.email);
   this.password = validatePassword(this.password);
   await dbEmailExist(this.email);

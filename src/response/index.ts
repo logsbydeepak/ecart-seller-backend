@@ -3,7 +3,7 @@ import { ErrorResponse as ErrorResponseType } from "types/graphql";
 
 export const ThrowErrorObject = (
   messageTitle: ErrorMessageTitle,
-  message: number
+  message: string
 ) => {
   throw {
     ErrorObject: {

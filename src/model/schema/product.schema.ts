@@ -1,5 +1,5 @@
 import {
-  validateCatergory,
+  validateCategory,
   validateIsPublic,
   validateProductDescription,
   validateProductName,
@@ -17,7 +17,7 @@ const ProductSchema: Schema = new Schema({
 });
 
 ProductSchema.post("validate", async function () {
-  this.category = validateCatergory(this.category);
+  this.category = validateCategory(this.category);
   this.name = validateProductName(this.name);
   this.description = validateProductDescription(this.description);
   this.isPublic = validateIsPublic(this.isPublic);
