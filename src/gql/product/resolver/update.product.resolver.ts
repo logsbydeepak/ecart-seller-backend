@@ -44,6 +44,7 @@ export const updateProduct: MutationResolvers<GQLContext>["updateProduct"] =
 
       return {
         __typename: "Product",
+        id: dbProduct._id,
         name: dbProduct.name,
         description: dbProduct.description,
         isPublic: dbProduct.isPublic,

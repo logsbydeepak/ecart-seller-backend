@@ -32,8 +32,9 @@ export const readProduct: QueryResolvers<GQLContext>["readProduct"] = async (
     const newDBProduct: Product[] = [];
 
     dbProduct.forEach((element) => {
-      const { name, description, isPublic, category } = element;
+      const { name, description, isPublic, category, _id } = element;
       newDBProduct.push({
+        id: _id,
         name,
         description,
         isPublic,

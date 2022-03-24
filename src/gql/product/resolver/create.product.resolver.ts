@@ -13,6 +13,7 @@ export const createProduct: MutationResolvers<GQLContext>["createProduct"] =
       await newProduct.save();
       return {
         __typename: "Product",
+        id: newProduct._id,
         name: newProduct.name,
         description: newProduct.description,
         isPublic: newProduct.isPublic,
