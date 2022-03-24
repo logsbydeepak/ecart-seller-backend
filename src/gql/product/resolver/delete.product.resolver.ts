@@ -9,11 +9,15 @@ export const deleteProduct: MutationResolvers<GQLContext>["deleteProduct"] =
   async (parent, args, { req, res }) => {
     try {
       const userId = await checkAccessToken(req);
-      const productId = validateEmpty(args.id, "BP", 36);
+      const productId = validateEmpty(
+        args.id,
+        "BODY_PARSE",
+        "product id is required"
+      );
 
       const dbProduct = await ProductModel.findById(productId);
       if (!dbProduct || dbProduct.owner !== userId) {
-        throw ErrorObject("BP", 37);
+        throw ErrorObject("BODY_PARSE", "product do not exist");
       }
 
       await ProductModel.findByIdAndRemove(productId);

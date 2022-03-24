@@ -1,9 +1,10 @@
 type Query {
   readProduct(
     category: String!
-    pagination: Int!
     isPublic: Boolean!
-  ): ProductInfo
+    skip: Int!
+    limit: Int!
+  ): [ProductInfo]
 }
 
 type Mutation {

@@ -75,7 +75,7 @@ export const validateCategory = (rawCategory: string): string => {
 };
 
 export const validateIsPublic = (rawIsPublic: boolean): boolean => {
-  if (!rawIsPublic) {
+  if (rawIsPublic.toString().length === 0) {
     throw ErrorObject("BODY_PARSE", "isPublic is required");
   }
 
@@ -92,7 +92,7 @@ export const validateProductName = (rawProductName: string): string => {
   }
 
   const formattedProductName = rawProductName.trim();
-  if (formattedProductName.length >= 10) {
+  if (formattedProductName.length <= 10) {
     throw ErrorObject("BODY_PARSE", "invalid product name");
   }
 
@@ -107,7 +107,7 @@ export const validateProductDescription = (
   }
 
   const formattedProductDescription = rawProductDescription.trim();
-  if (formattedProductDescription.length >= 20) {
+  if (formattedProductDescription.length <= 20) {
     throw ErrorObject("BODY_PARSE", "invalid product description");
   }
 

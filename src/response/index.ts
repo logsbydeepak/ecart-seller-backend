@@ -23,6 +23,9 @@ export const ErrorResponse = (
 };
 
 export const handleCatchError = (error: any) => {
+  if (error.__typename === "ErrorResponse") {
+    return error;
+  }
   if (error.ErrorObject) {
     return ErrorResponse(
       error.ErrorObject.messageTitle,

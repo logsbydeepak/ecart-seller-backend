@@ -8,7 +8,7 @@ import { TokenModel, UserModel } from "model";
 import { checkAccessToken } from "validateRequest";
 
 export const deleteUser: MutationResolvers<GQLContext>["deleteUser"] = async (
-  parend,
+  parent,
   args,
   { req, res }
 ) => {
