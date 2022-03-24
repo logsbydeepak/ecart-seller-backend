@@ -113,3 +113,18 @@ export const validateProductDescription = (
 
   return formattedProductDescription;
 };
+
+export const validateIsNumber = (
+  rawIsNumber: number,
+  value: string
+): number => {
+  if (rawIsNumber.toString().length === 0) {
+    throw ErrorObject("BODY_PARSE", `${value} is required`);
+  }
+
+  if (typeof rawIsNumber !== "boolean") {
+    throw ErrorObject("BODY_PARSE", `invalid ${value}`);
+  }
+
+  return rawIsNumber;
+};

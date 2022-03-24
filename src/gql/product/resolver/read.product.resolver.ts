@@ -1,3 +1,4 @@
+import { validateCategory, validateIsNumber, validateIsPublic } from "helper";
 import { ProductModel } from "model";
 import { ErrorObject, handleCatchError } from "response";
 import { GQLContext } from "types";
@@ -11,7 +12,10 @@ export const readProduct: QueryResolvers<GQLContext>["readProduct"] = async (
 ) => {
   try {
     const userId = await checkAccessToken(req);
-    const { category, isPublic, skip, limit } = args;
+    const category = validateCategory(args.category);
+    const isPublic = validateIsPublic(args.isPublic);
+    const skip = validateIsNumber(args.skip, "skip");
+    const limit = validateIsNumber(args.limit, "limit");
 
     const dbProduct = await ProductModel.find({
       owner: userId,
