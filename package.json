@@ -27,8 +27,8 @@
   "homepage": "https://github.com/logsbydeepak/ecart-seller-backend#readme",
   "devDependencies": {
     "@graphql-codegen/cli": "2.6.2",
-    "@graphql-codegen/typescript": "2.4.7",
-    "@graphql-codegen/typescript-resolvers": "2.5.4",
+    "@graphql-codegen/typescript": "2.4.8",
+    "@graphql-codegen/typescript-resolvers": "2.6.1",
     "@types/bcryptjs": "^2.4.2",
     "@types/cookie-parser": "^1.4.2",
     "@types/cryptr": "^4.0.1",
@@ -38,16 +38,16 @@
     "copyfiles": "^2.4.1",
     "npm-run-all": "^4.1.5",
     "onchange": "^7.1.0",
-    "prettier": "^2.5.1",
+    "prettier": "^2.6.1",
     "rimraf": "^3.0.2",
     "ts-node-dev": "^1.1.8",
-    "typescript": "^4.6.2"
+    "typescript": "^4.6.3"
   },
   "dependencies": {
-    "@graphql-tools/graphql-file-loader": "^7.3.4",
-    "@graphql-tools/load": "^7.5.2",
-    "@graphql-tools/schema": "^8.3.2",
-    "apollo-server-express": "^3.6.4",
+    "@graphql-tools/graphql-file-loader": "^7.3.7",
+    "@graphql-tools/load": "^7.5.5",
+    "@graphql-tools/schema": "^8.3.5",
+    "apollo-server-express": "^3.6.6",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
     "cross-env": "^7.0.3",
@@ -58,8 +58,8 @@
     "helmet": "^5.0.2",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.1",
-    "mongoose": "^6.2.6",
-    "tsconfig-paths": "^3.13.0",
+    "mongoose": "^6.2.8",
+    "tsconfig-paths": "^3.14.1",
     "validator": "^13.7.0"
   }
 }
