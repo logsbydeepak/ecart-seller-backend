@@ -1,0 +1,10 @@
+type Query {
+  readReview: [ReviewInfo]
+}
+
+type Review {
+  name: String!
+  comment: String!
+}
+
+union ReviewInfo = Review | ErrorResponse

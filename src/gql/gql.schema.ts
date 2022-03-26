@@ -6,9 +6,10 @@ const allSchema = resolve(__dirname + "/gql.schema.gql");
 const userSchema = resolve(__dirname + "/user/user.schema.gql");
 const sessionSchema = resolve(__dirname + "/session/session.schema.gql");
 const productSchema = resolve(__dirname + "/product/product.schema.gql");
+const reviewSchema = resolve(__dirname + "/review/review.schema.gql");
 
 export const gqlSchema = loadSchemaSync(
-  [allSchema, userSchema, sessionSchema, productSchema],
+  [allSchema, userSchema, sessionSchema, productSchema, reviewSchema],
   {
     loaders: [new GraphQLFileLoader()],
   }
