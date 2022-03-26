@@ -14,7 +14,7 @@ import {
 export const UserModel: Model<UserModelType> = model("users", UserSchema);
 export const TokenModel: Model<TokenModelType> = model("tokens", TokenSchema);
 export const ReviewModel: Model<ReviewModelType> = model(
-  "tokens",
+  "reviews",
   ReviewSchema
 );
 export const ProductModel: Model<ProductModelType> = model(

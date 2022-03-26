@@ -1,5 +1,5 @@
 type Query {
-  readReview: [ReviewInfo]
+  readReview(productId: String!, skip: Int!, limit: Int!): [ReviewInfo]
 }
 
 type Review {
