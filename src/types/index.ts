@@ -21,6 +21,12 @@ export interface TokenModelType extends Document {
   refreshToken: string;
 }
 
+export interface ReviewModelType extends Document {
+  productId: string;
+  buyerId: string;
+  comment: string;
+}
+
 export interface ProductModelType extends Document {
   _id: string;
   owner: string;
