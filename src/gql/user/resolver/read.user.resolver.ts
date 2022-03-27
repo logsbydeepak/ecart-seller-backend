@@ -3,7 +3,7 @@ import { handleCatchError } from "response";
 import { QueryResolvers } from "types/graphql";
 import { GQLContext, UserModelType } from "types";
 import { checkAccessToken } from "validateRequest";
-import { SellerAccountModel } from "model";
+import { SellerUserModel } from "model";
 
 export const readUser: QueryResolvers<GQLContext>["readUser"] = async (
   parent,

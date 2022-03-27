@@ -10,7 +10,7 @@ import {
 
 import { GQLContext, UserModelType } from "types";
 import { handleCatchError } from "response";
-import { BuyerAccountModel, SellerAccountModel } from "model";
+import { BuyerUserModel, SellerUserModel } from "model";
 
 export const createUser: MutationResolvers<GQLContext>["createUser"] = async (
   parent,
@@ -25,10 +25,10 @@ export const createUser: MutationResolvers<GQLContext>["createUser"] = async (
     let newUserId;
 
     if (accountType === "SELLER") {
-      newUser = new SellerAccountModel(bodyData);
+      newUser = new SellerUserModel(bodyData);
       newUserId = newUser._id;
     } else {
-      newUser = new BuyerAccountModel(bodyData);
+      newUser = new BuyerUserModel(bodyData);
       newUserId = newUser._id;
     }
 

@@ -1,7 +1,8 @@
 import { model, Model } from "mongoose";
 
-import UserSchema from "./schema/user.schema";
 import TokenSchema from "./schema/token.schema";
+import SellerUserSchema from "./schema/sellerUser.schema";
+import BuyerUserSchema from "./schema/buyerSeller.schema";
 import ProductSchema from "./schema/product.schema";
 import ReviewSchema from "./schema/review.schema";
 import {
@@ -11,16 +12,18 @@ import {
   UserModelType,
 } from "types";
 
-export const UserModel: Model<UserModelType> = model("users", UserSchema);
-export const SellerAccountModel: Model<UserModelType> = model(
-  "sellersAccount",
-  UserSchema
+export const SellerUserModel: Model<UserModelType> = model(
+  "sellerUsers",
+  SellerUserSchema
 );
-export const BuyerAccountModel: Model<UserModelType> = model(
-  "buyersAccounts",
-  UserSchema
+
+export const BuyerUserModel: Model<UserModelType> = model(
+  "buyerUsers",
+  BuyerUserSchema
 );
+
 export const TokenModel: Model<TokenModelType> = model("tokens", TokenSchema);
+
 export const SellerAccountTokenModel: Model<TokenModelType> = model(
   "sellersAccountTokens",
   TokenSchema
