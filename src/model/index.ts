@@ -12,7 +12,23 @@ import {
 } from "types";
 
 export const UserModel: Model<UserModelType> = model("users", UserSchema);
+export const SellerAccountModel: Model<UserModelType> = model(
+  "sellersAccount",
+  UserSchema
+);
+export const BuyerAccountModel: Model<UserModelType> = model(
+  "buyersAccounts",
+  UserSchema
+);
 export const TokenModel: Model<TokenModelType> = model("tokens", TokenSchema);
+export const SellerAccountTokenModel: Model<TokenModelType> = model(
+  "sellersAccountTokens",
+  TokenSchema
+);
+export const BuyerAccountTokenModel: Model<TokenModelType> = model(
+  "buyersAccountTokens",
+  TokenSchema
+);
 export const ReviewModel: Model<ReviewModelType> = model(
   "reviews",
   ReviewSchema

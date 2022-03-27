@@ -1,6 +1,12 @@
+enum AccountType {
+  SELLER
+  BUYER
+}
+
 type User {
   name: String!
   email: String!
+  type: AccountType!
 }
 
 type ErrorResponse {

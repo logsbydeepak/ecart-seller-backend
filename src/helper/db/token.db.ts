@@ -4,24 +4,43 @@ import {
   refreshTokenGenerator,
 } from "helper";
 
-import { TokenModel } from "model";
+import {
+  BuyerAccountTokenModel,
+  SellerAccountTokenModel,
+  TokenModel,
+} from "model";
 import { ErrorMessageTitle, TokenModelType } from "types";
 import { ErrorObject } from "response";
 
 export const dbCreateToken = (
   userId: string,
-  refreshTokenCount: number
+  refreshTokenCount: number,
+  accountType: "SELLER" | "BUYER"
 ): TokenModelType => {
-  const accessToken: string = accessTokenGenerator(userId);
-  const refreshToken: string = refreshTokenGenerator(userId, refreshTokenCount);
+  const accessToken: string = accessTokenGenerator(userId, accountType);
+  const refreshToken: string = refreshTokenGenerator(
+    userId,
+    accountType,
+    refreshTokenCount
+  );
   const accessTokenEncrypt: string = generateEncryption(accessToken);
   const refreshTokenEncrypt: string = generateEncryption(refreshToken);
 
-  const newToken: TokenModelType = new TokenModel({
-    owner: userId,
-    refreshToken: refreshTokenEncrypt,
-    accessToken: accessTokenEncrypt,
-  });
+  let newToken: TokenModelType;
+
+  if (accountType === "SELLER") {
+    newToken = new SellerAccountTokenModel({
+      owner: userId,
+      refreshToken: refreshTokenEncrypt,
+      accessToken: accessTokenEncrypt,
+    });
+  } else {
+    newToken = new BuyerAccountTokenModel({
+      owner: userId,
+      refreshToken: refreshTokenEncrypt,
+      accessToken: accessTokenEncrypt,
+    });
+  }
 
   return newToken;
 };

@@ -2,16 +2,20 @@ import { JwtPayload, sign, verify } from "jsonwebtoken";
 
 import { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from "config";
 
-export const accessTokenGenerator = (id: string): string =>
-  sign({ id }, ACCESS_TOKEN_SECRET as string, {
+export const accessTokenGenerator = (
+  id: string,
+  type: "SELLER" | "BUYER"
+): string =>
+  sign({ id, type }, ACCESS_TOKEN_SECRET as string, {
     expiresIn: "15m",
   });
 
 export const refreshTokenGenerator = (
   id: string,
+  type: "SELLER" | "BUYER",
   refreshTokenRefreshCount: number
 ): string =>
-  sign({ id, refreshTokenRefreshCount }, REFRESH_TOKEN_SECRET as string, {
+  sign({ id, refreshTokenRefreshCount, type }, REFRESH_TOKEN_SECRET as string, {
     expiresIn: "30d",
   });
 
