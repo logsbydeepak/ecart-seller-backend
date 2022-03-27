@@ -1,5 +1,5 @@
-import { UserModel } from "model";
-import { UserModelType } from "types";
+import { BuyerAccountModel, SellerAccountModel, UserModel } from "model";
+import { UserModelType, UserType } from "types";
 import { ErrorObject } from "response";
 
 export const dbEmailExist = async (email: string): Promise<void> => {
@@ -9,10 +9,21 @@ export const dbEmailExist = async (email: string): Promise<void> => {
   }
 };
 
-export const dbUserExist = async (userId: string): Promise<void> => {
-  const idCount: number = await UserModel.count({
-    _id: userId,
-  });
+export const dbUserExist = async (
+  userId: string,
+  userType: UserType
+): Promise<void> => {
+  let idCount;
+
+  if (userType === "SELLER") {
+    idCount = await SellerAccountModel.count({
+      _id: userId,
+    });
+  } else {
+    idCount = await BuyerAccountModel.count({
+      _id: userId,
+    });
+  }
 
   if (idCount === 0) {
     throw ErrorObject("AUTHENTICATION", "user do not exist");
@@ -20,9 +31,16 @@ export const dbUserExist = async (userId: string): Promise<void> => {
 };
 
 export const dbReadUserById = async (
-  userId: string
+  userId: string,
+  userType: UserType
 ): Promise<UserModelType> => {
-  const dbUser: UserModelType | null = await UserModel.findById(userId);
+  let dbUser;
+
+  if (userType === "SELLER") {
+    dbUser = await SellerAccountModel.findById(userId);
+  } else {
+    dbUser = await BuyerAccountModel.findById(userId);
+  }
 
   if (!dbUser) {
     throw ErrorObject("AUTHENTICATION", "user do not exist");

@@ -1,6 +1,7 @@
 import { Request } from "express";
 
 import { handleCatchError, ErrorObject } from "response";
+import { isValidObjectId } from "mongoose";
 import {
   validateEmpty,
   accessTokenValidator,
@@ -23,8 +24,6 @@ export const checkAccessToken = async (req: Request) => {
       "invalid access token"
     );
 
-    await dbTokenExist({ accessToken }, "TOKEN_PARSE", "invalid access token");
-
     const accessTokenData = accessTokenValidator(accessTokenDecryption);
 
     if (!accessTokenData) {
@@ -36,13 +35,26 @@ export const checkAccessToken = async (req: Request) => {
     }
 
     const userId: string = accessTokenData.id;
-    if (!userId) {
+    const userType = accessTokenData.type;
+
+    if (
+      !userId ||
+      !isValidObjectId(userId) ||
+      !userType ||
+      (userType !== "SELLER" && userType !== "BUYER")
+    ) {
       throw ErrorObject("TOKEN_PARSE", "invalid access token");
     }
 
-    await dbUserExist(userId);
+    await dbTokenExist(
+      { accessToken },
+      userType,
+      "TOKEN_PARSE",
+      "invalid access token"
+    );
+    await dbUserExist(userId, userType);
 
-    return userId;
+    return { userId, userType };
   } catch (error: any) {
     throw handleCatchError(error);
   }

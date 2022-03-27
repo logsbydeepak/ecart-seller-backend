@@ -9,7 +9,7 @@ import {
   SellerAccountTokenModel,
   TokenModel,
 } from "model";
-import { ErrorMessageTitle, TokenModelType } from "types";
+import { ErrorMessageTitle, TokenModelType, UserType } from "types";
 import { ErrorObject } from "response";
 
 export const dbCreateToken = (
@@ -47,10 +47,17 @@ export const dbCreateToken = (
 
 export const dbTokenExist = async (
   data: { accessToken: string } | { refreshToken: string },
+  userType: UserType,
   messageTitle: ErrorMessageTitle,
   message: string
 ): Promise<void> => {
-  const dbTokenCount: number = await TokenModel.count(data);
+  let dbTokenCount;
+
+  if (userType === "SELLER") {
+    dbTokenCount = await SellerAccountTokenModel.count(data);
+  } else {
+    dbTokenCount = await BuyerAccountTokenModel.count(data);
+  }
 
   if (dbTokenCount === 0) {
     throw ErrorObject(messageTitle, message);
