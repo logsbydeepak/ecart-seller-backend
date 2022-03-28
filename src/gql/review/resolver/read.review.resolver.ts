@@ -3,7 +3,7 @@ import { handleCatchError } from "response";
 import { GQLContext } from "types";
 import { QueryResolvers, Review } from "types/graphql";
 import { checkAccessToken } from "validateRequest";
-import { ReviewModel, UserModel } from "model";
+import { ReviewModel, SellerUserModel } from "model";
 import { ErrorObject } from "response";
 
 export const readReview: QueryResolvers<GQLContext>["readReview"] = async (
@@ -33,7 +33,7 @@ export const readReview: QueryResolvers<GQLContext>["readReview"] = async (
 
     dbReview.forEach(async (element) => {
       const { comment, buyerId } = element;
-      const dbUser = await UserModel.findById(buyerId);
+      const dbUser = await SellerUserModel.findById(buyerId);
       if (!dbUser) {
         throw {};
       }

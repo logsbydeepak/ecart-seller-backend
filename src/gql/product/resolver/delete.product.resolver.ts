@@ -8,7 +8,7 @@ import { checkAccessToken } from "validateRequest";
 export const deleteProduct: MutationResolvers<GQLContext>["deleteProduct"] =
   async (parent, args, { req, res }) => {
     try {
-      const userId = await checkAccessToken(req);
+      const { userId, userType } = await checkAccessToken(req);
       const productId = validateEmpty(
         args.id,
         "BODY_PARSE",
@@ -16,7 +16,11 @@ export const deleteProduct: MutationResolvers<GQLContext>["deleteProduct"] =
       );
 
       const dbProduct = await ProductModel.findById(productId);
-      if (!dbProduct || dbProduct.owner !== userId) {
+      if (!dbProduct) {
+        throw ErrorObject("BODY_PARSE", "product do not exist");
+      }
+
+      if (dbProduct.owner !== userId) {
         throw ErrorObject("BODY_PARSE", "product do not exist");
       }
 

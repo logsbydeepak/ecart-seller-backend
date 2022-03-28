@@ -7,6 +7,7 @@ import {
   validateHashAndSalt,
   dbCreateToken,
   dbReadUserByEmail,
+  validateAccountType,
 } from "helper";
 
 import {
@@ -25,12 +26,13 @@ export const createSession: MutationResolvers<GQLContext>["createSession"] =
       const bodyData: CreateUserBodyType = validateBody(args, 2);
       const email: string = validateEmail(bodyData.email);
       const password: string = validatePassword(bodyData.password);
+      const userType = validateAccountType(args.userType);
 
-      const dbUser: UserModelType = await dbReadUserByEmail(email);
+      const dbUser: UserModelType = await dbReadUserByEmail(email, userType);
 
       await validateHashAndSalt(password, dbUser.password as string);
       const dbUserId: string = dbUser._id;
-      const newToken: TokenModelType = dbCreateToken(dbUserId, 1);
+      const newToken: TokenModelType = dbCreateToken(dbUserId, 1, userType);
       await newToken.save();
 
       setAccessTokenCookie(res, newToken.accessToken);

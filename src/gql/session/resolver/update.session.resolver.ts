@@ -39,11 +39,13 @@ export const updateSession: MutationResolvers<GQLContext>["updateSession"] =
 
       await dbTokenExist(
         { accessToken },
+        "SELLER",
         "TOKEN_PARSE",
         "invalid access token"
       );
       await dbTokenExist(
         { refreshToken },
+        "SELLER",
         "TOKEN_PARSE",
         "invalid refresh token"
       );
@@ -81,7 +83,7 @@ export const updateSession: MutationResolvers<GQLContext>["updateSession"] =
         throw ErrorObject("TOKEN_PARSE", "refresh token expired");
       }
 
-      await dbUserExist(refreshTokenData.id);
+      await dbUserExist(refreshTokenData.id, "SELLER");
 
       const timeBeforeExpire = moment
         .unix(refreshTokenData.exp as number)
@@ -96,7 +98,8 @@ export const updateSession: MutationResolvers<GQLContext>["updateSession"] =
 
         const newDbToken: TokenModelType = dbCreateToken(
           refreshTokenData.id,
-          refreshTokenData.refreshTokenRefreshCount + 1
+          refreshTokenData.refreshTokenRefreshCount + 1,
+          "SELLER"
         );
         await newDbToken.save();
 
@@ -118,7 +121,8 @@ export const updateSession: MutationResolvers<GQLContext>["updateSession"] =
 
       if (accessTokenData === "TokenExpiredError") {
         const accessTokenRaw: string = accessTokenGenerator(
-          refreshTokenData.id
+          refreshTokenData.id,
+          "SELLER"
         );
         const accessTokenEncrypt: string = generateEncryption(accessTokenRaw);
 
