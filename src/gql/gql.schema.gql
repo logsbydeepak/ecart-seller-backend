@@ -1,4 +1,4 @@
-enum AccountType {
+enum UserType {
   SELLER
   BUYER
 }
@@ -6,7 +6,7 @@ enum AccountType {
 type User {
   name: String!
   email: String!
-  type: AccountType!
+  type: UserType!
 }
 
 type ErrorResponse {

@@ -7,7 +7,7 @@ type Mutation {
     name: String!
     email: String!
     password: String!
-    accountType: String!
+    userType: String!
   ): UserInfo
   deleteUser(currentPassword: String!): DeleteData
   updateUser(

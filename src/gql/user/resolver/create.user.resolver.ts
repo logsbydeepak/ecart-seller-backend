@@ -3,7 +3,7 @@ import { MutationResolvers } from "types/graphql";
 import {
   validateBody,
   dbCreateToken,
-  validateAccountType,
+  validateUserType,
   setAccessTokenCookie,
   setRefreshTokenCookie,
 } from "helper";
@@ -19,12 +19,12 @@ export const createUser: MutationResolvers<GQLContext>["createUser"] = async (
 ) => {
   try {
     const bodyData = validateBody(args, 3);
-    const accountType = validateAccountType(args.email);
+    const userType = validateUserType(args.email);
 
     let newUser: UserModelType;
     let newUserId;
 
-    if (accountType === "SELLER") {
+    if (userType === "SELLER") {
       newUser = new SellerUserModel(bodyData);
       newUserId = newUser._id;
     } else {
@@ -32,7 +32,7 @@ export const createUser: MutationResolvers<GQLContext>["createUser"] = async (
       newUserId = newUser._id;
     }
 
-    const newToken = dbCreateToken(newUserId, 1, accountType);
+    const newToken = dbCreateToken(newUserId, 1, userType);
 
     await newUser.save();
     await newToken.save();
@@ -44,7 +44,7 @@ export const createUser: MutationResolvers<GQLContext>["createUser"] = async (
       __typename: "User",
       name: newUser.name,
       email: newUser.email,
-      type: accountType,
+      type: userType,
     };
   } catch (error: any) {
     return handleCatchError(error);

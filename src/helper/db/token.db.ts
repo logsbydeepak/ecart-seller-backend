@@ -15,12 +15,12 @@ import { ErrorObject } from "response";
 export const dbCreateToken = (
   userId: string,
   refreshTokenCount: number,
-  accountType: "SELLER" | "BUYER"
+  userType: UserType
 ): TokenModelType => {
-  const accessToken: string = accessTokenGenerator(userId, accountType);
+  const accessToken: string = accessTokenGenerator(userId, userType);
   const refreshToken: string = refreshTokenGenerator(
     userId,
-    accountType,
+    userType,
     refreshTokenCount
   );
   const accessTokenEncrypt: string = generateEncryption(accessToken);
@@ -28,7 +28,7 @@ export const dbCreateToken = (
 
   let newToken: TokenModelType;
 
-  if (accountType === "SELLER") {
+  if (userType === "SELLER") {
     newToken = new SellerAccountTokenModel({
       owner: userId,
       refreshToken: refreshTokenEncrypt,
