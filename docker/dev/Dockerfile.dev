@@ -1,7 +1,7 @@
 FROM node:16.13.1-alpine3.14
 RUN apk add --no-cache git
 RUN apk add --no-cache zsh 
-WORKDIR /home/node/ecart-seller-backend
+WORKDIR /home/node/ecart-backend
 USER node
 ENV SHELL=/bin/zsh
 RUN sh -c "$(wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"

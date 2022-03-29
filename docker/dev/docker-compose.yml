@@ -6,9 +6,9 @@ services:
       - 27017:27017
     networks:
       - dev_network
-    container_name: ecart_seller_dev_backend_mongo_container
+    container_name: ecart_dev_backend_mongo_container
 
-  ecart_seller_backend:
+  ecart_backend:
     links:
       - mongo_container
     tty: true
@@ -18,12 +18,12 @@ services:
       context: ../../
       dockerfile: ./docker/dev/Dockerfile.dev
     volumes:
-      - ../../:/home/node/ecart-seller-backend
+      - ../../:/home/node/ecart-backend
     depends_on:
       - mongo_container
     networks:
       - dev_network
-    container_name: ecart_seller_dev_backend_api
+    container_name: ecart_dev_backend_api
 
   mongo_express:
     environment:
@@ -35,8 +35,8 @@ services:
       - 8888:8081
     networks:
       - dev_network
-    container_name: ecart_seller_dev_backend_mongo_express
+    container_name: ecart_dev_backend_mongo_express
 
 networks:
   dev_network:
-    name: ecart_seller_dev_backend_network
+    name: ecart_dev_backend_network
