@@ -12,7 +12,8 @@ if (NODE_ENV !== "prod") {
 
 export const {
   PORT,
-  DB_URL,
+  DB_URL_MAIN,
+  DB_URL_SELLER,
   ACCESS_TOKEN_SECRET,
   REFRESH_TOKEN_SECRET,
   ALLOW_ORIGIN,
