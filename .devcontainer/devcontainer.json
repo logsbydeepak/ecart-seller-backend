@@ -1,8 +1,8 @@
 {
-  "name": "Ecart Backend Node",
+  "name": "Ecart Seller Backend Node",
   "dockerComposeFile": "../docker/dev/docker-compose.yml",
-  "service": "ecart_backend",
-  "workspaceFolder": "/home/node/ecart-backend",
+  "service": "ecart_seller_backend",
+  "workspaceFolder": "/home/node/ecart-seller-backend",
   "remoteUser": "node",
   "extensions": [
     "GraphQL.vscode-graphql",
