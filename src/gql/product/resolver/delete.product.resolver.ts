@@ -8,7 +8,7 @@ import { checkAccessToken } from "validateRequest";
 export const deleteProduct: MutationResolvers<GQLContext>["deleteProduct"] =
   async (parent, args, { req, res }) => {
     try {
-      const { userId, userType } = await checkAccessToken(req);
+      const { userId } = await checkAccessToken(req);
       const productId = validateEmpty(
         args.id,
         "BODY_PARSE",

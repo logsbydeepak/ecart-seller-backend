@@ -8,7 +8,7 @@ import { checkAccessToken } from "validateRequest";
 export const updateProduct: MutationResolvers<GQLContext>["updateProduct"] =
   async (parent, args, { req, res }) => {
     try {
-      const { userId, userType } = await checkAccessToken(req);
+      const { userId } = await checkAccessToken(req);
 
       const bodyDate = validateBody(args, 3);
       const toUpdate = validateEmpty(

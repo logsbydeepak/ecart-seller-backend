@@ -10,8 +10,8 @@ import { checkAccessToken, checkPassword } from "validateRequest";
 export const deleteAllSession: MutationResolvers<GQLContext>["deleteAllSession"] =
   async (parent, args, { req, res }) => {
     try {
-      const { userId, userType } = await checkAccessToken(req);
-      await checkPassword(args.currentPassword, userId, userType);
+      const { userId } = await checkAccessToken(req);
+      await checkPassword(args.currentPassword, userId);
 
       await TokenModel.deleteMany({ owner: userId });
 
