@@ -1,9 +1,8 @@
 import { dbReadUserById } from "helper";
 import { handleCatchError } from "response";
 import { QueryResolvers } from "types/graphql";
-import { GQLContext, UserModelType } from "types";
+import { GQLContext } from "types";
 import { checkAccessToken } from "validateRequest";
-import { SellerUserModel } from "db";
 
 export const readUser: QueryResolvers<GQLContext>["readUser"] = async (
   parent,
@@ -11,8 +10,8 @@ export const readUser: QueryResolvers<GQLContext>["readUser"] = async (
   { req, res }
 ) => {
   try {
-    const { userId, userType } = await checkAccessToken(req);
-    const dbUser: UserModelType = await dbReadUserById(userId, userType);
+    const { userId } = await checkAccessToken(req);
+    const dbUser = await dbReadUserById(userId);
 
     return {
       __typename: "User",

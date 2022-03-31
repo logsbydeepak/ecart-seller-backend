@@ -4,13 +4,8 @@ import { removeAccessTokenCookie, removeRefreshTokenCookie } from "helper";
 
 import { GQLContext } from "types";
 import { handleCatchError } from "response";
-import {
-  BuyerUserModel,
-  BuyerAccountTokenModel,
-  SellerUserModel,
-  SellerAccountTokenModel,
-} from "db";
 import { checkAccessToken } from "validateRequest";
+import { TokenModel, UserModel } from "db";
 
 export const deleteUser: MutationResolvers<GQLContext>["deleteUser"] = async (
   parent,
@@ -18,15 +13,10 @@ export const deleteUser: MutationResolvers<GQLContext>["deleteUser"] = async (
   { req, res }
 ) => {
   try {
-    const { userId, userType } = await checkAccessToken(req);
+    const { userId } = await checkAccessToken(req);
 
-    if (userType === "SELLER") {
-      await SellerUserModel.findByIdAndRemove(userId);
-      await SellerAccountTokenModel.findByIdAndRemove(userId);
-    } else {
-      await BuyerUserModel.findByIdAndRemove(userId);
-      await BuyerAccountTokenModel.findByIdAndRemove(userId);
-    }
+    await UserModel.findByIdAndRemove(userId);
+    await TokenModel.findByIdAndRemove(userId);
 
     removeAccessTokenCookie(res);
     removeRefreshTokenCookie(res);

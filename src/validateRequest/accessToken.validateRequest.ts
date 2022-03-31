@@ -41,20 +41,15 @@ export const checkAccessToken = async (req: Request) => {
       !userId ||
       !isValidObjectId(userId) ||
       !userType ||
-      (userType !== "SELLER" && userType !== "BUYER")
+      userType !== "SELLER"
     ) {
       throw ErrorObject("TOKEN_PARSE", "invalid access token");
     }
 
-    await dbTokenExist(
-      { accessToken },
-      userType,
-      "TOKEN_PARSE",
-      "invalid access token"
-    );
-    await dbUserExist(userId, userType);
+    await dbTokenExist({ accessToken }, "TOKEN_PARSE", "invalid access token");
+    await dbUserExist(userId);
 
-    return { userId, userType };
+    return { userId };
   } catch (error: any) {
     throw handleCatchError(error);
   }

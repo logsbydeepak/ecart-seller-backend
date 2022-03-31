@@ -1,9 +1,5 @@
 type Mutation {
-  createSession(
-    email: String!
-    password: String!
-    userType: UserType!
-  ): UserInfo
+  createSession(email: String!, password: String!): UserInfo
   updateSession: UpdateSession
   deleteSession: DeleteData
   deleteAllSession(currentPassword: String!): DeleteData

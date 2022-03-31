@@ -1,12 +1,6 @@
-enum UserType {
-  SELLER
-  BUYER
-}
-
 type User {
   name: String!
   email: String!
-  type: UserType!
 }
 
 type ErrorResponse {

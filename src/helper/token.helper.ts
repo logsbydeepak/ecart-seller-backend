@@ -1,20 +1,18 @@
 import { JwtPayload, sign, verify } from "jsonwebtoken";
 
 import { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from "config";
-import { UserType } from "types";
 
-export const accessTokenGenerator = (id: string, userType: UserType): string =>
-  sign({ id, type: userType }, ACCESS_TOKEN_SECRET as string, {
+export const accessTokenGenerator = (id: string): string =>
+  sign({ id, type: "SELLER" }, ACCESS_TOKEN_SECRET as string, {
     expiresIn: "15m",
   });
 
 export const refreshTokenGenerator = (
   id: string,
-  userType: UserType,
   refreshTokenRefreshCount: number
 ): string =>
   sign(
-    { id, refreshTokenRefreshCount, type: userType },
+    { id, refreshTokenRefreshCount, type: "SELLER" },
     REFRESH_TOKEN_SECRET as string,
     {
       expiresIn: "30d",

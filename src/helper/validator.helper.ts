@@ -3,7 +3,6 @@ import isStrongPassword from "validator/lib/isStrongPassword";
 
 import { ErrorObject } from "response";
 import { ErrorMessageTitle } from "types";
-import { UserType } from "types/graphql";
 
 const productCategoryList = ["electronics", "home"];
 
@@ -128,18 +127,4 @@ export const validateIsNumber = (
   }
 
   return rawIsNumber;
-};
-
-export const validateUserType = (rawUserType: string) => {
-  const formattedUserType = rawUserType.trim().toUpperCase();
-
-  if (!rawUserType) {
-    throw ErrorObject("BODY_PARSE", "account type is required");
-  }
-
-  if (formattedUserType !== "SELLER" && formattedUserType !== "BUYER") {
-    throw ErrorObject("BODY_PARSE", "invalid account type");
-  }
-
-  return formattedUserType;
 };

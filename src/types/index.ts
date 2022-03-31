@@ -14,8 +14,6 @@ export interface UserModelType extends Document {
   name: string;
 }
 
-export type UserType = "SELLER" | "BUYER";
-
 export interface TokenModelType extends Document {
   _id: string;
   owner: string;

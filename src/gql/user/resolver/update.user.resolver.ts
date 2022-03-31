@@ -12,8 +12,8 @@ export const updateUser: MutationResolvers<GQLContext>["updateUser"] = async (
   { req, res }
 ) => {
   try {
-    const { userId, userType } = await checkAccessToken(req);
-    await checkPassword(args.currentPassword!, userId, userType);
+    const { userId } = await checkAccessToken(req);
+    await checkPassword(args.currentPassword!, userId);
 
     const bodyData = validateBody(args, 3);
     const toUpdate: string = validateEmpty(
@@ -22,7 +22,7 @@ export const updateUser: MutationResolvers<GQLContext>["updateUser"] = async (
       "toUpdate is required"
     );
 
-    const dbUser = await dbReadUserById(userId, userType);
+    const dbUser = await dbReadUserById(userId);
 
     if (
       toUpdate !== "name" &&
