@@ -1,5 +1,5 @@
 import { validateCategory, validateIsNumber, validateIsPublic } from "helper";
-import { ProductModel } from "model";
+import { ProductModel } from "db";
 import { ErrorObject, handleCatchError } from "response";
 import { GQLContext } from "types";
 import { QueryResolvers, Product } from "types/graphql";

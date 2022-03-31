@@ -8,7 +8,7 @@ import {
   BuyerAccountTokenModel,
   SellerAccountTokenModel,
   TokenModel,
-} from "model";
+} from "db";
 import { ErrorMessageTitle, TokenModelType, UserType } from "types";
 import { ErrorObject } from "response";
 

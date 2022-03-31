@@ -1,4 +1,4 @@
-import { BuyerUserModel, SellerUserModel } from "model";
+import { BuyerUserModel, SellerUserModel } from "db";
 import { UserModelType, UserType } from "types";
 import { ErrorObject } from "response";
 

@@ -1,4 +1,4 @@
-import { model, Model } from "mongoose";
+import { model, Model, createConnection } from "mongoose";
 
 import TokenSchema from "./schema/token.schema";
 import SellerUserSchema from "./schema/sellerUser.schema";
@@ -11,8 +11,12 @@ import {
   TokenModelType,
   UserModelType,
 } from "types";
+import { DB_URL_MAIN, DB_URL_SELLER } from "config";
 
-export const SellerUserModel: Model<UserModelType> = model(
+export const DB_MAIN = createConnection(DB_URL_MAIN as string);
+export const DB_SELLER = createConnection(DB_URL_SELLER as string);
+
+export const SellerUserModel: Model<UserModelType> = DB_MAIN.model(
   "sellerUsers",
   SellerUserSchema
 );
@@ -22,9 +26,12 @@ export const BuyerUserModel: Model<UserModelType> = model(
   BuyerUserSchema
 );
 
-export const TokenModel: Model<TokenModelType> = model("tokens", TokenSchema);
+export const TokenModel: Model<TokenModelType> = DB_SELLER.model(
+  "tokens",
+  TokenSchema
+);
 
-export const SellerAccountTokenModel: Model<TokenModelType> = model(
+export const SellerAccountTokenModel: Model<TokenModelType> = DB_SELLER.model(
   "sellersAccountTokens",
   TokenSchema
 );
@@ -32,11 +39,13 @@ export const BuyerAccountTokenModel: Model<TokenModelType> = model(
   "buyersAccountTokens",
   TokenSchema
 );
-export const ReviewModel: Model<ReviewModelType> = model(
+
+export const ReviewModel: Model<ReviewModelType> = DB_MAIN.model(
   "reviews",
   ReviewSchema
 );
-export const ProductModel: Model<ProductModelType> = model(
+
+export const ProductModel: Model<ProductModelType> = DB_MAIN.model(
   "products",
   ProductSchema
 );

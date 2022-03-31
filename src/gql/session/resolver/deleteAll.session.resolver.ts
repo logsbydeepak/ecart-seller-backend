@@ -2,7 +2,7 @@ import { MutationResolvers } from "types/graphql";
 
 import { removeAccessTokenCookie, removeRefreshTokenCookie } from "helper";
 
-import { TokenModel } from "model";
+import { TokenModel } from "db";
 import { GQLContext } from "types";
 import { handleCatchError } from "response";
 import { checkAccessToken, checkPassword } from "validateRequest";

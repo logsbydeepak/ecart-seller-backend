@@ -1,8 +1,12 @@
-import { checkEnv, DB_MAIN, DB_SELLER } from "helper";
+import { checkEnv, dbEmailExist, verifyConnection } from "helper";
 checkEnv();
 
 import { corsOption } from "helper";
 import { PORT, server, apolloServer } from "config";
+import { DB_MAIN, DB_SELLER } from "db";
+
+verifyConnection(DB_MAIN, "ECART_MAIN");
+verifyConnection(DB_SELLER, "ECART_SELLER");
 
 DB_MAIN.on("open", async () => {
   DB_SELLER.on("open", async () => {

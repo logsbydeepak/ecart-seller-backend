@@ -1,4 +1,4 @@
-import { ProductModel } from "model";
+import { ProductModel } from "db";
 import { handleCatchError } from "response";
 import { GQLContext } from "types";
 import { MutationResolvers } from "types/graphql";

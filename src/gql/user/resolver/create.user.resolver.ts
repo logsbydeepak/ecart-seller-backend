@@ -10,7 +10,7 @@ import {
 
 import { GQLContext, UserModelType } from "types";
 import { handleCatchError } from "response";
-import { BuyerUserModel, SellerUserModel } from "model";
+import { BuyerUserModel, SellerUserModel } from "db";
 
 export const createUser: MutationResolvers<GQLContext>["createUser"] = async (
   parent,
@@ -18,8 +18,8 @@ export const createUser: MutationResolvers<GQLContext>["createUser"] = async (
   { req, res }
 ) => {
   try {
-    const bodyData = validateBody(args, 3);
-    const userType = validateUserType(args.email);
+    const bodyData = validateBody(args, 4);
+    const userType = validateUserType(args.userType);
 
     let newUser: UserModelType;
     let newUserId;
@@ -47,6 +47,7 @@ export const createUser: MutationResolvers<GQLContext>["createUser"] = async (
       type: userType,
     };
   } catch (error: any) {
+    console.log(error);
     return handleCatchError(error);
   }
 };

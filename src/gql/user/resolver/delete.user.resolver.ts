@@ -9,7 +9,7 @@ import {
   BuyerAccountTokenModel,
   SellerUserModel,
   SellerAccountTokenModel,
-} from "model";
+} from "db";
 import { checkAccessToken } from "validateRequest";
 
 export const deleteUser: MutationResolvers<GQLContext>["deleteUser"] = async (

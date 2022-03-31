@@ -18,7 +18,7 @@ import {
   generateEncryption,
 } from "helper";
 
-import { TokenModel } from "model";
+import { TokenModel } from "db";
 import { MutationResolvers } from "types/graphql";
 import { ErrorObject, handleCatchError } from "response";
 

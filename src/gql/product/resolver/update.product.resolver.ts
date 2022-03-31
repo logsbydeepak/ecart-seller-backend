@@ -1,5 +1,5 @@
 import { validateBody, validateEmpty } from "helper";
-import { ProductModel } from "model";
+import { ProductModel } from "db";
 import { ErrorObject, handleCatchError } from "response";
 import { GQLContext } from "types";
 import { MutationResolvers } from "types/graphql";

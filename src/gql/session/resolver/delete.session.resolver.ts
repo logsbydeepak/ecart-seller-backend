@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 
 import { removeAccessTokenCookie, removeRefreshTokenCookie } from "helper";
 
-import { TokenModel } from "model";
+import { TokenModel } from "db";
 import { MutationResolvers } from "types/graphql";
 import { GQLContext } from "types";
 import { handleCatchError } from "response";
