@@ -4,6 +4,7 @@ checkEnv();
 import { corsOption } from "helper";
 import { PORT, server, apolloServer } from "config";
 import { DB_MAIN, DB_SELLER } from "db";
+import logger from "config/logger.config";
 
 verifyConnection(DB_MAIN, "ECART_MAIN");
 verifyConnection(DB_SELLER, "ECART_SELLER");
@@ -14,7 +15,7 @@ DB_MAIN.on("open", async () => {
     apolloServer.applyMiddleware({ app: server, cors: corsOption });
 
     server.listen(PORT, () => {
-      console.log(
+      logger.info(
         `Server is listening on http://localhost:${PORT}${apolloServer.graphqlPath}`
       );
     });

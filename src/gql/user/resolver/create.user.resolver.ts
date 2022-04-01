@@ -36,7 +36,6 @@ export const createUser: MutationResolvers<GQLContext>["createUser"] = async (
       email: newUser.email,
     };
   } catch (error: any) {
-    console.log(error);
     return handleCatchError(error);
   }
 };

@@ -60,6 +60,8 @@
     "moment": "^2.29.1",
     "mongoose": "^6.2.9",
     "tsconfig-paths": "^3.14.1",
-    "validator": "^13.7.0"
+    "validator": "^13.7.0",
+    "winston": "^3.6.0",
+    "winston-mongodb": "^5.0.7"
   }
 }
