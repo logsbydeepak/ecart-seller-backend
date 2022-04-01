@@ -17,7 +17,7 @@ export const createUser: MutationResolvers<GQLContext>["createUser"] = async (
   { req, res }
 ) => {
   try {
-    const bodyData = validateBody(args, 4);
+    const bodyData = validateBody(args, 3);
 
     const newUser = new UserModel(bodyData);
     const newUserId = newUser._id;

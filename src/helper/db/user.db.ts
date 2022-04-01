@@ -6,7 +6,7 @@ export const dbEmailExist = async (email: string): Promise<void> => {
   const emailCount = await UserModel.count({ email });
 
   if (emailCount !== 0) {
-    throw ErrorObject("AUTHENTICATION", "user already exist");
+    throw ErrorObject("AUTHENTICATION", "email already exist");
   }
 };
 
