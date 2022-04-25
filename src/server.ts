@@ -1,4 +1,4 @@
-import { checkEnv, dbEmailExist, verifyConnection } from "helper";
+import { checkEnv, verifyConnection } from "helper";
 checkEnv();
 
 import { corsOption } from "helper";
