@@ -5,6 +5,7 @@ const defaultConfig: CookieOptions = {
   maxAge: 86400000 * 90,
   secure: true,
   sameSite: "none",
+  path: "/graphql",
 };
 
 export const setAccessTokenCookie = (
