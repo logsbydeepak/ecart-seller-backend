@@ -102,7 +102,6 @@ export const updateSession: MutationResolvers<GQLContext>["updateSession"] =
 
         setAccessTokenCookie(res, newDbToken.accessToken);
         setRefreshTokenCookie(res, newDbToken.refreshToken);
-        res.send();
         return {
           __typename: "SuccessResponse",
           message: "refresh successfully",
@@ -127,7 +126,6 @@ export const updateSession: MutationResolvers<GQLContext>["updateSession"] =
         await dbToken.save();
 
         setAccessTokenCookie(res, accessTokenEncrypt);
-        res.send();
         return {
           __typename: "SuccessResponse",
           message: "refresh successfully",

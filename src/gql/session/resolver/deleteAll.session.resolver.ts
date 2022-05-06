@@ -19,7 +19,6 @@ export const deleteAllSession: MutationResolvers<GQLContext>["deleteAllSession"]
       removeRefreshTokenCookie(res);
 
       res.statusCode = 204;
-      res.send();
       return {
         __typename: "SuccessResponse",
         message: "session removed successfully",
