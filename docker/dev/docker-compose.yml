@@ -10,7 +10,7 @@ services:
 
   ecart_seller_backend:
     links:
-      - mongo:_container
+      - mongo_container
     tty: true
     ports:
       - 4000:4000
