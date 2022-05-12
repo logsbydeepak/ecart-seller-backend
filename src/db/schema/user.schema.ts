@@ -7,13 +7,14 @@ import {
   validateEmpty,
   validatePassword,
 } from "helper";
+import { UserModelType } from "types";
 
 const defaultProperty = {
   required: true,
   type: String,
 };
 
-const UserSchema: Schema = new Schema({
+const UserSchema = new Schema<UserModelType>({
   name: defaultProperty,
   email: defaultProperty,
   password: defaultProperty,
