@@ -3,7 +3,11 @@ type Query {
 }
 
 type Mutation {
-  createUser(name: String!, email: String!, password: String!): UserInfo
+  createUser(
+    name: String!
+    email: String!
+    password: String!
+  ): UserInfoWithAccessToken
   deleteUser(currentPassword: String!): DeleteData
   updateUser(
     toUpdate: String!
@@ -12,4 +16,10 @@ type Mutation {
     name: String
     currentPassword: String!
   ): UserInfo
+}
+
+type UserInfoWithAccessToken {
+  name: String!
+  email: String!
+  accessToken: String!
 }

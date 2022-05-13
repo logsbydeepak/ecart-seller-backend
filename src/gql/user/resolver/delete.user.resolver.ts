@@ -1,6 +1,6 @@
 import { MutationResolvers } from "types/graphql";
 
-import { removeAccessTokenCookie, removeRefreshTokenCookie } from "helper";
+import { removeRefreshTokenCookie } from "helper";
 
 import { GQLContext } from "types";
 import { handleCatchError } from "response";
@@ -18,7 +18,6 @@ export const deleteUser: MutationResolvers<GQLContext>["deleteUser"] = async (
     await UserModel.findByIdAndRemove(userId);
     await TokenModel.findByIdAndRemove(userId);
 
-    removeAccessTokenCookie(res);
     removeRefreshTokenCookie(res);
 
     return {

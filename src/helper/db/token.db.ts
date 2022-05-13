@@ -8,25 +8,6 @@ import { TokenModel, UserModel } from "db";
 import { ErrorMessageTitle, TokenModelType } from "types";
 import { ErrorObject } from "response";
 
-export const dbCreateToken = (
-  userId: string,
-  refreshTokenCount: number
-): TokenModelType => {
-  const accessToken: string = accessTokenGenerator(userId);
-  const refreshToken: string = refreshTokenGenerator(userId, refreshTokenCount);
-
-  const accessTokenEncrypt: string = generateEncryption(accessToken);
-  const refreshTokenEncrypt: string = generateEncryption(refreshToken);
-
-  const newToken = new TokenModel({
-    owner: userId,
-    refreshToken: refreshTokenEncrypt,
-    accessToken: accessTokenEncrypt,
-  });
-
-  return newToken;
-};
-
 export const dbTokenExist = async (
   data: { accessToken: string } | { refreshToken: string },
   messageTitle: ErrorMessageTitle,

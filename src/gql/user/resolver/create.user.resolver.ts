@@ -2,19 +2,19 @@ import { MutationResolvers } from "types/graphql";
 
 import {
   validateBody,
-  dbCreateToken,
-  setAccessTokenCookie,
   setRefreshTokenCookie,
+  accessTokenGenerator,
+  refreshTokenGenerator,
 } from "helper";
 
-import { GQLContext, UserModelType } from "types";
-import { handleCatchError } from "response";
 import { UserModel } from "db";
+import { GQLContext } from "types";
+import { handleCatchError } from "response";
 
 export const createUser: MutationResolvers<GQLContext>["createUser"] = async (
-  parent,
+  _,
   args,
-  { req, res }
+  { res }
 ) => {
   try {
     const bodyData = validateBody(args, 3);
@@ -22,18 +22,18 @@ export const createUser: MutationResolvers<GQLContext>["createUser"] = async (
     const newUser = new UserModel(bodyData);
     const newUserId = newUser._id;
 
-    const newToken = dbCreateToken(newUserId, 1);
+    const accessToken = accessTokenGenerator(newUserId);
+    const refreshToken = refreshTokenGenerator(newUserId);
 
     await newUser.save();
-    await newToken.save();
 
-    setAccessTokenCookie(res, newToken.accessToken);
-    setRefreshTokenCookie(res, newToken.refreshToken);
+    setRefreshTokenCookie(res, refreshToken);
 
     return {
       __typename: "User",
       name: newUser.name,
       email: newUser.email,
+      accessToken,
     };
   } catch (error: any) {
     return handleCatchError(error);
