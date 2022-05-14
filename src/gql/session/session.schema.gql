@@ -5,4 +5,8 @@ type Mutation {
   deleteAllSession(currentPassword: String!): DeleteData
 }
 
-union UpdateSession = ErrorResponse | SuccessResponse
+type Token {
+  accessToken: String!
+}
+
+union UpdateSession = ErrorResponse | Token

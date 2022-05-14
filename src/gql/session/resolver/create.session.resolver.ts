@@ -1,23 +1,21 @@
 import { MutationResolvers } from "types/graphql";
 
 import {
-  validateBody,
   validateEmail,
   validatePassword,
   validateHashAndSalt,
-  dbCreateToken,
   dbReadUserByEmail,
 } from "helper";
 
-import {
-  CreateUserBodyType,
-  GQLContext,
-  TokenModelType,
-  UserModelType,
-} from "types";
+import { CreateUserBodyType, GQLContext } from "types";
 
 import { handleCatchError } from "response";
-import { setAccessTokenCookie, setRefreshTokenCookie } from "helper";
+import {
+  validateBody,
+  setRefreshTokenCookie,
+  accessTokenGenerator,
+  refreshTokenGenerator,
+} from "helper";
 
 export const createSession: MutationResolvers<GQLContext>["createSession"] =
   async (parent, args, { req, res }) => {
@@ -26,20 +24,21 @@ export const createSession: MutationResolvers<GQLContext>["createSession"] =
       const email: string = validateEmail(bodyData.email);
       const password: string = validatePassword(bodyData.password);
 
-      const dbUser: UserModelType = await dbReadUserByEmail(email);
+      const dbUser = await dbReadUserByEmail(email);
 
       await validateHashAndSalt(password, dbUser.password as string);
-      const dbUserId: string = dbUser._id;
-      const newToken: TokenModelType = dbCreateToken(dbUserId, 1);
-      await newToken.save();
+      const dbUserId = dbUser._id;
 
-      setAccessTokenCookie(res, newToken.accessToken);
-      setRefreshTokenCookie(res, newToken.refreshToken);
+      const accessToken = accessTokenGenerator(dbUserId);
+      const refreshToken = refreshTokenGenerator(dbUserId);
+
+      setRefreshTokenCookie(res, refreshToken);
 
       return {
         __typename: "User",
         name: dbUser.name,
         email: dbUser.email,
+        accessToken,
       };
     } catch (error: any) {
       return handleCatchError(error);
