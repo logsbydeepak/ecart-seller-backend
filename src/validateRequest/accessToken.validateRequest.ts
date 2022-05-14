@@ -13,7 +13,7 @@ import {
 export const checkAccessToken = async (req: Request) => {
   try {
     const accessToken: string = validateEmpty(
-      req.cookies.accessToken,
+      req.headers["x-access-token"],
       "TOKEN_PARSE",
       "access token is required"
     );

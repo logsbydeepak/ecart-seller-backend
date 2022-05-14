@@ -20,11 +20,11 @@ export const validateBody = (bodyData: any, bodyDataCount: number) => {
 };
 
 export const validateEmpty = (
-  rawData: string,
+  rawData: string | string[] | undefined,
   messageTitle: ErrorMessageTitle,
   message: string
 ): string => {
-  if (!rawData) {
+  if (!rawData || typeof rawData === "object") {
     throw ErrorObject(messageTitle, message);
   }
 

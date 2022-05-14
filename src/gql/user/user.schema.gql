@@ -18,8 +18,10 @@ type Mutation {
   ): UserInfo
 }
 
-type UserInfoWithAccessToken {
+type UserAccessToken {
   name: String!
   email: String!
   accessToken: String!
 }
+
+union UserInfoWithAccessToken = UserAccessToken | ErrorResponse
