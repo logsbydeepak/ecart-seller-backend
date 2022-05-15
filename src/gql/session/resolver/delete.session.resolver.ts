@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 
-import { removeAccessTokenCookie, removeRefreshTokenCookie } from "helper";
+import { removeRefreshTokenCookie } from "helper";
 
 import { TokenModel } from "db";
 import { MutationResolvers } from "types/graphql";
@@ -16,7 +16,6 @@ export const deleteSession: MutationResolvers<GQLContext>["deleteSession"] =
 
       await TokenModel.deleteOne({ accessToken });
 
-      removeAccessTokenCookie(res);
       removeRefreshTokenCookie(res);
 
       return {

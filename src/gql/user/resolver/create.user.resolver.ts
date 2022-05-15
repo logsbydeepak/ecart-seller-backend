@@ -31,10 +31,9 @@ export const createUser: MutationResolvers<GQLContext>["createUser"] = async (
     res.setHeader("x-access-token", accessToken);
 
     return {
-      __typename: "UserAccessToken",
+      __typename: "User",
       name: newUser.name,
       email: newUser.email,
-      accessToken,
     };
   } catch (error: any) {
     return handleCatchError(error);

@@ -1,6 +1,6 @@
 import { MutationResolvers } from "types/graphql";
 
-import { removeAccessTokenCookie, removeRefreshTokenCookie } from "helper";
+import { removeRefreshTokenCookie } from "helper";
 
 import { TokenModel } from "db";
 import { GQLContext } from "types";
@@ -15,7 +15,6 @@ export const deleteAllSession: MutationResolvers<GQLContext>["deleteAllSession"]
 
       await TokenModel.deleteMany({ owner: userId });
 
-      removeAccessTokenCookie(res);
       removeRefreshTokenCookie(res);
 
       res.statusCode = 204;
