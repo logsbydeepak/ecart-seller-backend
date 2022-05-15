@@ -1,16 +1,15 @@
-import { GQLContext } from "types";
-
 import {
   accessTokenGenerator,
   accessTokenValidator,
   refreshTokenValidator,
-  removeRefreshTokenCookie,
-  validateEmpty,
-  generateDecryption,
-} from "helper";
+} from "~/helper/token.helper";
 
-import { MutationResolvers } from "types/graphql";
-import { ErrorObject, handleCatchError } from "response";
+import { GQLContext } from "~/types";
+import { MutationResolvers } from "~/types/graphql";
+import { validateEmpty } from "~/helper/validator.helper";
+import { generateDecryption } from "~/helper/security.helper";
+import { removeRefreshTokenCookie } from "~/helper/cookie.helper";
+import { ErrorObject, handleCatchError } from "~/helper/response.helper";
 
 export const updateSession: MutationResolvers<GQLContext>["updateSession"] =
   async (_, __, { req, res }) => {

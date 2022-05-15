@@ -1,13 +1,12 @@
-import { ProductModel } from "db";
-import { handleCatchError } from "response";
-import { GQLContext } from "types";
-import { MutationResolvers } from "types/graphql";
-import { checkAccessToken } from "validateRequest";
+import { GQLContext } from "~/types";
+import { ProductModel } from "~/db/model.db";
+import { MutationResolvers } from "~/types/graphql";
+import { handleCatchError } from "~/helper/response.helper";
 
 export const createProduct: MutationResolvers<GQLContext>["createProduct"] =
-  async (parent, args, { req, res }) => {
+  async (_, args, { req, validateAccessTokenMiddleware }) => {
     try {
-      const userId = await checkAccessToken(req);
+      const userId = await validateAccessTokenMiddleware(req);
       const newProduct = new ProductModel({ ...args, owner: userId });
 
       await newProduct.save();

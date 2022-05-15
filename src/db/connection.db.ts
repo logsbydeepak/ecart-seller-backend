@@ -1,7 +1,7 @@
-import logger from "config/logger.config";
+import logger from "~/config/logger.config";
 import { Connection } from "mongoose";
 
-export const verifyConnection = (DBConnection: Connection, DBName: string) => {
+const verifyConnection = (DBConnection: Connection, DBName: string) => {
   DBConnection.on("open", () => {
     logger.info(`${DBName} | DB connection established successfully`);
   });
@@ -12,3 +12,5 @@ export const verifyConnection = (DBConnection: Connection, DBName: string) => {
     process.exit(1);
   });
 };
+
+export default verifyConnection;

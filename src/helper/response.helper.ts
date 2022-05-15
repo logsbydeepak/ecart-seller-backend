@@ -1,5 +1,5 @@
-import { ErrorMessageTitle } from "types";
-import { ErrorResponse as ErrorResponseType } from "types/graphql";
+import { ErrorMessageTitle } from "~/types";
+import { ErrorResponse as ErrorResponseType } from "~/types/graphql";
 
 export const ErrorObject = (
   messageTitle: ErrorMessageTitle,
@@ -26,6 +26,7 @@ export const handleCatchError = (error: any) => {
   if (error.__typename === "ErrorResponse") {
     return error;
   }
+
   if (error.ErrorObject) {
     return ErrorResponse(
       error.ErrorObject.messageTitle,

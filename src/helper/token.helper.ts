@@ -1,7 +1,7 @@
 import { JwtPayload, sign, verify } from "jsonwebtoken";
 
-import { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from "config";
 import { generateEncryption } from "./security.helper";
+import { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from "~/config/env.config";
 
 export const accessTokenGenerator = (id: string): string =>
   generateEncryption(

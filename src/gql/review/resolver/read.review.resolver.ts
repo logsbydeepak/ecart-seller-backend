@@ -1,18 +1,16 @@
-import { validateEmpty, validateIsNumber } from "helper";
-import { handleCatchError } from "response";
-import { GQLContext } from "types";
-import { QueryResolvers, Review } from "types/graphql";
-import { checkAccessToken } from "validateRequest";
-import { ReviewModel, UserModel } from "db";
-import { ErrorObject } from "response";
+import { GQLContext } from "~/types";
+import { ReviewModel, UserModel } from "~/db/model.db";
+import { QueryResolvers, Review } from "~/types/graphql";
+import { ErrorObject, handleCatchError } from "~/helper/response.helper";
+import { validateEmpty, validateIsNumber } from "~/helper/validator.helper";
 
 export const readReview: QueryResolvers<GQLContext>["readReview"] = async (
-  parent,
+  _,
   args,
-  { req, res }
+  { req, validateAccessTokenMiddleware }
 ) => {
   try {
-    const userId = await checkAccessToken(req);
+    const userId = await validateAccessTokenMiddleware(req);
     const skip = validateIsNumber(args.skip, "skip");
     const limit = validateIsNumber(args.limit, "limit");
     const productId = validateEmpty(

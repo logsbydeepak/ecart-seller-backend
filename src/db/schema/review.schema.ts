@@ -1,5 +1,6 @@
 import { Schema } from "mongoose";
-import { ReviewModelType } from "types";
+
+import { ReviewModelType } from "~/types";
 
 const { ObjectId } = Schema.Types;
 

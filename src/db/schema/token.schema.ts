@@ -1,5 +1,5 @@
 import { Schema } from "mongoose";
-import { TokenModelType } from "types";
+import { TokenModelType } from "~/types";
 
 const { ObjectId } = Schema.Types;
 

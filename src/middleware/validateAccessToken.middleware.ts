@@ -1,16 +1,14 @@
 import { Request } from "express";
-
-import { handleCatchError, ErrorObject } from "response";
 import { isValidObjectId } from "mongoose";
-import {
-  validateEmpty,
-  accessTokenValidator,
-  generateDecryption,
-  dbTokenExist,
-  dbUserExist,
-} from "helper";
 
-export const checkAccessToken = async (req: Request) => {
+import { dbUserExist } from "~/db/query/user.query";
+import { dbTokenExist } from "~/db/query/token.query";
+import { validateEmpty } from "~/helper/validator.helper";
+import { accessTokenValidator } from "~/helper/token.helper";
+import { generateDecryption } from "~/helper/security.helper";
+import { handleCatchError, ErrorObject } from "~/helper/response.helper";
+
+const validateAccessTokenMiddleware = async (req: Request) => {
   try {
     const accessToken: string = validateEmpty(
       req.headers["x-access-token"],
@@ -54,3 +52,5 @@ export const checkAccessToken = async (req: Request) => {
     throw handleCatchError(error);
   }
 };
+
+export default validateAccessTokenMiddleware;

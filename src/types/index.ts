@@ -5,6 +5,11 @@ import { Document } from "mongoose";
 export type GQLContext = {
   req: Request;
   res: Response;
+  validateAccessTokenMiddleware: (req: Request) => Promise<{ userId: string }>;
+  validatePasswordMiddleware: (
+    password: string,
+    userId: string
+  ) => Promise<any>;
 };
 
 export interface UserModelType extends Document {

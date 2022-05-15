@@ -1,17 +1,21 @@
-import { validateCategory, validateIsNumber, validateIsPublic } from "helper";
-import { ProductModel } from "db";
-import { ErrorObject, handleCatchError } from "response";
-import { GQLContext } from "types";
-import { QueryResolvers, Product } from "types/graphql";
-import { checkAccessToken } from "validateRequest";
+import {
+  validateCategory,
+  validateIsNumber,
+  validateIsPublic,
+} from "~/helper/validator.helper";
+
+import { GQLContext } from "~/types";
+import { ProductModel } from "~/db/model.db";
+import { Product, QueryResolvers } from "~/types/graphql";
+import { ErrorObject, handleCatchError } from "~/helper/response.helper";
 
 export const readProduct: QueryResolvers<GQLContext>["readProduct"] = async (
-  parent,
+  _,
   args,
-  { req, res }
+  { req, validateAccessTokenMiddleware }
 ) => {
   try {
-    const userId = await checkAccessToken(req);
+    const userId = await validateAccessTokenMiddleware(req);
     const category = validateCategory(args.category);
     const isPublic = validateIsPublic(args.isPublic);
     const skip = validateIsNumber(args.skip, "skip");

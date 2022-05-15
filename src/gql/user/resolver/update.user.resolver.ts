@@ -1,20 +1,18 @@
-import { MutationResolvers } from "types/graphql";
-
-import { validateEmpty, dbReadUserById, validateBody } from "helper";
-
-import { ErrorObject, ErrorResponse, handleCatchError } from "response";
-import { checkAccessToken, checkPassword } from "validateRequest";
-import { UserModelType, GQLContext } from "types";
+import { GQLContext } from "~/types";
+import { MutationResolvers } from "~/types/graphql";
+import { dbReadUserById } from "~/db/query/user.query";
+import { validateBody, validateEmpty } from "~/helper/validator.helper";
+import { ErrorObject, handleCatchError } from "~/helper/response.helper";
 
 export const updateUser: MutationResolvers<GQLContext>["updateUser"] = async (
-  parent,
+  _,
   args,
-  { req, res }
+  { req, validateAccessTokenMiddleware, validatePasswordMiddleware }
 ) => {
   try {
     const bodyData = validateBody(args, 3);
-    const { userId } = await checkAccessToken(req);
-    await checkPassword(args.currentPassword!, userId);
+    const { userId } = await validateAccessTokenMiddleware(req);
+    await validatePasswordMiddleware(args.currentPassword!, userId);
 
     const toUpdate: string = validateEmpty(
       bodyData.toUpdate,

@@ -1,16 +1,15 @@
-import { dbReadUserById } from "helper";
-import { handleCatchError } from "response";
-import { QueryResolvers } from "types/graphql";
-import { GQLContext } from "types";
-import { checkAccessToken } from "validateRequest";
+import { GQLContext } from "~/types";
+import { QueryResolvers } from "~/types/graphql";
+import { dbReadUserById } from "~/db/query/user.query";
+import { handleCatchError } from "~/helper/response.helper";
 
 export const readUser: QueryResolvers<GQLContext>["readUser"] = async (
   parent,
   args,
-  { req, res }
+  { req, res, validateAccessTokenMiddleware }
 ) => {
   try {
-    const { userId } = await checkAccessToken(req);
+    const { userId } = await validateAccessTokenMiddleware(req);
     const dbUser = await dbReadUserById(userId);
 
     return {

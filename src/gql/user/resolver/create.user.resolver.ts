@@ -1,15 +1,14 @@
-import { MutationResolvers } from "types/graphql";
-
 import {
-  validateBody,
-  setRefreshTokenCookie,
   accessTokenGenerator,
   refreshTokenGenerator,
-} from "helper";
+} from "~/helper/token.helper";
 
-import { UserModel } from "db";
-import { GQLContext } from "types";
-import { handleCatchError } from "response";
+import { GQLContext } from "~/types";
+import { UserModel } from "~/db/model.db";
+import { MutationResolvers } from "~/types/graphql";
+import { validateBody } from "~/helper/validator.helper";
+import { handleCatchError } from "~/helper/response.helper";
+import { setRefreshTokenCookie } from "~/helper/cookie.helper";
 
 export const createUser: MutationResolvers<GQLContext>["createUser"] = async (
   _,

@@ -1,11 +1,13 @@
+import { Schema } from "mongoose";
+
 import {
   validateCategory,
   validateIsPublic,
   validateProductDescription,
   validateProductName,
-} from "helper";
-import { Schema } from "mongoose";
-import { ProductModelType } from "types";
+} from "~/helper/validator.helper";
+
+import { ProductModelType } from "~/types";
 
 const { ObjectId } = Schema.Types;
 

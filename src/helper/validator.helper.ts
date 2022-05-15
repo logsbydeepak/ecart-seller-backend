@@ -1,8 +1,8 @@
 import isEmail from "validator/lib/isEmail";
 import isStrongPassword from "validator/lib/isStrongPassword";
 
-import { ErrorObject } from "response";
-import { ErrorMessageTitle } from "types";
+import { ErrorMessageTitle } from "~/types";
+import { ErrorObject } from "~/helper/response.helper";
 
 const productCategoryList = ["electronics", "home"];
 

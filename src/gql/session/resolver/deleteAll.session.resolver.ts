@@ -1,17 +1,18 @@
-import { MutationResolvers } from "types/graphql";
-
-import { removeRefreshTokenCookie } from "helper";
-
-import { TokenModel } from "db";
-import { GQLContext } from "types";
-import { handleCatchError } from "response";
-import { checkAccessToken, checkPassword } from "validateRequest";
+import { GQLContext } from "~/types";
+import { TokenModel } from "~/db/model.db";
+import { MutationResolvers } from "~/types/graphql";
+import { handleCatchError } from "~/helper/response.helper";
+import { removeRefreshTokenCookie } from "~/helper/cookie.helper";
 
 export const deleteAllSession: MutationResolvers<GQLContext>["deleteAllSession"] =
-  async (parent, args, { req, res }) => {
+  async (
+    _,
+    args,
+    { req, res, validateAccessTokenMiddleware, validatePasswordMiddleware }
+  ) => {
     try {
-      const { userId } = await checkAccessToken(req);
-      await checkPassword(args.currentPassword, userId);
+      const { userId } = await validateAccessTokenMiddleware(req);
+      await validatePasswordMiddleware(args.currentPassword, userId);
 
       await TokenModel.deleteMany({ owner: userId });
 

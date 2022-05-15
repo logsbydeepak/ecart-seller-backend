@@ -1,12 +1,6 @@
-import {
-  generateEncryption,
-  accessTokenGenerator,
-  refreshTokenGenerator,
-} from "helper";
-
-import { TokenModel, UserModel } from "db";
-import { ErrorMessageTitle, TokenModelType } from "types";
-import { ErrorObject } from "response";
+import { TokenModel, UserModel } from "~/db/model.db";
+import { ErrorObject } from "~/helper/response.helper";
+import { ErrorMessageTitle, TokenModelType } from "~/types";
 
 export const dbTokenExist = async (
   data: { accessToken: string } | { refreshToken: string },

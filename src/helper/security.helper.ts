@@ -1,9 +1,9 @@
 import Cryptr from "cryptr";
 import { compare, hash } from "bcryptjs";
 
-import { ErrorObject } from "response";
-import { ENCRYPT_SECRET } from "config";
-import { ErrorMessageTitle } from "types";
+import { ErrorObject } from "./response.helper";
+import { ENCRYPT_SECRET } from "~/config/env.config";
+import { ErrorMessageTitle } from "~/types";
 
 const cryptr = new Cryptr(ENCRYPT_SECRET as string);
 

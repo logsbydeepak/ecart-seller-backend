@@ -1,17 +1,13 @@
-import { NextFunction, Request, Response } from "express";
-
-import { removeRefreshTokenCookie } from "helper";
-
-import { TokenModel } from "db";
-import { MutationResolvers } from "types/graphql";
-import { GQLContext } from "types";
-import { handleCatchError } from "response";
-import { checkAccessToken } from "validateRequest";
+import { GQLContext } from "~/types";
+import { TokenModel } from "~/db/model.db";
+import { MutationResolvers } from "~/types/graphql";
+import { handleCatchError } from "~/helper/response.helper";
+import { removeRefreshTokenCookie } from "~/helper/cookie.helper";
 
 export const deleteSession: MutationResolvers<GQLContext>["deleteSession"] =
-  async (parent, args, { req, res }) => {
+  async (_, __, { req, res, validateAccessTokenMiddleware }) => {
     try {
-      await checkAccessToken(req);
+      await validateAccessTokenMiddleware(req);
       const { accessToken } = req.cookies;
 
       await TokenModel.deleteOne({ accessToken });

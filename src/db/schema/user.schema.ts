@@ -1,13 +1,14 @@
 import { Schema } from "mongoose";
+import { generateHashAndSalt } from "~/helper/security.helper";
 
 import {
-  dbEmailExist,
-  generateHashAndSalt,
   validateEmail,
   validateEmpty,
   validatePassword,
-} from "helper";
-import { UserModelType } from "types";
+} from "~/helper/validator.helper";
+
+import { UserModelType } from "~/types";
+import { dbEmailExist } from "../query/user.query";
 
 const defaultProperty = {
   required: true,

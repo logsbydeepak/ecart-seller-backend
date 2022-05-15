@@ -1,14 +1,13 @@
-import { validateBody, validateEmpty } from "helper";
-import { ProductModel } from "db";
-import { ErrorObject, handleCatchError } from "response";
-import { GQLContext } from "types";
-import { MutationResolvers } from "types/graphql";
-import { checkAccessToken } from "validateRequest";
+import { GQLContext } from "~/types";
+import { ProductModel } from "~/db/model.db";
+import { MutationResolvers } from "~/types/graphql";
+import { validateBody, validateEmpty } from "~/helper/validator.helper";
+import { ErrorObject, handleCatchError } from "~/helper/response.helper";
 
 export const updateProduct: MutationResolvers<GQLContext>["updateProduct"] =
-  async (parent, args, { req, res }) => {
+  async (_, args, { req, validateAccessTokenMiddleware }) => {
     try {
-      const { userId } = await checkAccessToken(req);
+      const { userId } = await validateAccessTokenMiddleware(req);
 
       const bodyDate = validateBody(args, 3);
       const toUpdate = validateEmpty(

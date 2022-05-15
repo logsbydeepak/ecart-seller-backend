@@ -1,7 +1,7 @@
-import * as allEnv from "../config/env.config";
+import * as allEnv from "~/config/env.config";
 
 // stop program if env is missing
-export const checkEnv = () => {
+const checkEnv = () => {
   Object.entries(allEnv).forEach((element) => {
     const value = element[1];
     if (!value) {
@@ -11,3 +11,5 @@ export const checkEnv = () => {
     }
   });
 };
+
+export default checkEnv;
