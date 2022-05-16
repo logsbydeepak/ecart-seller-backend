@@ -9,7 +9,7 @@ import { ProductModel } from "~/db/model.db";
 import { Product, QueryResolvers } from "~/types/graphql";
 import { ErrorObject, handleCatchError } from "~/helper/response.helper";
 
-export const readProduct: QueryResolvers<GQLContext>["readProduct"] = async (
+const readProduct: QueryResolvers<GQLContext>["readProduct"] = async (
   _,
   args,
   { req, validateAccessTokenMiddleware }
@@ -52,3 +52,5 @@ export const readProduct: QueryResolvers<GQLContext>["readProduct"] = async (
     return [handleCatchError(error)];
   }
 };
+
+export default readProduct;

@@ -3,7 +3,7 @@ import { QueryResolvers } from "~/types/graphql";
 import { dbReadUserById } from "~/db/query/user.query";
 import { handleCatchError } from "~/helper/response.helper";
 
-export const readUser: QueryResolvers<GQLContext>["readUser"] = async (
+const readUser: QueryResolvers<GQLContext>["readUser"] = async (
   parent,
   args,
   { req, res, validateAccessTokenMiddleware }
@@ -21,3 +21,5 @@ export const readUser: QueryResolvers<GQLContext>["readUser"] = async (
     return handleCatchError(error);
   }
 };
+
+export default readUser;

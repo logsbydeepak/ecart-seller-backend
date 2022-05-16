@@ -4,7 +4,7 @@ import { MutationResolvers } from "~/types/graphql";
 import { handleCatchError } from "~/helper/response.helper";
 import { removeRefreshTokenCookie } from "~/helper/cookie.helper";
 
-export const deleteAllSession: MutationResolvers<GQLContext>["deleteAllSession"] =
+const deleteAllSession: MutationResolvers<GQLContext>["deleteAllSession"] =
   async (
     _,
     args,
@@ -27,3 +27,5 @@ export const deleteAllSession: MutationResolvers<GQLContext>["deleteAllSession"]
       return handleCatchError(error);
     }
   };
+
+export default deleteAllSession;

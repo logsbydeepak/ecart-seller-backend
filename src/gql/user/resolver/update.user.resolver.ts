@@ -4,7 +4,7 @@ import { dbReadUserById } from "~/db/query/user.query";
 import { validateBody, validateEmpty } from "~/helper/validator.helper";
 import { ErrorObject, handleCatchError } from "~/helper/response.helper";
 
-export const updateUser: MutationResolvers<GQLContext>["updateUser"] = async (
+const updateUser: MutationResolvers<GQLContext>["updateUser"] = async (
   _,
   args,
   { req, validateAccessTokenMiddleware, validatePasswordMiddleware }

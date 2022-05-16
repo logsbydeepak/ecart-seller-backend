@@ -4,7 +4,7 @@ import { handleCatchError } from "~/helper/response.helper";
 import { GQLContext } from "~/types";
 import { MutationResolvers } from "~/types/graphql";
 
-export const deleteUser: MutationResolvers<GQLContext>["deleteUser"] = async (
+const deleteUser: MutationResolvers<GQLContext>["deleteUser"] = async (
   parent,
   args,
   { req, res, validateAccessTokenMiddleware }
@@ -25,3 +25,5 @@ export const deleteUser: MutationResolvers<GQLContext>["deleteUser"] = async (
     return handleCatchError(error);
   }
 };
+
+export default deleteUser;

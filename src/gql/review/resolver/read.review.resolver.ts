@@ -4,7 +4,7 @@ import { QueryResolvers, Review } from "~/types/graphql";
 import { ErrorObject, handleCatchError } from "~/helper/response.helper";
 import { validateEmpty, validateIsNumber } from "~/helper/validator.helper";
 
-export const readReview: QueryResolvers<GQLContext>["readReview"] = async (
+const readReview: QueryResolvers<GQLContext>["readReview"] = async (
   _,
   args,
   { req, validateAccessTokenMiddleware }
@@ -48,3 +48,5 @@ export const readReview: QueryResolvers<GQLContext>["readReview"] = async (
     return [handleCatchError(error)];
   }
 };
+
+export default readReview;

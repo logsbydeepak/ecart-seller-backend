@@ -10,7 +10,7 @@ import { validateBody } from "~/helper/validator.helper";
 import { handleCatchError } from "~/helper/response.helper";
 import { setRefreshTokenCookie } from "~/helper/cookie.helper";
 
-export const createUser: MutationResolvers<GQLContext>["createUser"] = async (
+const createUser: MutationResolvers<GQLContext>["createUser"] = async (
   _,
   args,
   { res }
@@ -38,3 +38,5 @@ export const createUser: MutationResolvers<GQLContext>["createUser"] = async (
     return handleCatchError(error);
   }
 };
+
+export default createUser;
