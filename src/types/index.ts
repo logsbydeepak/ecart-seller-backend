@@ -12,7 +12,9 @@ export type ResolveQuery<T extends keyof QueryResolvers> =
 export type GQLContext = {
   req: Request;
   res: Response;
-  validateAccessTokenMiddleware: (req: Request) => Promise<{ userId: string }>;
+  validateAccessTokenMiddleware: (
+    req: Request
+  ) => Promise<{ userId: string; accessToken: string }>;
   validatePasswordMiddleware: (
     password: string,
     userId: string
@@ -29,8 +31,7 @@ export interface UserModelType extends Document {
 export interface TokenModelType extends Document {
   _id: string;
   owner: string;
-  accessToken: string;
-  refreshToken: string;
+  token: string;
 }
 
 export interface ReviewModelType extends Document {

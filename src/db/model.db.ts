@@ -21,8 +21,8 @@ export const UserModel: Model<UserModelType> = DB_MAIN.model(
   UserSchema
 );
 
-export const TokenModel: Model<TokenModelType> = DB_SELLER.model(
-  "tokens",
+export const InvalidTokenModel: Model<TokenModelType> = DB_SELLER.model(
+  "invalidTokens",
   TokenSchema
 );
 

@@ -44,10 +44,14 @@ const validateAccessTokenMiddleware = async (req: Request) => {
       throw ErrorObject("TOKEN_PARSE", "invalid access token");
     }
 
-    await dbTokenExist({ accessToken }, "TOKEN_PARSE", "invalid access token");
+    await dbTokenExist(
+      { owner: userId, token: accessToken },
+      "TOKEN_PARSE",
+      "invalid access token"
+    );
     await dbUserExist(userId);
 
-    return { userId };
+    return { userId, accessToken };
   } catch (error: any) {
     throw handleCatchError(error);
   }

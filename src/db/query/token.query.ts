@@ -1,26 +1,15 @@
-import { TokenModel, UserModel } from "~/db/model.db";
+import { InvalidTokenModel, UserModel } from "~/db/model.db";
 import { ErrorObject } from "~/helper/response.helper";
 import { ErrorMessageTitle, TokenModelType } from "~/types";
 
 export const dbTokenExist = async (
-  data: { accessToken: string } | { refreshToken: string },
+  data: { owner: string; token: string },
   messageTitle: ErrorMessageTitle,
   message: string
 ): Promise<void> => {
-  const dbTokenCount = await UserModel.count(data);
+  const dbTokenCount = await InvalidTokenModel.count(data);
 
-  if (dbTokenCount === 0) {
+  if (dbTokenCount === 1) {
     throw ErrorObject(messageTitle, message);
   }
-};
-
-export const dbReadToken = async (
-  data: { accessToken: string } | { refreshToken: string }
-): Promise<TokenModelType> => {
-  const dbToken: TokenModelType | null = await TokenModel.findOne(data);
-
-  if (!dbToken) {
-    throw ErrorObject("TOKEN_PARSE", "invalid token");
-  }
-  return dbToken;
 };

@@ -5,6 +5,7 @@ import {
 } from "~/helper/token.helper";
 
 import { ResolveMutation } from "~/types";
+import { dbTokenExist } from "~/db/query/token.query";
 import { validateEmpty } from "~/helper/validator.helper";
 import { generateDecryption } from "~/helper/security.helper";
 import { removeRefreshTokenCookie } from "~/helper/cookie.helper";
@@ -59,6 +60,12 @@ const updateSession: ResolveMutation<"updateSession"> = async (
       removeRefreshTokenCookie(res);
       throw ErrorObject("TOKEN_PARSE", "refresh token expired");
     }
+
+    await dbTokenExist(
+      { owner: refreshTokenData.id, token: accessToken },
+      "TOKEN_PARSE",
+      "invalid access token"
+    );
 
     const newAccessToken = accessTokenGenerator(refreshTokenData.id);
 
