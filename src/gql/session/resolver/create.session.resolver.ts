@@ -9,14 +9,13 @@ import {
   validatePassword,
 } from "~/helper/validator.helper";
 
-import { MutationResolvers } from "~/types/graphql";
-import { CreateUserBodyType, GQLContext } from "~/types";
 import { dbReadUserByEmail } from "~/db/query/user.query";
 import { handleCatchError } from "~/helper/response.helper";
+import { CreateUserBodyType, ResolveMutation } from "~/types";
 import { validateHashAndSalt } from "~/helper/security.helper";
 import { setRefreshTokenCookie } from "~/helper/cookie.helper";
 
-const createSession: MutationResolvers<GQLContext>["createSession"] = async (
+const createSession: ResolveMutation<"createSession"> = async (
   _,
   args,
   { res }

@@ -3,18 +3,13 @@ import {
   refreshTokenGenerator,
 } from "~/helper/token.helper";
 
-import { GQLContext } from "~/types";
+import { ResolveMutation } from "~/types";
 import { UserModel } from "~/db/model.db";
-import { MutationResolvers } from "~/types/graphql";
 import { validateBody } from "~/helper/validator.helper";
 import { handleCatchError } from "~/helper/response.helper";
 import { setRefreshTokenCookie } from "~/helper/cookie.helper";
 
-const createUser: MutationResolvers<GQLContext>["createUser"] = async (
-  _,
-  args,
-  { res }
-) => {
+const createUser: ResolveMutation<"createUser"> = async (_, args, { res }) => {
   try {
     const bodyData = validateBody(args, 3);
 

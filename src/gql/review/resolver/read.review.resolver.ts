@@ -1,10 +1,10 @@
-import { GQLContext } from "~/types";
+import { ResolveQuery } from "~/types";
 import { ReviewModel, UserModel } from "~/db/model.db";
 import { QueryResolvers, Review } from "~/types/graphql";
 import { ErrorObject, handleCatchError } from "~/helper/response.helper";
 import { validateEmpty, validateIsNumber } from "~/helper/validator.helper";
 
-const readReview: QueryResolvers<GQLContext>["readReview"] = async (
+const readReview: ResolveQuery<"readReview"> = async (
   _,
   args,
   { req, validateAccessTokenMiddleware }

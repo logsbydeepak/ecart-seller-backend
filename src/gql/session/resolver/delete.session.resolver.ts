@@ -1,10 +1,9 @@
-import { GQLContext } from "~/types";
+import { ResolveMutation } from "~/types";
 import { TokenModel } from "~/db/model.db";
-import { MutationResolvers } from "~/types/graphql";
 import { handleCatchError } from "~/helper/response.helper";
 import { removeRefreshTokenCookie } from "~/helper/cookie.helper";
 
-const deleteSession: MutationResolvers<GQLContext>["deleteSession"] = async (
+const deleteSession: ResolveMutation<"deleteSession"> = async (
   _,
   __,
   { req, res, validateAccessTokenMiddleware }

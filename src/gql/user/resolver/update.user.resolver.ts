@@ -1,10 +1,9 @@
-import { GQLContext } from "~/types";
-import { MutationResolvers } from "~/types/graphql";
+import { ResolveMutation } from "~/types";
 import { dbReadUserById } from "~/db/query/user.query";
 import { validateBody, validateEmpty } from "~/helper/validator.helper";
 import { ErrorObject, handleCatchError } from "~/helper/response.helper";
 
-const updateUser: MutationResolvers<GQLContext>["updateUser"] = async (
+const updateUser: ResolveMutation<"updateUser"> = async (
   _,
   args,
   { req, validateAccessTokenMiddleware, validatePasswordMiddleware }

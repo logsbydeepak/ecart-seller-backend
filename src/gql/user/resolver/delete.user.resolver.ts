@@ -1,12 +1,11 @@
+import { ResolveMutation } from "~/types";
 import { TokenModel, UserModel } from "~/db/model.db";
-import { removeRefreshTokenCookie } from "~/helper/cookie.helper";
 import { handleCatchError } from "~/helper/response.helper";
-import { GQLContext } from "~/types";
-import { MutationResolvers } from "~/types/graphql";
+import { removeRefreshTokenCookie } from "~/helper/cookie.helper";
 
-const deleteUser: MutationResolvers<GQLContext>["deleteUser"] = async (
-  parent,
-  args,
+const deleteUser: ResolveMutation<"deleteUser"> = async (
+  _,
+  __,
   { req, res, validateAccessTokenMiddleware }
 ) => {
   try {

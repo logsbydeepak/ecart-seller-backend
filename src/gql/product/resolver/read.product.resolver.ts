@@ -4,12 +4,12 @@ import {
   validateIsPublic,
 } from "~/helper/validator.helper";
 
-import { GQLContext } from "~/types";
+import { ResolveQuery } from "~/types";
+import { Product } from "~/types/graphql";
 import { ProductModel } from "~/db/model.db";
-import { Product, QueryResolvers } from "~/types/graphql";
 import { ErrorObject, handleCatchError } from "~/helper/response.helper";
 
-const readProduct: QueryResolvers<GQLContext>["readProduct"] = async (
+const readProduct: ResolveQuery<"readProduct"> = async (
   _,
   args,
   { req, validateAccessTokenMiddleware }

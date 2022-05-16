@@ -1,10 +1,9 @@
-import { GQLContext } from "~/types";
+import { ResolveMutation } from "~/types";
 import { ProductModel } from "~/db/model.db";
-import { MutationResolvers } from "~/types/graphql";
 import { validateEmpty } from "~/helper/validator.helper";
 import { ErrorObject, handleCatchError } from "~/helper/response.helper";
 
-const deleteProduct: MutationResolvers<GQLContext>["deleteProduct"] = async (
+const deleteProduct: ResolveMutation<"deleteProduct"> = async (
   _,
   args,
   { req, validateAccessTokenMiddleware }
