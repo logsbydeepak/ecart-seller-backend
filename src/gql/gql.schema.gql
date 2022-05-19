@@ -12,5 +12,9 @@ type SuccessResponse {
   message: String!
 }
 
+type AccessToken {
+  token: String!
+}
+
 union UserInfo = User | ErrorResponse
 union DeleteData = SuccessResponse | ErrorResponse

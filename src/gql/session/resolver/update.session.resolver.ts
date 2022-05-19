@@ -70,8 +70,8 @@ const updateSession: ResolveMutation<"updateSession"> = async (
     const newAccessToken = accessTokenGenerator(refreshTokenData.id);
 
     return {
-      __typename: "Token",
-      accessToken: newAccessToken,
+      __typename: "AccessToken",
+      token: newAccessToken,
     };
   } catch (error: any) {
     return handleCatchError(error);

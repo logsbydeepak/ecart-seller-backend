@@ -3,7 +3,7 @@ type Query {
 }
 
 type Mutation {
-  createUser(name: String!, email: String!, password: String!): UserInfo
+  createUser(name: String!, email: String!, password: String!): Token
   deleteUser(currentPassword: String!): DeleteData
   updateUser(
     toUpdate: String!
@@ -13,3 +13,5 @@ type Mutation {
     currentPassword: String!
   ): UserInfo
 }
+
+union Token = AccessToken | ErrorResponse

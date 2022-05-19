@@ -22,12 +22,10 @@ const createUser: ResolveMutation<"createUser"> = async (_, args, { res }) => {
     await newUser.save();
 
     setRefreshTokenCookie(res, refreshToken);
-    res.setHeader("x-access-token", accessToken);
 
     return {
-      __typename: "User",
-      name: newUser.name,
-      email: newUser.email,
+      __typename: "AccessToken",
+      token: accessToken,
     };
   } catch (error: any) {
     return handleCatchError(error);

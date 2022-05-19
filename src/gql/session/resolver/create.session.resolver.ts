@@ -34,12 +34,11 @@ const createSession: ResolveMutation<"createSession"> = async (
     const refreshToken = refreshTokenGenerator(dbUserId);
 
     setRefreshTokenCookie(res, refreshToken);
+    res.setHeader("x-access-token", accessToken);
 
     return {
-      __typename: "User",
-      name: dbUser.name,
-      email: dbUser.email,
-      accessToken,
+      __typename: "AccessToken",
+      token: accessToken,
     };
   } catch (error: any) {
     return handleCatchError(error);

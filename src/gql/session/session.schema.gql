@@ -1,12 +1,6 @@
 type Mutation {
-  createSession(email: String!, password: String!): UserInfo
-  updateSession: UpdateSession
+  createSession(email: String!, password: String!): Token
+  updateSession: Token
   deleteSession: DeleteData
   deleteAllSession(currentPassword: String!): DeleteData
 }
-
-type Token {
-  accessToken: String!
-}
-
-union UpdateSession = ErrorResponse | Token
