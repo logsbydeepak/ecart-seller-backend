@@ -14,6 +14,7 @@
     "format:watch": "onchange \"**/*\" --exclude-path .prettierignore -- prettier --write {{changed}}",
     "copy:gql": "copyfiles -u 1 src/**/*.gql  dist",
     "codegen": "graphql-codegen --config codegen.yml",
+    "codegen:watch": "graphql-codegen --config codegen.yml",
     "start": "node dist/server.js"
   },
   "repository": {
