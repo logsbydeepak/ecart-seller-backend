@@ -16,13 +16,23 @@ const defaultProperty = {
 };
 
 const UserSchema = new Schema<UserModelType>({
-  name: defaultProperty,
+  firstName: defaultProperty,
+  lastName: defaultProperty,
   email: defaultProperty,
   password: defaultProperty,
 });
 
 UserSchema.post("validate", async function () {
-  this.name = validateEmpty(this.name, "BODY_PARSE", "name is required");
+  this.firstName = validateEmpty(
+    this.firstName,
+    "BODY_PARSE",
+    "firstName is required"
+  );
+  this.lastName = validateEmpty(
+    this.lastName,
+    "BODY_PARSE",
+    "lastName is required"
+  );
   this.email = validateEmail(this.email);
   this.password = validatePassword(this.password);
   await dbEmailExist(this.email);

@@ -13,7 +13,8 @@ const readUser: ResolveQuery<"readUser"> = async (
 
     return {
       __typename: "User",
-      name: dbUser.name,
+      firstName: dbUser.firstName,
+      lastName: dbUser.lastName,
       email: dbUser.email,
     };
   } catch (error: any) {

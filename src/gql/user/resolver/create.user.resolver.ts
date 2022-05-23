@@ -11,7 +11,7 @@ import { setRefreshTokenCookie } from "~/helper/cookie.helper";
 
 const createUser: ResolveMutation<"createUser"> = async (_, args, { res }) => {
   try {
-    const bodyData = validateBody(args, 3);
+    const bodyData = validateBody(args, 4);
 
     const newUser = new UserModel(bodyData);
     const newUserId = newUser._id;

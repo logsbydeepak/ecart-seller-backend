@@ -3,7 +3,12 @@ type Query {
 }
 
 type Mutation {
-  createUser(name: String!, email: String!, password: String!): Token
+  createUser(
+    firstName: String!
+    lastName: String!
+    email: String!
+    password: String!
+  ): Token
   deleteUser(currentPassword: String!): DeleteData
   updateUser(
     toUpdate: String!

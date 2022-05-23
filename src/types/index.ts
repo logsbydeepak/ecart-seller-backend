@@ -25,7 +25,8 @@ export interface UserModelType extends Document {
   _id: string;
   email: string;
   password: string;
-  name: string;
+  firstName: string;
+  lastName: string;
 }
 
 export interface TokenModelType extends Document {
