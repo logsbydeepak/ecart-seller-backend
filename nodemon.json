@@ -2,6 +2,6 @@
   "env": {
     "NODE_ENV": "dev"
   },
-  "ext": "ts,json,gql",
+  "ext": "ts,json,gql,env",
   "exec": "ts-node -r tsconfig-paths/register -- src/server.ts"
 }

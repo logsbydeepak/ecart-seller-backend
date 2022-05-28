@@ -11,6 +11,7 @@ const deleteAllSession: ResolveMutation<"deleteAllSession"> = async (
   try {
     const { userId, accessToken } = await validateAccessTokenMiddleware(req);
     await validatePasswordMiddleware(args.currentPassword, userId);
+    console.log("should not run");
 
     await InvalidTokenModel.deleteMany({ owner: userId });
 

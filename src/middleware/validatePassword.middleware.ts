@@ -13,7 +13,7 @@ const validatePasswordMiddleware = async (password: string, userId: string) => {
 
     return null;
   } catch (error: any) {
-    return handleCatchError(error);
+    throw handleCatchError(error);
   }
 };
 
