@@ -34,8 +34,11 @@ UserSchema.post("validate", async function () {
     "lastName is required"
   );
   this.email = validateEmail(this.email);
-  this.password = validatePassword(this.password);
+
+  if (!this.isModified("email")) return;
   await dbEmailExist(this.email);
+
+  this.password = validatePassword(this.password);
   if (!this.isModified("password")) return;
   this.password = await generateHashAndSalt(this.password);
   return;

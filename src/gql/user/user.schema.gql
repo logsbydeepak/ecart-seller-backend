@@ -14,9 +14,14 @@ type Mutation {
     toUpdate: String!
     email: String
     password: String
-    name: String
+    name: FullName
     currentPassword: String!
   ): UserInfo
+}
+
+input FullName {
+  firstName: String
+  lastName: String
 }
 
 union Token = AccessToken | ErrorResponse

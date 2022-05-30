@@ -11,7 +11,7 @@ const updateUser: ResolveMutation<"updateUser"> = async (
   try {
     const bodyData = validateBody(args, 3);
     const { userId } = await validateAccessTokenMiddleware(req);
-    await validatePasswordMiddleware(args.currentPassword!, userId);
+    await validatePasswordMiddleware(bodyData.currentPassword, userId);
 
     const toUpdate: string = validateEmpty(
       bodyData.toUpdate,
@@ -21,20 +21,30 @@ const updateUser: ResolveMutation<"updateUser"> = async (
 
     const dbUser = await dbReadUserById(userId);
 
-    if (
-      toUpdate !== "name" &&
-      toUpdate !== "email" &&
-      toUpdate !== "password"
-    ) {
-      throw ErrorObject("BODY_PARSE", "invalid toUpdate");
+    switch (toUpdate) {
+      case "name":
+        if (args.name?.firstName) dbUser.firstName = args.name.firstName;
+        if (args.name?.lastName) dbUser.lastName = args.name.lastName;
+        break;
+
+      case "email":
+        dbUser.email = bodyData.email;
+        break;
+
+      case "password":
+        dbUser.email = bodyData.email;
+        break;
+
+      default:
+        throw ErrorObject("BODY_PARSE", "invalid toUpdate");
     }
 
-    dbUser[toUpdate] = bodyData[toUpdate];
     await dbUser.save();
 
     return {
       __typename: "User",
-      name: dbUser.name,
+      firstName: dbUser.firstName,
+      lastName: dbUser.lastName,
       email: dbUser.email,
     };
   } catch (error: any) {
