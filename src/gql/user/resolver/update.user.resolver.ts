@@ -1,6 +1,13 @@
 import { ResolveMutation } from "~/types";
-import { dbReadUserById } from "~/db/query/user.query";
-import { validateBody, validateEmpty } from "~/helper/validator.helper";
+import { dbEmailExist, dbReadUserById } from "~/db/query/user.query";
+
+import {
+  validateBody,
+  validateEmail,
+  validateEmpty,
+  validatePassword,
+} from "~/helper/validator.helper";
+
 import { ErrorObject, handleCatchError } from "~/helper/response.helper";
 
 const updateUser: ResolveMutation<"updateUser"> = async (
@@ -23,16 +30,38 @@ const updateUser: ResolveMutation<"updateUser"> = async (
 
     switch (toUpdate) {
       case "name":
-        if (args.name?.firstName) dbUser.firstName = args.name.firstName;
-        if (args.name?.lastName) dbUser.lastName = args.name.lastName;
+        if (!args.name?.firstName || !args.name?.lastName) {
+          ErrorObject("BODY_PARSE", "name is required");
+        }
+
+        if (args.name?.firstName) {
+          const firstName = validateEmpty(
+            bodyData.firstName,
+            "BODY_PARSE",
+            "firstName is required"
+          );
+          dbUser.firstName = firstName;
+        }
+
+        if (args.name?.lastName) {
+          const lastName = validateEmpty(
+            bodyData.lastName,
+            "BODY_PARSE",
+            "lastName is required"
+          );
+          dbUser.lastName = lastName;
+        }
         break;
 
       case "email":
-        dbUser.email = bodyData.email;
+        const email = validateEmail(bodyData.email);
+        dbEmailExist(email);
+        dbUser.email = email;
         break;
 
       case "password":
-        dbUser.email = bodyData.email;
+        const password = validatePassword(bodyData.password);
+        dbUser.password = password;
         break;
 
       default:
