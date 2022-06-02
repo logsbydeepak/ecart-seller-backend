@@ -37,6 +37,14 @@ services:
       - dev_network
     container_name: ecart_seller_dev_backend_mongo_express
 
+  redis_container:
+    image: redis:7.0.0
+    ports:
+      - 6379:6379
+    networks:
+      - dev_network
+    container_name: ecart_seller_dev_backend_redis_container
+
 networks:
   dev_network:
     name: ecart_seller_dev_backend_network
