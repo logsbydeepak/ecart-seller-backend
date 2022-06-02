@@ -68,6 +68,7 @@
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.3",
     "mongoose": "^6.3.5",
+    "redis": "^4.1.0",
     "validator": "^13.7.0",
     "winston": "^3.7.2",
     "winston-mongodb": "^5.0.7"
