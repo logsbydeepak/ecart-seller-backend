@@ -8,6 +8,15 @@ const defaultConfig: CookieOptions = {
   path: "/graphql",
 };
 
+export const setAccessTokenCookie = (
+  res: Response,
+  refreshToken: string
+): Response =>
+  res.cookie("accessToken", refreshToken, {
+    ...defaultConfig,
+  });
+
+
 export const setRefreshTokenCookie = (
   res: Response,
   refreshToken: string

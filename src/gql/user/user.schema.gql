@@ -8,8 +8,8 @@ type Mutation {
     lastName: String!
     email: String!
     password: String!
-  ): Token
-  deleteUser(currentPassword: String!): DeleteData
+  ): Response
+  deleteUser(currentPassword: String!): Response
   updateUser(
     toUpdate: String!
     email: String

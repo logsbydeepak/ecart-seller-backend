@@ -18,4 +18,4 @@ type AccessToken {
 }
 
 union UserInfo = User | ErrorResponse
-union DeleteData = SuccessResponse | ErrorResponse
+union Response = SuccessResponse | ErrorResponse

@@ -37,8 +37,10 @@ const createSession: ResolveMutation<"createSession"> = async (
     res.setHeader("x-access-token", accessToken);
 
     return {
-      __typename: "AccessToken",
-      token: accessToken,
+      __typename: "User",
+      firstName: dbUser.firstName,
+      lastName: dbUser.lastName,
+      email: dbUser.email,
     };
   } catch (error: any) {
     return handleCatchError(error);

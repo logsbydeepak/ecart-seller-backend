@@ -21,7 +21,7 @@ type Mutation {
     description: String
     isPublic: Boolean
   ): ProductInfo
-  deleteProduct(id: String!): DeleteData
+  deleteProduct(id: String!): Response
 }
 
 type Product {

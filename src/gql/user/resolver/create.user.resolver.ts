@@ -13,7 +13,11 @@ import {
 import { ResolveMutation } from "~/types";
 import { UserModel } from "~/db/model.db";
 import { handleCatchError } from "~/helper/response.helper";
-import { setRefreshTokenCookie } from "~/helper/cookie.helper";
+import {
+  setAccessTokenCookie,
+  setRefreshTokenCookie,
+} from "~/helper/cookie.helper";
+import { redisClient } from "~/config/redis.config";
 
 const createUser: ResolveMutation<"createUser"> = async (_, args, { res }) => {
   try {
@@ -40,13 +44,18 @@ const createUser: ResolveMutation<"createUser"> = async (_, args, { res }) => {
     const accessToken = accessTokenGenerator(newUserId);
     const refreshToken = refreshTokenGenerator(newUserId);
 
+    await redisClient.json.set(newUserId, ".", [
+      { refreshToken, accessToken: [accessToken] },
+    ]);
+
     await newUser.save();
 
     setRefreshTokenCookie(res, refreshToken);
+    setAccessTokenCookie(res, accessToken);
 
     return {
-      __typename: "AccessToken",
-      token: accessToken,
+      __typename: "SuccessResponse",
+      message: "User created successfully",
     };
   } catch (error: any) {
     return handleCatchError(error);
