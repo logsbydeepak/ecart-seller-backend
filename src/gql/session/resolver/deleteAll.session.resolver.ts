@@ -1,5 +1,4 @@
 import { ResolveMutation } from "~/types";
-import { InvalidTokenModel } from "~/db/model.db";
 import { handleCatchError } from "~/helper/response.helper";
 import { removeRefreshTokenCookie } from "~/helper/cookie.helper";
 
@@ -12,14 +11,6 @@ const deleteAllSession: ResolveMutation<"deleteAllSession"> = async (
     const { userId, accessToken } = await validateAccessTokenMiddleware(req);
     await validatePasswordMiddleware(args.currentPassword, userId);
     console.log("should not run");
-
-    await InvalidTokenModel.deleteMany({ owner: userId });
-
-    const newAccessToken = new InvalidTokenModel({
-      owner: userId,
-      token: accessToken,
-    });
-    await newAccessToken.save();
 
     removeRefreshTokenCookie(res);
 

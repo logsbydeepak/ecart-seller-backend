@@ -16,7 +16,6 @@ export const setAccessTokenCookie = (
     ...defaultConfig,
   });
 
-
 export const setRefreshTokenCookie = (
   res: Response,
   refreshToken: string

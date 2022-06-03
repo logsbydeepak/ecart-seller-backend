@@ -7,7 +7,6 @@ import {
   UserModelType,
 } from "~/types";
 
-import TokenSchema from "./schema/token.schema";
 import UserSchema from "./schema/user.schema";
 import ProductSchema from "./schema/product.schema";
 import ReviewSchema from "./schema/review.schema";
@@ -19,11 +18,6 @@ export const DB_SELLER = createConnection(DB_URL_SELLER as string);
 export const UserModel: Model<UserModelType> = DB_MAIN.model(
   "sellerUsers",
   UserSchema
-);
-
-export const InvalidTokenModel: Model<TokenModelType> = DB_SELLER.model(
-  "invalidTokens",
-  TokenSchema
 );
 
 export const ReviewModel: Model<ReviewModelType> = DB_MAIN.model(
