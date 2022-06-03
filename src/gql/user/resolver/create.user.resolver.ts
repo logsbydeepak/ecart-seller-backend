@@ -44,9 +44,7 @@ const createUser: ResolveMutation<"createUser"> = async (_, args, { res }) => {
     const accessToken = accessTokenGenerator(newUserId);
     const refreshToken = refreshTokenGenerator(newUserId);
 
-    await redisClient.json.set(newUserId, ".", [
-      { refreshToken, accessToken: [accessToken] },
-    ]);
+    await redisClient.hSet(newUserId.toString(), accessToken, refreshToken);
 
     await newUser.save();
 
@@ -58,6 +56,7 @@ const createUser: ResolveMutation<"createUser"> = async (_, args, { res }) => {
       message: "User created successfully",
     };
   } catch (error: any) {
+    console.log(error);
     return handleCatchError(error);
   }
 };

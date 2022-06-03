@@ -7,11 +7,12 @@ import { validateEmpty } from "~/helper/validator.helper";
 import { accessTokenValidator } from "~/helper/token.helper";
 import { generateDecryption } from "~/helper/security.helper";
 import { handleCatchError, ErrorObject } from "~/helper/response.helper";
+import { redisClient } from "~/config/redis.config";
 
 const validateAccessTokenMiddleware = async (req: Request) => {
   try {
     const accessToken: string = validateEmpty(
-      req.headers["x-access-token"],
+      req.cookies.accessToken,
       "TOKEN_PARSE",
       "access token is required"
     );
@@ -44,12 +45,11 @@ const validateAccessTokenMiddleware = async (req: Request) => {
       throw ErrorObject("TOKEN_PARSE", "invalid access token");
     }
 
-    await dbTokenExist(
-      { owner: userId, token: accessToken },
-      "TOKEN_PARSE",
-      "invalid access token"
-    );
-    await dbUserExist(userId);
+    const isToken = await redisClient.HEXISTS(userId, accessToken);
+
+    if (!isToken) {
+      throw ErrorObject("TOKEN_PARSE", "invalid access token");
+    }
 
     return { userId, accessToken };
   } catch (error: any) {
