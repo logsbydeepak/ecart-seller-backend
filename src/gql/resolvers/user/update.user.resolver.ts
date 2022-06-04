@@ -81,4 +81,4 @@ const updateUser: ResolveMutation<"updateUser"> = async (
   }
 };
 
-export default updateUser;
+export default { Mutation: { updateUser } };

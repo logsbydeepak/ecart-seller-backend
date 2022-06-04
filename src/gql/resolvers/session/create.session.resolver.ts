@@ -47,4 +47,4 @@ const createSession: ResolveMutation<"createSession"> = async (
   }
 };
 
-export default createSession;
+export default { Mutation: { createSession } };

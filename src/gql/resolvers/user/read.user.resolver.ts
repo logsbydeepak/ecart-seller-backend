@@ -22,4 +22,4 @@ const readUser: ResolveQuery<"readUser"> = async (
   }
 };
 
-export default readUser;
+export default { Query: { readUser } };

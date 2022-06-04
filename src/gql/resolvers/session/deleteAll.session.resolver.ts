@@ -24,4 +24,4 @@ const deleteAllSession: ResolveMutation<"deleteAllSession"> = async (
   }
 };
 
-export default deleteAllSession;
+export default { Mutation: { deleteAllSession } };

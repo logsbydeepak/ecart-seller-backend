@@ -25,4 +25,4 @@ const deleteUser: ResolveMutation<"deleteUser"> = async (
   }
 };
 
-export default deleteUser;
+export default { Mutation: { deleteUser } };

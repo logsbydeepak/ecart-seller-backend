@@ -85,4 +85,4 @@ const updateSession: ResolveMutation<"updateSession"> = async (
   }
 };
 
-export default updateSession;
+export default { Mutation: { updateSession } };

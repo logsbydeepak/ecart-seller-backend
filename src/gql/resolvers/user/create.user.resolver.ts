@@ -61,4 +61,4 @@ const createUser: ResolveMutation<"createUser"> = async (_, args, { res }) => {
   }
 };
 
-export default createUser;
+export default { Mutation: { createUser } };
