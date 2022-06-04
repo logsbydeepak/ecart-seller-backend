@@ -1,16 +1,12 @@
-import logger from "~/config/logger.config";
-import { Connection } from "mongoose";
+import { Mongoose } from "mongoose";
+import { DB_URL_MAIN, DB_URL_SELLER } from "~/config/env.config";
 
-const verifyConnection = (DBConnection: Connection, DBName: string) => {
-  DBConnection.on("open", () => {
-    logger.info(`${DBName} | DB connection established successfully`);
-  });
+export const DBBuyer = new Mongoose();
+export const DBSeller = new Mongoose();
 
-  DBConnection.on("error", () => {
-    logger.info(`
-    ${DBName} Error establishing DB connection`);
-    process.exit(1);
-  });
-};
+const connectToDB = (mongoose: Mongoose, url: string) => mongoose.connect(url);
 
-export default verifyConnection;
+export const connectToDBuyer = () =>
+  connectToDB(DBBuyer, DB_URL_MAIN as string);
+export const connectToDBSeller = () =>
+  connectToDB(DBSeller, DB_URL_SELLER as string);

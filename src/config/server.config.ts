@@ -39,16 +39,16 @@ const expressServer = express();
 expressServer.use(cookieParser());
 isProduction && expressServer.use(helmet());
 
-apolloServer.applyMiddleware({
-  app: expressServer,
-  cors: {
-    origin: ALLOW_ORIGIN,
-    credentials: true,
-  },
-});
-
 const startServer = async () => {
   await apolloServer.start();
+
+  apolloServer.applyMiddleware({
+    app: expressServer,
+    cors: {
+      origin: ALLOW_ORIGIN,
+      credentials: true,
+    },
+  });
 
   expressServer.listen(PORT, () => {
     logger.info(`Server is listening on http://localhost:${PORT}/graphql`);

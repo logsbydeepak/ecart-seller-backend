@@ -1,31 +1,22 @@
-import { createConnection, Model } from "mongoose";
-
-import {
-  ProductModelType,
-  ReviewModelType,
-  TokenModelType,
-  UserModelType,
-} from "~/types";
+import { Model } from "mongoose";
 
 import UserSchema from "./schema/user.schema";
 import ProductSchema from "./schema/product.schema";
 import ReviewSchema from "./schema/review.schema";
-import { DB_URL_MAIN, DB_URL_SELLER } from "~/config/env.config";
+import { DBSeller, DBBuyer } from "./connection.db";
+import { ProductModelType, ReviewModelType, UserModelType } from "~/types";
 
-export const DB_MAIN = createConnection(DB_URL_MAIN as string);
-export const DB_SELLER = createConnection(DB_URL_SELLER as string);
-
-export const UserModel: Model<UserModelType> = DB_MAIN.model(
+export const UserModel: Model<UserModelType> = DBSeller.model(
   "sellerUsers",
   UserSchema
 );
 
-export const ReviewModel: Model<ReviewModelType> = DB_MAIN.model(
+export const ReviewModel: Model<ReviewModelType> = DBBuyer.model(
   "reviews",
   ReviewSchema
 );
 
-export const ProductModel: Model<ProductModelType> = DB_MAIN.model(
+export const ProductModel: Model<ProductModelType> = DBBuyer.model(
   "products",
   ProductSchema
 );

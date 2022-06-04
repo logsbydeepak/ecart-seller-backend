@@ -1,17 +1,27 @@
 import checkEnv from "~/helper/env.helper";
 checkEnv();
 
-import verifyConnection from "~/db/connection.db";
-import { DB_MAIN, DB_SELLER } from "~/db/model.db";
 import startServer from "~/config/server.config";
 import { connectToRedis } from "./config/redis.config";
+import { connectToDBuyer, connectToDBSeller } from "./db/connection.db";
+import logger from "./config/logger.config";
 
-verifyConnection(DB_MAIN, "ECART_MAIN");
-verifyConnection(DB_SELLER, "ECART_SELLER");
-connectToRedis();
+const startAllService = async () => {
+  try {
+    await connectToDBuyer();
+    logger.info("DBBuyer connected successfully");
 
-DB_MAIN.on("open", async () => {
-  DB_SELLER.on("open", async () => {
+    await connectToDBSeller();
+    logger.info("DBSeller connected successfully");
+
+    await connectToRedis();
+    logger.info("Redis connected successfully");
+
     startServer();
-  });
-});
+  } catch (error: any) {
+    console.log(error);
+    process.exit(1);
+  }
+};
+
+startAllService();
