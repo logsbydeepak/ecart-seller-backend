@@ -1,14 +1,13 @@
 import path from "path";
 import helmet from "helmet";
-import cookieParser from "cookie-parser";
 import express from "express";
+import cookieParser from "cookie-parser";
 import { ApolloServer } from "apollo-server-express";
 import { loadFilesSync } from "@graphql-tools/load-files";
 
 import { ALLOW_ORIGIN, NODE_ENV, PORT } from "~/config/env.config";
 import validatePasswordMiddleware from "~/middleware/validatePassword.middleware";
 import validateAccessTokenMiddleware from "~/middleware/validateAccessToken.middleware";
-import logger from "./logger.config";
 
 const isProduction = NODE_ENV === "prod";
 
@@ -50,9 +49,7 @@ const startServer = async () => {
     },
   });
 
-  expressServer.listen(PORT, () => {
-    logger.info(`Server is listening on http://localhost:${PORT}/graphql`);
-  });
+  return expressServer.listen(PORT);
 };
 
 export default startServer;

@@ -28,11 +28,13 @@ const createUser: ResolveMutation<"createUser"> = async (_, args, { res }) => {
       "BODY_PARSE",
       "firstName is required"
     );
+
     const lastName = validateEmpty(
       bodyData.lastName,
       "BODY_PARSE",
       "lastName is required"
     );
+
     const email = validateEmail(bodyData.email);
     const password = validatePassword(bodyData.password);
 
