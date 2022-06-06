@@ -1,19 +1,15 @@
 import {
-  accessTokenGenerator,
-  refreshTokenGenerator,
-} from "~/helper/token.helper";
-
-import {
   validateBody,
   validateEmail,
   validatePassword,
 } from "~/helper/validator.helper";
 
+import { redisClient } from "~/config/redis.config";
+import { tokenGenerator } from "~/helper/token.helper";
 import { dbReadUserByEmail } from "~/db/query/user.query";
 import { handleCatchError } from "~/helper/response.helper";
 import { CreateUserBodyType, ResolveMutation } from "~/types";
 import { validateHashAndSalt } from "~/helper/security.helper";
-import { setRefreshTokenCookie } from "~/helper/cookie.helper";
 
 const createSession: ResolveMutation<"createSession"> = async (
   _,
@@ -26,21 +22,16 @@ const createSession: ResolveMutation<"createSession"> = async (
     const password: string = validatePassword(bodyData.password);
 
     const dbUser = await dbReadUserByEmail(email);
-
-    await validateHashAndSalt(password, dbUser.password as string);
     const dbUserId = dbUser._id;
 
-    const accessToken = accessTokenGenerator(dbUserId);
-    const refreshToken = refreshTokenGenerator(dbUserId);
+    await validateHashAndSalt(password, dbUser.password as string);
 
-    setRefreshTokenCookie(res, refreshToken);
-    res.setHeader("x-access-token", accessToken);
+    const token = tokenGenerator(dbUserId);
+    await redisClient.SADD(dbUserId, token);
 
     return {
-      __typename: "User",
-      firstName: dbUser.firstName,
-      lastName: dbUser.lastName,
-      email: dbUser.email,
+      __typename: "Token",
+      token,
     };
   } catch (error: any) {
     return handleCatchError(error);
