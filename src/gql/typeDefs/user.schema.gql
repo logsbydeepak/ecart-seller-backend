@@ -8,7 +8,7 @@ type Mutation {
     lastName: String!
     email: String!
     password: String!
-  ): Response
+  ): TokenResponse
   deleteUser(currentPassword: String!): Response
   updateUser(
     toUpdate: String!
@@ -24,4 +24,8 @@ input FullName {
   lastName: String
 }
 
-union Token = AccessToken | ErrorResponse
+type Token {
+  token: String!
+}
+
+union TokenResponse = Token | ErrorResponse

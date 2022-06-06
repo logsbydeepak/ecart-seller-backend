@@ -5,10 +5,10 @@ import { handleCatchError } from "~/helper/response.helper";
 const readUser: ResolveQuery<"readUser"> = async (
   _,
   __,
-  { req, validateAccessTokenMiddleware }
+  { req, validateTokenMiddleware }
 ) => {
   try {
-    const { userId } = await validateAccessTokenMiddleware(req);
+    const { userId } = await validateTokenMiddleware(req);
     const dbUser = await dbReadUserById(userId);
 
     return {

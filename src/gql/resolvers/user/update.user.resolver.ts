@@ -13,11 +13,11 @@ import { ErrorObject, handleCatchError } from "~/helper/response.helper";
 const updateUser: ResolveMutation<"updateUser"> = async (
   _,
   args,
-  { req, validateAccessTokenMiddleware, validatePasswordMiddleware }
+  { req, validateTokenMiddleware, validatePasswordMiddleware }
 ) => {
   try {
     const bodyData = validateBody(args, 3);
-    const { userId } = await validateAccessTokenMiddleware(req);
+    const { userId } = await validateTokenMiddleware(req);
     await validatePasswordMiddleware(bodyData.currentPassword, userId);
 
     const toUpdate: string = validateEmpty(

@@ -1,9 +1,4 @@
 import {
-  accessTokenGenerator,
-  refreshTokenGenerator,
-} from "~/helper/token.helper";
-
-import {
   validateBody,
   validateEmail,
   validateEmpty,
@@ -11,12 +6,9 @@ import {
 } from "~/helper/validator.helper";
 
 import { ResolveMutation } from "~/types";
+import { tokenGenerator } from "~/helper/token.helper";
 import { UserModel } from "~/db/model.db";
 import { handleCatchError } from "~/helper/response.helper";
-import {
-  setAccessTokenCookie,
-  setRefreshTokenCookie,
-} from "~/helper/cookie.helper";
 import { redisClient } from "~/config/redis.config";
 
 const createUser: ResolveMutation<"createUser"> = async (_, args, { res }) => {
@@ -43,22 +35,15 @@ const createUser: ResolveMutation<"createUser"> = async (_, args, { res }) => {
 
     const newUserId = newUser._id;
 
-    const accessToken = accessTokenGenerator(newUserId);
-    const refreshToken = refreshTokenGenerator(newUserId);
+    const token = await tokenGenerator(newUserId);
 
-    await redisClient.hSet(newUserId.toString(), accessToken, refreshToken);
-
-    await newUser.save();
-
-    setRefreshTokenCookie(res, refreshToken);
-    setAccessTokenCookie(res, accessToken);
+    await redisClient.SADD(newUserId, token);
 
     return {
-      __typename: "SuccessResponse",
-      message: "User created successfully",
+      __typename: "Token",
+      token,
     };
   } catch (error: any) {
-    console.log(error);
     return handleCatchError(error);
   }
 };

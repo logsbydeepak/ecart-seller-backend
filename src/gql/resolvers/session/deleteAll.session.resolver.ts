@@ -5,10 +5,10 @@ import { removeRefreshTokenCookie } from "~/helper/cookie.helper";
 const deleteAllSession: ResolveMutation<"deleteAllSession"> = async (
   _,
   args,
-  { req, res, validateAccessTokenMiddleware, validatePasswordMiddleware }
+  { req, res, validateTokenMiddleware, validatePasswordMiddleware }
 ) => {
   try {
-    const { userId, accessToken } = await validateAccessTokenMiddleware(req);
+    const { userId, accessToken } = await validateTokenMiddleware(req);
     await validatePasswordMiddleware(args.currentPassword, userId);
     console.log("should not run");
 

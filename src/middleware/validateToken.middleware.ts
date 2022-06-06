@@ -1,40 +1,38 @@
 import { Request } from "express";
 import { isValidObjectId } from "mongoose";
 
-import { dbUserExist } from "~/db/query/user.query";
-import { dbTokenExist } from "~/db/query/token.query";
+import { redisClient } from "~/config/redis.config";
+import { tokenValidator } from "~/helper/token.helper";
 import { validateEmpty } from "~/helper/validator.helper";
-import { accessTokenValidator } from "~/helper/token.helper";
 import { generateDecryption } from "~/helper/security.helper";
 import { handleCatchError, ErrorObject } from "~/helper/response.helper";
-import { redisClient } from "~/config/redis.config";
 
-const validateAccessTokenMiddleware = async (req: Request) => {
+const validateTokenMiddleware = async (req: Request) => {
   try {
-    const accessToken: string = validateEmpty(
-      req.cookies.accessToken,
+    const token: string = validateEmpty(
+      req.headers.token,
       "TOKEN_PARSE",
       "access token is required"
     );
 
-    const accessTokenDecryption: string = generateDecryption(
-      accessToken,
+    const tokenDecryption: string = generateDecryption(
+      token,
       "TOKEN_PARSE",
       "invalid access token"
     );
 
-    const accessTokenData = accessTokenValidator(accessTokenDecryption);
+    const tokenData = tokenValidator(tokenDecryption);
 
-    if (!accessTokenData) {
+    if (!tokenData) {
       throw ErrorObject("TOKEN_PARSE", "invalid access token");
     }
 
-    if (accessTokenData === "TokenExpiredError") {
+    if (tokenData === "TokenExpiredError") {
       throw ErrorObject("TOKEN_PARSE", "token expired");
     }
 
-    const userId: string = accessTokenData.id;
-    const userType = accessTokenData.type;
+    const userId: string = tokenData.id;
+    const userType = tokenData.type;
 
     if (
       !userId ||
@@ -45,16 +43,16 @@ const validateAccessTokenMiddleware = async (req: Request) => {
       throw ErrorObject("TOKEN_PARSE", "invalid access token");
     }
 
-    const isToken = await redisClient.HEXISTS(userId, accessToken);
+    const isToken = await redisClient.SISMEMBER(userId, token);
 
     if (!isToken) {
       throw ErrorObject("TOKEN_PARSE", "invalid access token");
     }
 
-    return { userId, accessToken };
+    return { userId, token };
   } catch (error: any) {
     throw handleCatchError(error);
   }
 };
 
-export default validateAccessTokenMiddleware;
+export default validateTokenMiddleware;

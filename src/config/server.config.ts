@@ -6,8 +6,8 @@ import { ApolloServer } from "apollo-server-express";
 import { loadFilesSync } from "@graphql-tools/load-files";
 
 import { ALLOW_ORIGIN, NODE_ENV, PORT } from "~/config/env.config";
+import validateTokenMiddleware from "~/middleware/validateToken.middleware";
 import validatePasswordMiddleware from "~/middleware/validatePassword.middleware";
-import validateAccessTokenMiddleware from "~/middleware/validateAccessToken.middleware";
 
 const isProduction = NODE_ENV === "prod";
 
@@ -29,7 +29,7 @@ const apolloServer = new ApolloServer({
       req,
       res,
       validatePasswordMiddleware,
-      validateAccessTokenMiddleware,
+      validateTokenMiddleware,
     };
   },
 });

@@ -6,10 +6,10 @@ import { removeRefreshTokenCookie } from "~/helper/cookie.helper";
 const deleteUser: ResolveMutation<"deleteUser"> = async (
   _,
   args,
-  { req, res, validateAccessTokenMiddleware, validatePasswordMiddleware }
+  { req, res, validateTokenMiddleware, validatePasswordMiddleware }
 ) => {
   try {
-    const { userId, accessToken } = await validateAccessTokenMiddleware(req);
+    const { userId, accessToken } = await validateTokenMiddleware(req);
     await validatePasswordMiddleware(args.currentPassword, userId);
 
     await UserModel.findByIdAndRemove(userId);

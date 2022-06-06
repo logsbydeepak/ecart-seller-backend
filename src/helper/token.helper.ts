@@ -1,40 +1,18 @@
 import { JwtPayload, sign, verify } from "jsonwebtoken";
 
 import { generateEncryption } from "./security.helper";
-import { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from "~/config/env.config";
+import { TOKEN_SECRET } from "~/config/env.config";
 
-export const accessTokenGenerator = (id: string): string =>
+export const tokenGenerator = (id: string) =>
   generateEncryption(
-    sign({ id, type: "SELLER" }, ACCESS_TOKEN_SECRET as string, {
-      expiresIn: "15m",
-    })
+    sign({ id, type: "SELLER" }, TOKEN_SECRET as string, { expiresIn: "90d" })
   );
 
-export const refreshTokenGenerator = (id: string): string =>
-  generateEncryption(
-    sign({ id, type: "SELLER" }, REFRESH_TOKEN_SECRET as string, {
-      expiresIn: "30d",
-    })
-  );
-
-export const accessTokenValidator = (
+export const tokenValidator = (
   token: string
 ): JwtPayload | null | "TokenExpiredError" => {
   try {
-    return verify(token, ACCESS_TOKEN_SECRET as string) as JwtPayload;
-  } catch (error: any) {
-    if (error.name === "TokenExpiredError") {
-      return "TokenExpiredError";
-    }
-    return null;
-  }
-};
-
-export const refreshTokenValidator = (
-  token: string
-): JwtPayload | null | "TokenExpiredError" => {
-  try {
-    return verify(token, REFRESH_TOKEN_SECRET as string) as JwtPayload;
+    return verify(token, TOKEN_SECRET as string) as JwtPayload;
   } catch (error: any) {
     if (error.name === "TokenExpiredError") {
       return "TokenExpiredError";
