@@ -35,13 +35,14 @@ const createUser: ResolveMutation<"createUser"> = async (_, args) => {
     await newUser.save();
 
     const token = tokenGenerator(newUserId);
-    await redisClient.SADD(newUserId, token);
+    await redisClient.SADD(newUserId.toString(), token);
 
     return {
       __typename: "Token",
       token,
     };
   } catch (error: any) {
+    console.log(error);
     return handleCatchError(error);
   }
 };

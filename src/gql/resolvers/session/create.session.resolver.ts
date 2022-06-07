@@ -27,7 +27,7 @@ const createSession: ResolveMutation<"createSession"> = async (
     await validateHashAndSalt(password, dbUser.password as string);
 
     const token = tokenGenerator(dbUserId);
-    await redisClient.SADD(dbUserId, token);
+    await redisClient.SADD(dbUserId.toString(), token);
 
     return {
       __typename: "Token",
