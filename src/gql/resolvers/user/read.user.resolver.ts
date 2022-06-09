@@ -16,6 +16,7 @@ const readUser: ResolveQuery<"readUser"> = async (
       firstName: dbUser.firstName,
       lastName: dbUser.lastName,
       email: dbUser.email,
+      picture: "default",
     };
   } catch (error: any) {
     return handleCatchError(error);

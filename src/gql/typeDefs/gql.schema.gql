@@ -2,6 +2,7 @@ type User {
   firstName: String!
   lastName: String!
   email: String!
+  picture: String!
 }
 
 type ErrorResponse {
