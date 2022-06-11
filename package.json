@@ -30,9 +30,9 @@
   "homepage": "https://github.com/logsbydeepak/ecart-seller-backend#readme",
   "devDependencies": {
     "@graphql-codegen/cli": "2.6.2",
-    "@graphql-codegen/typescript": "2.5.0",
-    "@graphql-codegen/typescript-resolvers": "2.6.5",
-    "@swc/core": "^1.2.197",
+    "@graphql-codegen/typescript": "2.5.1",
+    "@graphql-codegen/typescript-resolvers": "2.6.6",
+    "@swc/core": "^1.2.198",
     "@swc/helpers": "^0.3.17",
     "@types/bcryptjs": "^2.4.2",
     "@types/cookie-parser": "^1.4.3",
