@@ -2,7 +2,7 @@
   "extends": "./tsconfig.paths.json",
   "compilerOptions": {
     "target": "es2016",
-    "module": "commonjs",
+    "module": "Node16",
     "resolveJsonModule": true,
     "outDir": "./dist",
     "esModuleInterop": true,
