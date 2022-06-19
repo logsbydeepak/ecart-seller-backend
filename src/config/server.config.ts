@@ -1,8 +1,9 @@
 import path from "path";
 import express from "express";
 import cookieParser from "cookie-parser";
-import { ApolloServer } from "apollo-server-express";
+import { ContextFunction } from "apollo-server-core";
 import { loadFilesSync } from "@graphql-tools/load-files";
+import { ApolloServer, ExpressContext } from "apollo-server-express";
 
 import { ALLOW_ORIGIN, NODE_ENV, PORT } from "~/config/env.config";
 import validateTokenMiddleware from "~/middleware/validateToken.middleware";
@@ -20,17 +21,17 @@ const resolverPath = path.join(
 const typeDefs = loadFilesSync(typeDefsPath);
 const resolvers = loadFilesSync(resolverPath);
 
+const context: ContextFunction<ExpressContext> = ({ req, res }) => ({
+  req,
+  res,
+  validatePasswordMiddleware,
+  validateTokenMiddleware,
+});
+
 const apolloServer = new ApolloServer({
   typeDefs,
   resolvers,
-  context: ({ req, res }) => {
-    return {
-      req,
-      res,
-      validatePasswordMiddleware,
-      validateTokenMiddleware,
-    };
-  },
+  context,
 });
 
 const expressServer = express();
