@@ -1,5 +1,4 @@
 import path from "path";
-import helmet from "helmet";
 import express from "express";
 import cookieParser from "cookie-parser";
 import { ApolloServer } from "apollo-server-express";
@@ -36,7 +35,7 @@ const apolloServer = new ApolloServer({
 
 const expressServer = express();
 expressServer.use(cookieParser());
-isProduction && expressServer.use(helmet());
+isProduction && expressServer.use(async () => await import("helmet"));
 
 const startServer = async () => {
   await apolloServer.start();
