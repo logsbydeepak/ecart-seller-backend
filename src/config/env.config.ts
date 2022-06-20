@@ -6,9 +6,7 @@ import { config } from "dotenv";
 const rootPath: string = resolve(`${__dirname}../../../`);
 export const { NODE_ENV } = env;
 
-if (NODE_ENV !== "prod") {
-  config({ path: `${rootPath}/${NODE_ENV}.env` });
-}
+if (NODE_ENV === "development") config({ path: `${rootPath}/.env.dev` });
 
 export const {
   PORT,

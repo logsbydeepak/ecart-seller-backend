@@ -9,8 +9,6 @@ import { ALLOW_ORIGIN, NODE_ENV, PORT } from "~/config/env.config";
 import validateTokenMiddleware from "~/middleware/validateToken.middleware";
 import validatePasswordMiddleware from "~/middleware/validatePassword.middleware";
 
-const isProduction = NODE_ENV === "prod";
-
 const currentPath = __dirname;
 const typeDefsPath = path.join(currentPath, "../gql/typeDefs/**/*.gql");
 const resolverPath = path.join(
@@ -36,7 +34,8 @@ const apolloServer = new ApolloServer({
 
 const expressServer = express();
 expressServer.use(cookieParser());
-isProduction && expressServer.use(async () => await import("helmet"));
+NODE_ENV === "production" &&
+  expressServer.use(async () => await import("helmet"));
 
 const startServer = async () => {
   await apolloServer.start();
