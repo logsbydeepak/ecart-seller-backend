@@ -33,10 +33,10 @@ interface Error {
 }
 
 enum CreateUserCredentialFiled {
-  FIRST_NAME
-  LAST_NAME
-  EMAIL
-  PASSWORD
+  firstName
+  lastName
+  email
+  password
 }
 
 type CreateUserCredentialError implements Error {

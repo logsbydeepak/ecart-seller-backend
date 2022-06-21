@@ -19,39 +19,46 @@ export const validateBody = (bodyData: any, bodyDataCount: number) => {
   return bodyData;
 };
 
-export const validateEmpty = (
+export const validateEmpty = <T extends Object>(
   rawData: string | string[] | undefined,
-  messageTitle: ErrorMessageTitle,
-  message: string
+  errorObj: T
 ): string => {
   if (!rawData || typeof rawData === "object") {
-    throw ErrorObject(messageTitle, message);
+    throw errorObj;
   }
 
   return rawData.trim();
 };
 
-export const validateEmail = (email: string): string => {
+export const validateEmail = <T extends Object>(
+  email: string,
+  emptyErrorObj: T,
+  invalidErrorObj: T
+) => {
   if (!email) {
-    throw ErrorObject("BODY_PARSE", "email is required");
+    throw emptyErrorObj;
   }
 
   const formattedEmail = email.trim().toLowerCase();
   if (!isEmail(formattedEmail)) {
-    throw ErrorObject("BODY_PARSE", "invalid email");
+    throw invalidErrorObj;
   }
 
   return formattedEmail;
 };
 
-export const validatePassword = (password: string): string => {
+export const validatePassword = <T extends Object>(
+  password: string,
+  emptyErrorObj: T,
+  invalidErrorObj: T
+) => {
   if (!password) {
-    throw ErrorObject("BODY_PARSE", "password is required");
+    throw emptyErrorObj;
   }
 
   const formattedPassword = password.trim();
   if (!isStrongPassword(formattedPassword)) {
-    throw ErrorObject("BODY_PARSE", "invalid password");
+    throw invalidErrorObj;
   }
 
   return formattedPassword;

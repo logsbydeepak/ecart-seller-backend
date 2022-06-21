@@ -4,37 +4,32 @@ import {
   validatePassword,
 } from "~/helper/validator.helper";
 
+import {
+  Mutation,
+  CreateUserCredentialFiled,
+  MutationCreateUserArgs,
+} from "~/types/graphql";
+
 import { GQLResolvers } from "~/types";
 import { UserModel } from "~/db/model.db";
 import { redisClient } from "~/config/redis.config";
 import { tokenGenerator } from "~/helper/token.helper";
 import { handleCatchError } from "~/helper/response.helper";
+import { dbEmailExist } from "~/db/query/user.query";
+
+type ResponseType = Mutation["createUser"];
 
 const CreateUser: GQLResolvers = {
   Mutation: {
     createUser: async (_parent, args) => {
       try {
-        const firstName = validateEmpty(
-          args.firstName,
-          "BODY_PARSE",
-          "firstName is required"
-        );
+        const validatedArgs = validateCreateUserArgs(args);
+        await dbEmailExist(validatedArgs.email);
 
-        const lastName = validateEmpty(
-          args.lastName,
-          "BODY_PARSE",
-          "lastName is required"
-        );
+        const newUser = await new UserModel(validatedArgs).save();
 
-        const email = validateEmail(args.email);
-        const password = validatePassword(args.password);
-
-        const newUser = new UserModel({ firstName, lastName, email, password });
-        const newUserId = newUser._id;
-        await newUser.save();
-
-        const token = tokenGenerator(newUserId);
-        await redisClient.SADD(newUserId.toString(), token);
+        const token = tokenGenerator(newUser._id);
+        await redisClient.SADD(newUser._id.toString(), token);
 
         return {
           __typename: "Token",
@@ -45,6 +40,50 @@ const CreateUser: GQLResolvers = {
       }
     },
   },
+};
+
+const validateCreateUserArgs = (args: MutationCreateUserArgs) => {
+  const firstName = validateEmpty<ResponseType>(args.firstName, {
+    __typename: "CreateUserCredentialError",
+    field: CreateUserCredentialFiled.FirstName,
+    message: "firstName is required",
+  });
+
+  const lastName = validateEmpty<ResponseType>(args.firstName, {
+    __typename: "CreateUserCredentialError",
+    field: CreateUserCredentialFiled.LastName,
+    message: "lastName is required",
+  });
+
+  const email = validateEmail<ResponseType>(
+    args.email,
+    {
+      __typename: "CreateUserCredentialError",
+      field: CreateUserCredentialFiled.Email,
+      message: "email is required",
+    },
+    {
+      __typename: "CreateUserCredentialError",
+      field: CreateUserCredentialFiled.Email,
+      message: "invalid email",
+    }
+  );
+
+  const password = validatePassword(
+    args.password,
+    {
+      __typename: "CreateUserCredentialError",
+      field: CreateUserCredentialFiled.Password,
+      message: "password is required",
+    },
+    {
+      __typename: "CreateUserCredentialError",
+      field: CreateUserCredentialFiled.Password,
+      message: "invalid password",
+    }
+  );
+
+  return { firstName, lastName, email, password };
 };
 
 export default CreateUser;

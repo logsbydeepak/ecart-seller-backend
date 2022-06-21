@@ -1,7 +1,13 @@
 import { Request, Response } from "express";
 import { ErrorRequestHandler } from "express";
 import { Document } from "mongoose";
-import { Resolvers } from "./graphql";
+import {
+  MutationResolvers,
+  RequireFields,
+  Resolver,
+  ResolverFn,
+  Resolvers,
+} from "./graphql";
 
 export type GQLContext = {
   req: Request;
