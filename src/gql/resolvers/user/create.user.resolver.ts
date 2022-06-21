@@ -1,50 +1,50 @@
 import {
-  validateBody,
   validateEmail,
   validateEmpty,
   validatePassword,
 } from "~/helper/validator.helper";
 
-import { ResolveMutation } from "~/types";
-import { tokenGenerator } from "~/helper/token.helper";
+import { GQLResolvers } from "~/types";
 import { UserModel } from "~/db/model.db";
-import { handleCatchError } from "~/helper/response.helper";
 import { redisClient } from "~/config/redis.config";
+import { tokenGenerator } from "~/helper/token.helper";
+import { handleCatchError } from "~/helper/response.helper";
 
-const createUser: ResolveMutation<"createUser"> = async (_, args) => {
-  try {
-    const bodyData = validateBody(args, 4);
+const CreateUser: GQLResolvers = {
+  Mutation: {
+    createUser: async (_parent, args) => {
+      try {
+        const firstName = validateEmpty(
+          args.firstName,
+          "BODY_PARSE",
+          "firstName is required"
+        );
 
-    const firstName = validateEmpty(
-      bodyData.firstName,
-      "BODY_PARSE",
-      "firstName is required"
-    );
+        const lastName = validateEmpty(
+          args.lastName,
+          "BODY_PARSE",
+          "lastName is required"
+        );
 
-    const lastName = validateEmpty(
-      bodyData.lastName,
-      "BODY_PARSE",
-      "lastName is required"
-    );
+        const email = validateEmail(args.email);
+        const password = validatePassword(args.password);
 
-    const email = validateEmail(bodyData.email);
-    const password = validatePassword(bodyData.password);
+        const newUser = new UserModel({ firstName, lastName, email, password });
+        const newUserId = newUser._id;
+        await newUser.save();
 
-    const newUser = new UserModel({ firstName, lastName, email, password });
-    const newUserId = newUser._id;
-    await newUser.save();
+        const token = tokenGenerator(newUserId);
+        await redisClient.SADD(newUserId.toString(), token);
 
-    const token = tokenGenerator(newUserId);
-    await redisClient.SADD(newUserId.toString(), token);
-
-    return {
-      __typename: "Token",
-      token,
-    };
-  } catch (error: any) {
-    console.log(error);
-    return handleCatchError(error);
-  }
+        return {
+          __typename: "Token",
+          token,
+        };
+      } catch (error: any) {
+        return handleCatchError(error);
+      }
+    },
+  },
 };
 
-export default { Mutation: { createUser } };
+export default CreateUser;

@@ -1,3 +1,4 @@
+import { ApolloError } from "apollo-server-express";
 import { ErrorMessageTitle } from "~/types";
 import { ErrorResponse as ErrorResponseType } from "~/types/graphql";
 
@@ -33,5 +34,6 @@ export const handleCatchError = (error: any) => {
       error.ErrorObject.message
     );
   }
-  return ErrorResponse("INTERNAL_SERVER", "Something went wrong");
+
+  throw new ApolloError("Something went wrong");
 };

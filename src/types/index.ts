@@ -1,13 +1,7 @@
 import { Request, Response } from "express";
 import { ErrorRequestHandler } from "express";
 import { Document } from "mongoose";
-import { MutationResolvers, QueryResolvers } from "./graphql";
-
-export type ResolveMutation<T extends keyof MutationResolvers> =
-  MutationResolvers<GQLContext>[T];
-
-export type ResolveQuery<T extends keyof QueryResolvers> =
-  QueryResolvers<GQLContext>[T];
+import { Resolvers } from "./graphql";
 
 export type GQLContext = {
   req: Request;
@@ -20,6 +14,8 @@ export type GQLContext = {
     userId: string
   ) => Promise<any>;
 };
+
+export type GQLResolvers = Resolvers<GQLContext>;
 
 export interface UserModelType extends Document {
   _id: string;

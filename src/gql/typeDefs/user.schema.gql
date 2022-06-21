@@ -8,7 +8,7 @@ type Mutation {
     lastName: String!
     email: String!
     password: String!
-  ): TokenResponse
+  ): CreateUserResponse!
   deleteUser(currentPassword: String!): Response
   updateUser(
     toUpdate: String!
@@ -27,5 +27,30 @@ input FullName {
 type Token {
   token: String!
 }
+
+interface Error {
+  message: String!
+}
+
+enum CreateUserCredentialFiled {
+  FIRST_NAME
+  LAST_NAME
+  EMAIL
+  PASSWORD
+}
+
+type CreateUserCredentialError implements Error {
+  message: String!
+  field: CreateUserCredentialFiled!
+}
+
+type UserAlreadyExistError implements Error {
+  message: String!
+}
+
+union CreateUserResponse =
+    Token
+  | CreateUserCredentialError
+  | UserAlreadyExistError
 
 union TokenResponse = Token | ErrorResponse
