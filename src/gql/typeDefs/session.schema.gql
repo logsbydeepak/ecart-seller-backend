@@ -1,6 +1,12 @@
 type Mutation {
-  createSession(email: String!, password: String!): TokenResponse
+  createSession(email: String!, password: String!): CreateSessionType!
   updateSession: Response
   deleteSession: Response
   deleteAllSession(currentPassword: String!): Response
 }
+
+type CreateSessionCredentialError implements Error {
+  message: String!
+}
+
+union CreateSessionType = Token | CreateSessionCredentialError

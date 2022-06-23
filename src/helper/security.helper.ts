@@ -27,13 +27,14 @@ export const generateDecryption = (
   }
 };
 
-export const validateHashAndSalt = async (
+export const validateHashAndSalt = async <T>(
   rawPassword: string,
-  dbPassword: string
+  dbPassword: string,
+  errorObj: T
 ): Promise<void> => {
   const comparePassword = await compare(rawPassword, dbPassword);
 
   if (!comparePassword) {
-    throw ErrorObject("BODY_PARSE", "invalid password");
+    throw errorObj;
   }
 };
