@@ -1,5 +1,5 @@
 type Query {
-  readUser: UserInfo
+  readUser: ReadUserResponse!
 }
 
 type Mutation {
@@ -53,4 +53,28 @@ union CreateUserResponse =
   | CreateUserCredentialError
   | UserAlreadyExistError
 
-union TokenResponse = Token | ErrorResponse
+type TokenMissingError implements Error {
+  message: String!
+}
+
+type TokenInvalidError implements Error {
+  message: String!
+}
+
+type TokenExpiredError implements Error {
+  message: String!
+}
+
+enum TokenErrorType {
+  TokenRequiredError
+  TokenInvalidError
+  TokenExpiredError
+  TokenUserDoNotExistError
+}
+
+type TokenError implements Error {
+  type: TokenErrorType!
+  message: String!
+}
+
+union ReadUserResponse = TokenError | User

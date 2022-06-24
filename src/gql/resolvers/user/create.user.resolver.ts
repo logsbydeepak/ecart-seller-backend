@@ -4,6 +4,9 @@ import {
   validatePassword,
 } from "~/helper/validator.helper";
 
+import { tokenGenerator } from "~/helper/token.helper";
+import { handleCatchError } from "~/helper/response.helper";
+
 import {
   Mutation,
   CreateUserCredentialFiled,
@@ -11,11 +14,11 @@ import {
 } from "~/types/graphql";
 
 import { GQLResolvers } from "~/types";
+
 import { UserModel } from "~/db/model.db";
-import { redisClient } from "~/config/redis.config";
-import { tokenGenerator } from "~/helper/token.helper";
-import { handleCatchError } from "~/helper/response.helper";
 import { dbEmailExist } from "~/db/query/user.query";
+
+import { redisClient } from "~/config/redis.config";
 
 type ResponseType = Mutation["createUser"];
 

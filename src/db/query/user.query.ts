@@ -24,13 +24,14 @@ export const dbUserExist = async (userId: string): Promise<void> => {
   }
 };
 
-export const dbReadUserById = async (
-  userId: string
+export const dbReadUserById = async <T>(
+  userId: string,
+  errorObj: T
 ): Promise<UserModelType> => {
   const dbUser = await UserModel.findById(userId);
 
   if (!dbUser) {
-    throw ErrorObject("AUTHENTICATION", "user do not exist");
+    throw errorObj;
   }
 
   return dbUser;

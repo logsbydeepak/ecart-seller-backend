@@ -2,33 +2,33 @@ import { Request } from "express";
 import { isValidObjectId } from "mongoose";
 
 import { redisClient } from "~/config/redis.config";
+import { TokenError, TokenErrorType } from "~/types/graphql";
+
 import { tokenValidator } from "~/helper/token.helper";
 import { validateEmpty } from "~/helper/validator.helper";
+import { handleCatchError } from "~/helper/response.helper";
 import { generateDecryption } from "~/helper/security.helper";
-import { handleCatchError, ErrorObject } from "~/helper/response.helper";
 
 const validateTokenMiddleware = async (req: Request) => {
   try {
-    const token: string = validateEmpty(
+    const token: string = validateEmpty<TokenError>(
       req.headers.token,
-      "TOKEN_PARSE",
-      "access token is required"
+      TokenRequiredError
     );
 
-    const tokenDecryption: string = generateDecryption(
+    const tokenDecryption = generateDecryption<TokenError>(
       token,
-      "TOKEN_PARSE",
-      "invalid access token"
+      TokenInvalidError
     );
 
     const tokenData = tokenValidator(tokenDecryption);
 
     if (!tokenData) {
-      throw ErrorObject("TOKEN_PARSE", "invalid access token");
+      throw TokenInvalidError;
     }
 
     if (tokenData === "TokenExpiredError") {
-      throw ErrorObject("TOKEN_PARSE", "token expired");
+      throw TokenExpiredError;
     }
 
     const userId: string = tokenData.id;
@@ -40,19 +40,37 @@ const validateTokenMiddleware = async (req: Request) => {
       !userType ||
       userType !== "SELLER"
     ) {
-      throw ErrorObject("TOKEN_PARSE", "invalid access token");
+      throw TokenInvalidError;
     }
 
     const isToken = await redisClient.SISMEMBER(userId, token);
 
     if (!isToken) {
-      throw ErrorObject("TOKEN_PARSE", "invalid access token");
+      throw TokenInvalidError;
     }
 
     return { userId, token };
   } catch (error: any) {
     throw handleCatchError(error);
   }
+};
+
+const TokenRequiredError: TokenError = {
+  __typename: "TokenError",
+  type: TokenErrorType.TokenRequiredError,
+  message: "token is required",
+};
+
+const TokenInvalidError: TokenError = {
+  __typename: "TokenError",
+  type: TokenErrorType.TokenInvalidError,
+  message: "invalid token",
+};
+
+const TokenExpiredError: TokenError = {
+  __typename: "TokenError",
+  type: TokenErrorType.TokenExpiredError,
+  message: "token expired",
 };
 
 export default validateTokenMiddleware;

@@ -15,15 +15,11 @@ export const generateHashAndSalt = async (rawPassword: string) => {
 export const generateEncryption = (token: string): string =>
   cryptr.encrypt(token);
 
-export const generateDecryption = (
-  token: string,
-  messageTitle: ErrorMessageTitle,
-  message: string
-) => {
+export const generateDecryption = <T>(token: string, errorObj: T) => {
   try {
     return cryptr.decrypt(token);
   } catch (error: any) {
-    throw ErrorObject(messageTitle, message);
+    throw errorObj;
   }
 };
 
