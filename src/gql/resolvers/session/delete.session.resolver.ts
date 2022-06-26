@@ -1,24 +1,23 @@
-import { ResolveMutation } from "~/types";
+import { GQLResolvers } from "~/types";
 import { handleCatchError } from "~/helper/response.helper";
-import { removeRefreshTokenCookie } from "~/helper/cookie.helper";
+import { redisClient } from "~/config/redis.config";
 
-const deleteSession: ResolveMutation<"deleteSession"> = async (
-  _,
-  __,
-  { req, res, validateTokenMiddleware }
-) => {
-  try {
-    const { userId, accessToken } = await validateTokenMiddleware(req);
+const DeleteSession: GQLResolvers = {
+  Mutation: {
+    deleteSession: async (_parent, _args, { req, validateTokenMiddleware }) => {
+      try {
+        const { userId, token } = await validateTokenMiddleware(req);
+        await redisClient.SREM(userId, token);
 
-    removeRefreshTokenCookie(res);
-
-    return {
-      __typename: "SuccessResponse",
-      message: "session removed successfully",
-    };
-  } catch (error: any) {
-    return handleCatchError(error);
-  }
+        return {
+          __typename: "LogoutSuccess",
+          message: "logout success",
+        };
+      } catch (error) {
+        return handleCatchError(error);
+      }
+    },
+  },
 };
 
-export default { Mutation: { deleteSession } };
+export default DeleteSession;
