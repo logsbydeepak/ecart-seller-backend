@@ -9,9 +9,7 @@ import { handleCatchError } from "~/helper/response.helper";
 import { validateHashAndSalt } from "~/helper/security.helper";
 import { validateEmail, validatePassword } from "~/helper/validator.helper";
 
-type ResponseType = Mutation["createSession"];
-
-const invalidCredentialError: ResponseType = {
+const invalidCredentialError: Mutation["createSession"] = {
   __typename: "CreateSessionCredentialError",
   message: "invalid email or password",
 };
@@ -26,7 +24,7 @@ const CreateSession: GQLResolvers = {
           email
         );
 
-        await validateHashAndSalt<ResponseType>(
+        await validateHashAndSalt<"createSession">(
           password,
           dbPassword,
           invalidCredentialError
@@ -47,7 +45,7 @@ const CreateSession: GQLResolvers = {
 };
 
 const validateCreateSessionArgs = (args: MutationCreateSessionArgs) => {
-  const email = validateEmail<ResponseType>(
+  const email = validateEmail<"createSession">(
     args.email,
     {
       __typename: "CreateSessionCredentialError",
@@ -56,7 +54,7 @@ const validateCreateSessionArgs = (args: MutationCreateSessionArgs) => {
     invalidCredentialError
   );
 
-  const password = validatePassword<ResponseType>(
+  const password = validatePassword<"createSession">(
     args.password,
     {
       __typename: "CreateSessionCredentialError",

@@ -1,7 +1,7 @@
 import isEmail from "validator/lib/isEmail";
 import isStrongPassword from "validator/lib/isStrongPassword";
 
-import { ErrorMessageTitle } from "~/types";
+import { GQLResponse, GQLResponseType } from "~/types";
 import { ErrorObject } from "~/helper/response.helper";
 
 const productCategoryList = ["electronics", "home"];
@@ -19,9 +19,9 @@ export const validateBody = (bodyData: any, bodyDataCount: number) => {
   return bodyData;
 };
 
-export const validateEmpty = <T extends Object>(
+export const validateEmpty = <T extends GQLResponseType>(
   rawData: string | string[] | undefined,
-  errorObj: T
+  errorObj: GQLResponse<T>
 ): string => {
   if (!rawData || typeof rawData === "object") {
     throw errorObj;
@@ -30,10 +30,10 @@ export const validateEmpty = <T extends Object>(
   return rawData.trim();
 };
 
-export const validateEmail = <T extends Object>(
+export const validateEmail = <T extends GQLResponseType>(
   email: string,
-  emptyErrorObj: T,
-  invalidErrorObj: T
+  emptyErrorObj: GQLResponse<T>,
+  invalidErrorObj: GQLResponse<T>
 ) => {
   if (!email) {
     throw emptyErrorObj;
@@ -46,11 +46,10 @@ export const validateEmail = <T extends Object>(
 
   return formattedEmail;
 };
-
-export const validatePassword = <T extends Object>(
+export const validatePassword = <T extends GQLResponseType>(
   password: string,
-  emptyErrorObj: T,
-  invalidErrorObj: T
+  emptyErrorObj: GQLResponse<T>,
+  invalidErrorObj: GQLResponse<T>
 ) => {
   if (!password) {
     throw emptyErrorObj;

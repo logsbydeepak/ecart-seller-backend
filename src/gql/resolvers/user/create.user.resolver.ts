@@ -7,11 +7,7 @@ import {
 import { tokenGenerator } from "~/helper/token.helper";
 import { handleCatchError } from "~/helper/response.helper";
 
-import {
-  Mutation,
-  CreateUserCredentialFiled,
-  MutationCreateUserArgs,
-} from "~/types/graphql";
+import { MutationCreateUserArgs } from "~/types/graphql";
 
 import { GQLResolvers } from "~/types";
 
@@ -19,8 +15,6 @@ import { UserModel } from "~/db/model.db";
 import { dbEmailExist } from "~/db/query/user.query";
 
 import { redisClient } from "~/config/redis.config";
-
-type ResponseType = Mutation["createUser"];
 
 const CreateUser: GQLResolvers = {
   Mutation: {
@@ -46,19 +40,19 @@ const CreateUser: GQLResolvers = {
 };
 
 const validateCreateUserArgs = (args: MutationCreateUserArgs) => {
-  const firstName = validateEmpty<ResponseType>(args.firstName, {
+  const firstName = validateEmpty<"createUser">(args.firstName, {
     __typename: "CreateUserCredentialError",
     field: "firstName",
     message: "firstName is required",
   });
 
-  const lastName = validateEmpty<ResponseType>(args.firstName, {
+  const lastName = validateEmpty<"createUser">(args.firstName, {
     __typename: "CreateUserCredentialError",
     field: "lastName",
     message: "lastName is required",
   });
 
-  const email = validateEmail<ResponseType>(
+  const email = validateEmail<"createUser">(
     args.email,
     {
       __typename: "CreateUserCredentialError",
@@ -72,7 +66,7 @@ const validateCreateUserArgs = (args: MutationCreateUserArgs) => {
     }
   );
 
-  const password = validatePassword<ResponseType>(
+  const password = validatePassword<"createUser">(
     args.password,
     {
       __typename: "CreateUserCredentialError",

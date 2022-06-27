@@ -3,7 +3,7 @@ import { compare, hash } from "bcryptjs";
 
 import { ErrorObject } from "./response.helper";
 import { ENCRYPT_SECRET } from "~/config/env.config";
-import { ErrorMessageTitle } from "~/types";
+import { ErrorMessageTitle, GQLResponse, GQLResponseType } from "~/types";
 
 const cryptr = new Cryptr(ENCRYPT_SECRET as string);
 
@@ -23,10 +23,10 @@ export const generateDecryption = <T>(token: string, errorObj: T) => {
   }
 };
 
-export const validateHashAndSalt = async <T>(
+export const validateHashAndSalt = async <T extends GQLResponseType>(
   rawPassword: string,
   dbPassword: string,
-  errorObj: T
+  errorObj: GQLResponse<T>
 ): Promise<void> => {
   const comparePassword = await compare(rawPassword, dbPassword);
 
