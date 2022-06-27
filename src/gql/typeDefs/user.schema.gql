@@ -9,7 +9,9 @@ type Mutation {
     email: String!
     password: String!
   ): CreateUserResponse!
-  deleteUser(currentPassword: String!): Response
+
+  deleteUser(currentPassword: String!): DeleteUserCredentialError!
+
   updateUser(
     toUpdate: String!
     email: String
@@ -78,3 +80,19 @@ type TokenError implements Error {
 }
 
 union ReadUserResponse = TokenError | User
+
+type DeleteUserCredentialError implements Error {
+  message: String!
+}
+
+union DeleteUserResponse =
+    SuccessResponse
+  | TokenError
+  | DeleteUserCredentialError
+
+type UpdateUserCredentialError implements Error {
+  message: String!
+  field: String!
+}
+
+union UpdateUser = User | TokenError | UpdateUserCredentialError

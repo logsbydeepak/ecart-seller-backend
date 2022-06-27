@@ -1,6 +1,8 @@
 overwrite: true
 schema: "src/gql/typeDefs/*.gql"
 documents: null
+config:
+  allowEnumStringTypes: true
 generates:
   src/types/graphql.ts:
     plugins:

@@ -48,13 +48,13 @@ const CreateUser: GQLResolvers = {
 const validateCreateUserArgs = (args: MutationCreateUserArgs) => {
   const firstName = validateEmpty<ResponseType>(args.firstName, {
     __typename: "CreateUserCredentialError",
-    field: CreateUserCredentialFiled.FirstName,
+    field: "firstName",
     message: "firstName is required",
   });
 
   const lastName = validateEmpty<ResponseType>(args.firstName, {
     __typename: "CreateUserCredentialError",
-    field: CreateUserCredentialFiled.LastName,
+    field: "lastName",
     message: "lastName is required",
   });
 
@@ -62,26 +62,26 @@ const validateCreateUserArgs = (args: MutationCreateUserArgs) => {
     args.email,
     {
       __typename: "CreateUserCredentialError",
-      field: CreateUserCredentialFiled.Email,
+      field: "email",
       message: "email is required",
     },
     {
       __typename: "CreateUserCredentialError",
-      field: CreateUserCredentialFiled.Email,
+      field: "email",
       message: "invalid email",
     }
   );
 
-  const password = validatePassword(
+  const password = validatePassword<ResponseType>(
     args.password,
     {
       __typename: "CreateUserCredentialError",
-      field: CreateUserCredentialFiled.Password,
+      field: "password",
       message: "password is required",
     },
     {
       __typename: "CreateUserCredentialError",
-      field: CreateUserCredentialFiled.Password,
+      field: "password",
       message: "invalid password",
     }
   );

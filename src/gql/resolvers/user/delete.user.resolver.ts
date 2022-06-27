@@ -1,28 +1,46 @@
-import { ResolveMutation } from "~/types";
+import { GQLResolvers } from "~/types";
+import { Mutation } from "~/types/graphql";
+
 import { UserModel } from "~/db/model.db";
+import { redisClient } from "~/config/redis.config";
 import { handleCatchError } from "~/helper/response.helper";
-import { removeRefreshTokenCookie } from "~/helper/cookie.helper";
 
-const deleteUser: ResolveMutation<"deleteUser"> = async (
-  _,
-  args,
-  { req, res, validateTokenMiddleware, validatePasswordMiddleware }
-) => {
-  try {
-    const { userId, accessToken } = await validateTokenMiddleware(req);
-    await validatePasswordMiddleware(args.currentPassword, userId);
+type ResponseType = Mutation["deleteUser"];
 
-    await UserModel.findByIdAndRemove(userId);
+const DeleteUser: GQLResolvers = {
+  Mutation: {
+    deleteUser: async (
+      _parent,
+      args,
+      { req, validateTokenMiddleware, validatePasswordMiddleware }
+    ) => {
+      try {
+        const { userId } = await validateTokenMiddleware(req);
+        await validatePasswordMiddleware<ResponseType>(
+          args.currentPassword,
+          userId,
+          {
+            __typename: "DeleteUserCredentialError",
+            message: "password is required",
+          },
+          {
+            __typename: "DeleteUserCredentialError",
+            message: "invalid password",
+          }
+        );
 
-    removeRefreshTokenCookie(res);
+        await redisClient.DEL(userId);
+        await UserModel.findByIdAndRemove(userId);
 
-    return {
-      __typename: "SuccessResponse",
-      message: "user removed successfully",
-    };
-  } catch (error: any) {
-    return handleCatchError(error);
-  }
+        return {
+          __typename: "SuccessResponse",
+          message: "user deleted",
+        };
+      } catch (error) {
+        return handleCatchError(error);
+      }
+    },
+  },
 };
 
-export default { Mutation: { deleteUser } };
+export default DeleteUser;
