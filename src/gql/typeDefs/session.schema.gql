@@ -1,17 +1,20 @@
 type Mutation {
   createSession(email: String!, password: String!): CreateSessionResponse!
-  updateSession: Response
   deleteSession: DeleteSessionResponse!
-  deleteAllSession(currentPassword: String!): Response
+  deleteAllSession(currentPassword: String!): DeleteAllSessionResponse!
 }
 
 type CreateSessionCredentialError implements Error {
   message: String!
 }
 
-type LogoutSuccess {
+type DeleteAllSessionCredentialError implements Error {
   message: String!
 }
 
 union CreateSessionResponse = CreateSessionCredentialError | Token
-union DeleteSessionResponse = LogoutSuccess | TokenError
+union DeleteSessionResponse = SuccessResponse | TokenError
+union DeleteAllSessionResponse =
+    SuccessResponse
+  | DeleteAllSessionCredentialError
+  | TokenError

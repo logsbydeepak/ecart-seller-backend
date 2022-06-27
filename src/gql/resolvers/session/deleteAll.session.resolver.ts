@@ -1,27 +1,44 @@
-import { ResolveMutation } from "~/types";
+import { GQLResolvers } from "~/types";
+import { Mutation } from "~/types/graphql";
+
+import { redisClient } from "~/config/redis.config";
 import { handleCatchError } from "~/helper/response.helper";
-import { removeRefreshTokenCookie } from "~/helper/cookie.helper";
 
-const deleteAllSession: ResolveMutation<"deleteAllSession"> = async (
-  _,
-  args,
-  { req, res, validateTokenMiddleware, validatePasswordMiddleware }
-) => {
-  try {
-    const { userId, accessToken } = await validateTokenMiddleware(req);
-    await validatePasswordMiddleware(args.currentPassword, userId);
-    console.log("should not run");
+type ResponseType = Mutation["deleteAllSession"];
 
-    removeRefreshTokenCookie(res);
+const DeleteAllSession: GQLResolvers = {
+  Mutation: {
+    deleteAllSession: async (
+      _parent,
+      args,
+      { req, validateTokenMiddleware, validatePasswordMiddleware }
+    ) => {
+      try {
+        const { userId } = await validateTokenMiddleware(req);
+        await validatePasswordMiddleware<ResponseType>(
+          args.currentPassword,
+          userId,
+          {
+            __typename: "DeleteAllSessionCredentialError",
+            message: "password is required",
+          },
+          {
+            __typename: "DeleteAllSessionCredentialError",
+            message: "invalid password",
+          }
+        );
 
-    res.statusCode = 204;
-    return {
-      __typename: "SuccessResponse",
-      message: "session removed successfully",
-    };
-  } catch (error: any) {
-    return handleCatchError(error);
-  }
+        await redisClient.DEL(userId);
+
+        return {
+          __typename: "SuccessResponse",
+          message: "logout from all device successfully",
+        };
+      } catch (error) {
+        return handleCatchError(error);
+      }
+    },
+  },
 };
 
-export default { Mutation: { deleteAllSession } };
+export default DeleteAllSession;

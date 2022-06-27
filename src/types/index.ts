@@ -15,9 +15,11 @@ export type GQLContext = {
   validateTokenMiddleware: (
     req: Request
   ) => Promise<{ userId: string; token: string }>;
-  validatePasswordMiddleware: (
+  validatePasswordMiddleware: <T>(
     password: string,
-    userId: string
+    userId: string,
+    passwordEmptyErrorObj: T,
+    passwordInvalidErrorObj: T
   ) => Promise<any>;
 };
 

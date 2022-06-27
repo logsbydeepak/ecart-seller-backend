@@ -10,7 +10,7 @@ const DeleteSession: GQLResolvers = {
         await redisClient.SREM(userId, token);
 
         return {
-          __typename: "LogoutSuccess",
+          __typename: "SuccessResponse",
           message: "logout success",
         };
       } catch (error) {
