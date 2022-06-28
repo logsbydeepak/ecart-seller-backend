@@ -1,0 +1,30 @@
+type User {
+  firstName: String!
+  lastName: String!
+  email: String!
+  picture: String!
+}
+
+type SuccessResponse {
+  message: String!
+}
+
+interface Error {
+  message: String!
+}
+
+type Token {
+  token: String!
+}
+
+enum TokenErrorType {
+  TokenRequiredError
+  TokenInvalidError
+  TokenExpiredError
+  TokenUserDoNotExistError
+}
+
+type TokenError implements Error {
+  type: TokenErrorType!
+  message: String!
+}

@@ -4,6 +4,13 @@ type Mutation {
   deleteAllSession(currentPassword: String!): DeleteAllSessionResponse!
 }
 
+union CreateSessionResponse = CreateSessionCredentialError | Token
+union DeleteSessionResponse = SuccessResponse | TokenError
+union DeleteAllSessionResponse =
+    SuccessResponse
+  | DeleteAllSessionCredentialError
+  | TokenError
+
 type CreateSessionCredentialError implements Error {
   message: String!
 }
@@ -11,10 +18,3 @@ type CreateSessionCredentialError implements Error {
 type DeleteAllSessionCredentialError implements Error {
   message: String!
 }
-
-union CreateSessionResponse = CreateSessionCredentialError | Token
-union DeleteSessionResponse = SuccessResponse | TokenError
-union DeleteAllSessionResponse =
-    SuccessResponse
-  | DeleteAllSessionCredentialError
-  | TokenError
