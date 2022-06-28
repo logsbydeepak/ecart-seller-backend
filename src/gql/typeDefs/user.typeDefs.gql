@@ -14,8 +14,10 @@ type Mutation {
 
   updateUser(
     toUpdate: ToUpdateFiled!
-    value: String!
     currentPassword: String!
+    email: String
+    password: String
+    name: ToUpdateName
   ): UpdateUserResponse!
 }
 
@@ -31,7 +33,16 @@ union DeleteUserResponse =
   | TokenError
   | DeleteUserCredentialError
 
-union UpdateUserResponse = User | TokenError | UpdateUserCredentialError
+union UpdateUserResponse =
+    User
+  | TokenError
+  | UpdateUserCredentialError
+  | UserAlreadyExistError
+
+input ToUpdateName {
+  firstName: String!
+  lastName: String!
+}
 
 enum ToUpdateFiled {
   email
@@ -42,7 +53,9 @@ enum ToUpdateFiled {
 enum UpdateUserCredentialField {
   toUpdate
   currentPassword
-  value
+  email
+  password
+  name
 }
 
 type UpdateUserCredentialError implements Error {

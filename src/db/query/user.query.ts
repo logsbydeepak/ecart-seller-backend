@@ -3,14 +3,14 @@ import { UserModel } from "~/db/model.db";
 import { ErrorObject } from "~/helper/response.helper";
 import { UserAlreadyExistError } from "~/types/graphql";
 
-export const dbEmailExist = async (email: string) => {
+export const dbEmailExist = async <T extends GQLResponseType>(
+  email: string,
+  emailError: GQLResponse<T>
+) => {
   const emailCount = await UserModel.count({ email });
 
   if (emailCount !== 0) {
-    throw {
-      __typename: "UserAlreadyExistError",
-      message: "user already exist",
-    } as UserAlreadyExistError;
+    throw emailError;
   }
 };
 

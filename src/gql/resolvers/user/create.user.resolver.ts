@@ -21,7 +21,10 @@ const CreateUser: GQLResolvers = {
     createUser: async (_parent, args) => {
       try {
         const validatedArgs = validateCreateUserArgs(args);
-        await dbEmailExist(validatedArgs.email);
+        await dbEmailExist<"createUser">(validatedArgs.email, {
+          __typename: "UserAlreadyExistError",
+          message: "email already exist",
+        });
 
         const newUser = await new UserModel(validatedArgs).save();
 

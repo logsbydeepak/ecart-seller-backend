@@ -20,7 +20,7 @@ export const validateBody = (bodyData: any, bodyDataCount: number) => {
 };
 
 export const validateEmpty = <T extends GQLResponseType>(
-  rawData: string | string[] | undefined,
+  rawData: string | string[] | undefined | null,
   errorObj: GQLResponse<T>
 ): string => {
   if (!rawData || typeof rawData === "object") {
@@ -31,7 +31,7 @@ export const validateEmpty = <T extends GQLResponseType>(
 };
 
 export const validateEmail = <T extends GQLResponseType>(
-  email: string,
+  email: string | undefined | null,
   emptyErrorObj: GQLResponse<T>,
   invalidErrorObj: GQLResponse<T>
 ) => {
@@ -47,7 +47,7 @@ export const validateEmail = <T extends GQLResponseType>(
   return formattedEmail;
 };
 export const validatePassword = <T extends GQLResponseType>(
-  password: string,
+  password: string | undefined | null,
   emptyErrorObj: GQLResponse<T>,
   invalidErrorObj: GQLResponse<T>
 ) => {

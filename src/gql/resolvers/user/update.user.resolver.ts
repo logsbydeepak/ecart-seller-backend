@@ -1,84 +1,147 @@
-import { ResolveMutation } from "~/types";
-import { dbEmailExist, dbReadUserById } from "~/db/query/user.query";
-
 import {
-  validateBody,
   validateEmail,
   validateEmpty,
   validatePassword,
 } from "~/helper/validator.helper";
 
-import { ErrorObject, handleCatchError } from "~/helper/response.helper";
+import { handleCatchError } from "~/helper/response.helper";
 
-const updateUser: ResolveMutation<"updateUser"> = async (
-  _,
-  args,
-  { req, validateTokenMiddleware, validatePasswordMiddleware }
-) => {
-  try {
-    const bodyData = validateBody(args, 3);
-    const { userId } = await validateTokenMiddleware(req);
-    await validatePasswordMiddleware(bodyData.currentPassword, userId);
+import { GQLResolvers } from "~/types";
+import { MutationUpdateUserArgs } from "~/types/graphql";
 
-    const toUpdate: string = validateEmpty(
-      bodyData.toUpdate,
-      "BODY_PARSE",
-      "toUpdate is required"
-    );
+import { dbEmailExist, dbReadUserById } from "~/db/query/user.query";
 
-    const dbUser = await dbReadUserById(userId);
+const UpdateUser: GQLResolvers = {
+  Mutation: {
+    updateUser: async (
+      _parent,
+      args,
+      { req, validateTokenMiddleware, validatePasswordMiddleware }
+    ) => {
+      try {
+        const { userId } = await validateTokenMiddleware(req);
 
-    switch (toUpdate) {
-      case "name":
-        if (!args.name?.firstName || !args.name?.lastName) {
-          ErrorObject("BODY_PARSE", "name is required");
+        await validatePasswordMiddleware<"updateUser">(
+          args.currentPassword,
+          userId,
+          {
+            __typename: "UpdateUserCredentialError",
+            field: "currentPassword",
+            message: "currentPassword is required",
+          },
+          {
+            __typename: "UpdateUserCredentialError",
+            field: "currentPassword",
+            message: "invalid currentPassword",
+          }
+        );
+
+        const { toUpdate, firstName, lastName, email, password } =
+          validateUpdateUserArgs(args);
+
+        const dbUser = await dbReadUserById<"updateUser">(userId, {
+          __typename: "TokenError",
+          type: "TokenUserDoNotExistError",
+          message: "user not found",
+        });
+
+        if (toUpdate === "name") {
+          dbUser.firstName = firstName as string;
+          dbUser.lastName = lastName as string;
         }
 
-        if (args.name?.firstName) {
-          const firstName = validateEmpty(
-            bodyData.firstName,
-            "BODY_PARSE",
-            "firstName is required"
-          );
-          dbUser.firstName = firstName;
+        if (toUpdate === "email") {
+          await dbEmailExist<"updateUser">(email as string, {
+            __typename: "UserAlreadyExistError",
+            message: "email already exist",
+          });
+          dbUser.email = email as string;
         }
 
-        if (args.name?.lastName) {
-          const lastName = validateEmpty(
-            bodyData.lastName,
-            "BODY_PARSE",
-            "lastName is required"
-          );
-          dbUser.lastName = lastName;
+        if (toUpdate === "password") {
+          dbUser.password = password as string;
         }
-        break;
 
-      case "email":
-        const email = validateEmail(bodyData.email);
-        dbEmailExist(email);
-        dbUser.email = email;
-        break;
+        await dbUser.save();
 
-      case "password":
-        const password = validatePassword(bodyData.password);
-        dbUser.password = password;
-        break;
-
-      default:
-        throw ErrorObject("BODY_PARSE", "invalid toUpdate");
-    }
-
-    await dbUser.save();
-
-    return {
-      __typename: "User",
-      firstName: dbUser.firstName,
-      lastName: dbUser.lastName,
-      email: dbUser.email,
-    };
-  } catch (error: any) {
-    return handleCatchError(error);
-  }
+        return {
+          __typename: "User",
+          firstName: dbUser.firstName,
+          lastName: dbUser.lastName,
+          email: dbUser.email,
+          picture: "default",
+        };
+      } catch (error) {
+        return handleCatchError(error);
+      }
+    },
+  },
 };
 
-export default { Mutation: { updateUser } };
+const validateUpdateUserArgs = (args: MutationUpdateUserArgs) => {
+  let firstName, lastName, email, password, currentPassword;
+
+  const toUpdate = validateEmpty<"updateUser">(args.toUpdate, {
+    __typename: "UpdateUserCredentialError",
+    field: "toUpdate",
+    message: "toUpdate is required",
+  });
+
+  if (!["name", "email", "password"].includes(toUpdate)) {
+    throw {
+      __typename: "UpdateUserCredentialError",
+      field: "toUpdate",
+      message: "toUpdate is invalid",
+    };
+  }
+
+  if (toUpdate === "password") {
+    password = validatePassword<"updateUser">(
+      args.password,
+      {
+        __typename: "UpdateUserCredentialError",
+        field: "password",
+        message: "password is required",
+      },
+      {
+        __typename: "UpdateUserCredentialError",
+        field: "password",
+        message: "invalid password",
+      }
+    );
+  }
+
+  if (toUpdate === "email") {
+    email = validateEmail<"updateUser">(
+      args.email,
+      {
+        __typename: "UpdateUserCredentialError",
+        field: "email",
+        message: "email is required",
+      },
+      {
+        __typename: "UpdateUserCredentialError",
+        field: "email",
+        message: "invalid email",
+      }
+    );
+  }
+
+  if (toUpdate === "name") {
+    firstName = validateEmpty<"updateUser">(args.name?.firstName, {
+      __typename: "UpdateUserCredentialError",
+      field: "name",
+      message: "firstName is required",
+    });
+
+    lastName = validateEmpty<"updateUser">(args.name?.lastName, {
+      __typename: "UpdateUserCredentialError",
+      field: "name",
+      message: "firstName is required",
+    });
+  }
+
+  return { toUpdate, email, password, firstName, lastName };
+};
+
+export default UpdateUser;
