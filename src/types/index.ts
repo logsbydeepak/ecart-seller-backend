@@ -1,6 +1,6 @@
 import { Request, Response, ErrorRequestHandler } from "express";
 import { Document } from "mongoose";
-import { Mutation, Query, Resolvers } from "./graphql";
+import { Mutation, Query, Resolvers, ResolversTypes } from "./graphql";
 
 export type GQLContext = {
   req: Request;
@@ -8,21 +8,27 @@ export type GQLContext = {
   validateTokenMiddleware: (
     req: Request
   ) => Promise<{ userId: string; token: string }>;
-  validatePasswordMiddleware: <T>(
+  validatePasswordMiddleware: <T extends GQLResponseType>(
     password: string,
     userId: string,
-    passwordEmptyErrorObj: T,
-    passwordInvalidErrorObj: T
+    passwordEmptyErrorObj: GQLResponse<T>,
+    passwordInvalidErrorObj: GQLResponse<T>
   ) => Promise<any>;
 };
 
 export type GQLResolvers = Resolvers<GQLContext>;
 
-export type GQLResponseType = keyof Mutation | keyof Query;
+export type GQLResponseType =
+  | keyof Mutation
+  | keyof Query
+  | keyof ResolversTypes;
+
 export type GQLResponse<T> = T extends keyof Mutation
   ? Mutation[T]
   : T extends keyof Query
   ? Query[T]
+  : T extends keyof ResolversTypes
+  ? ResolversTypes[T]
   : never;
 
 export interface UserModelType extends Document {
@@ -69,20 +75,3 @@ export interface UpdateUserBodyType
 }
 
 export interface BodyDataType extends CreateUserBodyType, UpdateUserBodyType {}
-
-export interface ErrorObjectType {
-  ErrorObject: {
-    messageTypeCode: string;
-    messageCode: number;
-  };
-}
-
-export interface MyErrorRequestHandler
-  extends ErrorRequestHandler,
-    ErrorObjectType {}
-
-export type ErrorMessageTitle =
-  | "INTERNAL_SERVER"
-  | "BODY_PARSE"
-  | "TOKEN_PARSE"
-  | "AUTHENTICATION";

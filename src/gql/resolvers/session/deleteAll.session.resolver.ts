@@ -1,10 +1,7 @@
 import { GQLResolvers } from "~/types";
-import { Mutation } from "~/types/graphql";
 
 import { redisClient } from "~/config/redis.config";
 import { handleCatchError } from "~/helper/response.helper";
-
-type ResponseType = Mutation["deleteAllSession"];
 
 const DeleteAllSession: GQLResolvers = {
   Mutation: {
@@ -15,7 +12,8 @@ const DeleteAllSession: GQLResolvers = {
     ) => {
       try {
         const { userId } = await validateTokenMiddleware(req);
-        await validatePasswordMiddleware<ResponseType>(
+
+        await validatePasswordMiddleware<"deleteAllSession">(
           args.currentPassword,
           userId,
           {

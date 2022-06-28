@@ -16,7 +16,7 @@ const DeleteUser: GQLResolvers = {
     ) => {
       try {
         const { userId } = await validateTokenMiddleware(req);
-        await validatePasswordMiddleware<ResponseType>(
+        await validatePasswordMiddleware<"deleteUser">(
           args.currentPassword,
           userId,
           {

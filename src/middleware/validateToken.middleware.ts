@@ -2,7 +2,7 @@ import { Request } from "express";
 import { isValidObjectId } from "mongoose";
 
 import { redisClient } from "~/config/redis.config";
-import { TokenError, TokenErrorType } from "~/types/graphql";
+import { TokenError } from "~/types/graphql";
 
 import { tokenValidator } from "~/helper/token.helper";
 import { validateEmpty } from "~/helper/validator.helper";
@@ -11,12 +11,12 @@ import { generateDecryption } from "~/helper/security.helper";
 
 const validateTokenMiddleware = async (req: Request) => {
   try {
-    const token: string = validateEmpty<TokenError>(
+    const token: string = validateEmpty<"TokenError">(
       req.headers.token,
       TokenRequiredError
     );
 
-    const tokenDecryption = generateDecryption<TokenError>(
+    const tokenDecryption = generateDecryption<"TokenError">(
       token,
       TokenInvalidError
     );
@@ -57,19 +57,19 @@ const validateTokenMiddleware = async (req: Request) => {
 
 const TokenRequiredError: TokenError = {
   __typename: "TokenError",
-  type: TokenErrorType.TokenRequiredError,
+  type: "TokenRequiredError",
   message: "token is required",
 };
 
 const TokenInvalidError: TokenError = {
   __typename: "TokenError",
-  type: TokenErrorType.TokenInvalidError,
+  type: "TokenInvalidError",
   message: "invalid token",
 };
 
 const TokenExpiredError: TokenError = {
   __typename: "TokenError",
-  type: TokenErrorType.TokenExpiredError,
+  type: "TokenExpiredError",
   message: "token expired",
 };
 

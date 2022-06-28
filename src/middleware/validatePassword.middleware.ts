@@ -1,21 +1,14 @@
-import { UserModelType } from "~/types";
+import { GQLResponse, GQLResponseType, UserModelType } from "~/types";
 import { dbReadUserById } from "~/db/query/user.query";
 import { handleCatchError } from "~/helper/response.helper";
 import { validatePassword } from "~/helper/validator.helper";
 import { validateHashAndSalt } from "~/helper/security.helper";
-import { TokenError, TokenErrorType } from "~/types/graphql";
 
-const TokenUserDoNotExistError: TokenError = {
-  __typename: "TokenError",
-  type: TokenErrorType.TokenUserDoNotExistError,
-  message: "user do not exist",
-};
-
-const validatePasswordMiddleware = async <T>(
+const validatePasswordMiddleware = async <T extends GQLResponseType>(
   password: string,
   userId: string,
-  passwordEmptyErrorObj: T,
-  passwordInvalidErrorObj: T
+  passwordEmptyErrorObj: GQLResponse<T>,
+  passwordInvalidErrorObj: GQLResponse<T>
 ) => {
   try {
     const currentPassword = validatePassword(
@@ -24,10 +17,12 @@ const validatePasswordMiddleware = async <T>(
       passwordInvalidErrorObj
     );
 
-    const dbUser: UserModelType = await dbReadUserById<TokenError>(
-      userId,
-      TokenUserDoNotExistError
-    );
+    const dbUser: UserModelType = await dbReadUserById<"TokenError">(userId, {
+      __typename: "TokenError",
+      type: "TokenUserDoNotExistError",
+      message: "user do not exist",
+    });
+
     await validateHashAndSalt(
       currentPassword,
       dbUser.password as string,

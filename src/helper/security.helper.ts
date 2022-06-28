@@ -15,7 +15,10 @@ export const generateHashAndSalt = async (rawPassword: string) => {
 export const generateEncryption = (token: string): string =>
   cryptr.encrypt(token);
 
-export const generateDecryption = <T>(token: string, errorObj: T) => {
+export const generateDecryption = <T extends GQLResponseType>(
+  token: string,
+  errorObj: GQLResponse<T>
+) => {
   try {
     return cryptr.decrypt(token);
   } catch (error: any) {

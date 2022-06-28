@@ -3,18 +3,17 @@ import { dbReadUserById } from "~/db/query/user.query";
 import { handleCatchError } from "~/helper/response.helper";
 import { TokenError, TokenErrorType } from "~/types/graphql";
 
-const TokenUserDoNotExistError: TokenError = {
-  __typename: "TokenError",
-  type: TokenErrorType.TokenUserDoNotExistError,
-  message: "user do not exist",
-};
-
 const ReadUser: GQLResolvers = {
   Query: {
     readUser: async (_parent, _args, { req, validateTokenMiddleware }) => {
       try {
         const { userId } = await validateTokenMiddleware(req);
-        const dbUser = await dbReadUserById(userId, TokenUserDoNotExistError);
+
+        const dbUser = await dbReadUserById<"readUser">(userId, {
+          __typename: "TokenError",
+          type: "TokenUserDoNotExistError",
+          message: "user do not exist",
+        });
 
         return {
           __typename: "User",

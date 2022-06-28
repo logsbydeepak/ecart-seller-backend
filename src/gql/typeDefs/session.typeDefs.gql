@@ -5,7 +5,9 @@ type Mutation {
 }
 
 union CreateSessionResponse = CreateSessionCredentialError | Token
+
 union DeleteSessionResponse = SuccessResponse | TokenError
+
 union DeleteAllSessionResponse =
     SuccessResponse
   | DeleteAllSessionCredentialError

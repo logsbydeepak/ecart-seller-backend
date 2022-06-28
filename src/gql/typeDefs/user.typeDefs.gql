@@ -50,11 +50,6 @@ type UpdateUserCredentialError implements Error {
   message: String!
 }
 
-input FullName {
-  firstName: String
-  lastName: String
-}
-
 enum CreateUserCredentialFiled {
   firstName
   lastName
