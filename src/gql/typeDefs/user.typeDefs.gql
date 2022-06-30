@@ -10,7 +10,7 @@ type Mutation {
     password: String!
   ): CreateUserResponse!
 
-  deleteUser(currentPassword: String!): DeleteUserCredentialError!
+  deleteUser(currentPassword: String!): DeleteUserResponse!
 
   updateUserName(
     firstName: String!
