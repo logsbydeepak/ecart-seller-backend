@@ -11,10 +11,7 @@ import validatePasswordMiddleware from "~/middleware/validatePassword.middleware
 
 const currentPath = __dirname;
 const typeDefsPath = path.join(currentPath, "../gql/typeDefs/**/*.gql");
-const resolverPath = path.join(
-  currentPath,
-  "../gql/resolvers/*/**/*.resolver.*"
-);
+const resolverPath = path.join(currentPath, "../gql/resolvers/*/**/*.ts");
 
 const typeDefs = loadFilesSync(typeDefsPath);
 const resolvers = loadFilesSync(resolverPath);

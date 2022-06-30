@@ -13,9 +13,10 @@ const updateUserName: GQLResolvers = {
     ) => {
       try {
         const { userId } = await validateTokenMiddleware(req);
+
         await validatePasswordMiddleware<"updateUserName">(
-          userId,
           args.currentPassword,
+          userId,
           {
             __typename: "UpdateUserNameCredentialError",
             field: "currentPassword",

@@ -1,7 +1,6 @@
 import { GQLResolvers } from "~/types";
 import { dbReadUserById } from "~/db/query/user.query";
 import { handleCatchError } from "~/helper/response.helper";
-import { TokenError, TokenErrorType } from "~/types/graphql";
 
 const ReadUser: GQLResolvers = {
   Query: {
