@@ -49,7 +49,7 @@ const validateCreateUserArgs = (args: MutationCreateUserArgs) => {
     message: "firstName is required",
   });
 
-  const lastName = validateEmpty<"createUser">(args.firstName, {
+  const lastName = validateEmpty<"createUser">(args.lastName, {
     __typename: "CreateUserCredentialError",
     field: "lastName",
     message: "lastName is required",
