@@ -28,7 +28,7 @@ type Mutation {
     password: String!
   ): UpdateUserPasswordResponse!
 
-  removeUserPicture(field: String!): RemoveUserPictureResponse!
+  removeUserPicture: RemoveUserPictureResponse!
 }
 
 union ReadUserResponse = TokenError | User
