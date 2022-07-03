@@ -39,7 +39,7 @@ const updateUserPicture: GQLResolvers = {
         });
 
         dbUser.picture = file.public_id;
-        dbUser.save();
+        await dbUser.save();
 
         return {
           __typename: "UpdateUserPictureSuccessResponse",
