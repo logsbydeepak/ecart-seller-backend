@@ -28,6 +28,8 @@ type Mutation {
     password: String!
   ): UpdateUserPasswordResponse!
 
+  updateUserPicture(file: String!): UpdateUserPictureResponse!
+
   removeUserPicture: RemoveUserPictureResponse!
 }
 
@@ -63,6 +65,19 @@ union UpdateUserPasswordResponse =
   | UpdateUserInvalidUserCredentialError
 
 union RemoveUserPictureResponse = TokenError | SuccessResponse
+
+union UpdateUserPictureResponse =
+    TokenError
+  | UpdateUserPictureCredentialError
+  | UpdateUserPictureSuccessResponse
+
+type UpdateUserPictureSuccessResponse {
+  picture: String!
+}
+
+type UpdateUserPictureCredentialError implements Error {
+  message: String!
+}
 
 type UpdateUserInvalidUserCredentialError implements Error {
   message: String!

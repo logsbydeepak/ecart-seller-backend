@@ -3,6 +3,7 @@ import isStrongPassword from "validator/lib/isStrongPassword";
 
 import { GQLResponse, GQLResponseType } from "~/types";
 import { ErrorObject } from "~/helper/response.helper";
+import isBase64 from "validator/lib/isBase64";
 
 const productCategoryList = ["electronics", "home"];
 
@@ -46,6 +47,23 @@ export const validateEmail = <T extends GQLResponseType>(
 
   return formattedEmail;
 };
+
+export const validateBase64 = <T extends GQLResponseType>(
+  file: string | undefined | null,
+  emptyErrorObj: GQLResponse<T>,
+  invalidErrorObj: GQLResponse<T>
+) => {
+  if (!file) {
+    throw emptyErrorObj;
+  }
+
+  if (!isBase64(file, { urlSafe: true })) {
+    throw invalidErrorObj;
+  }
+
+  return file;
+};
+
 export const validatePassword = <T extends GQLResponseType>(
   password: string | undefined | null,
   emptyErrorObj: GQLResponse<T>,
