@@ -37,6 +37,7 @@ export interface UserModelType extends Document {
   password: string;
   firstName: string;
   lastName: string;
+  picture: string;
 }
 
 export interface TokenModelType extends Document {

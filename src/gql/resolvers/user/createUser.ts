@@ -26,7 +26,10 @@ const CreateUser: GQLResolvers = {
           message: "email already exist",
         });
 
-        const newUser = await new UserModel(validatedArgs).save();
+        const newUser = await new UserModel({
+          ...validatedArgs,
+          picture: "default",
+        }).save();
 
         const token = tokenGenerator(newUser._id);
         await redisClient.SADD(newUser._id.toString(), token);

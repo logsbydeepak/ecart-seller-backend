@@ -1,6 +1,8 @@
 import { handleCatchError } from "~/helper/response.helper";
 import { GQLResolvers } from "~/types/index";
 import { validateBase64 } from "~/helper/validator.helper";
+import cloudinary from "~/config/cloudinary.config";
+import { dbReadUserById } from "~/db/query/user.query";
 
 const updateUserPicture: GQLResolvers = {
   Mutation: {
@@ -10,7 +12,7 @@ const updateUserPicture: GQLResolvers = {
       { req, validateTokenMiddleware }
     ) => {
       try {
-        await validateTokenMiddleware(req);
+        const { userId } = await validateTokenMiddleware(req);
 
         const image = validateBase64<"updateUserPicture">(
           args.file,
@@ -24,9 +26,24 @@ const updateUserPicture: GQLResolvers = {
           }
         );
 
+        const file = await cloudinary.uploader.upload(image, {
+          folder: `ecart_seller_user_picture`,
+          overwrite: true,
+          public_id: userId,
+        });
+
+        const dbUser = await dbReadUserById<"updateUserPicture">(userId, {
+          __typename: "TokenError",
+          type: "TokenUserDoNotExistError",
+          message: "user do not exist",
+        });
+
+        dbUser.picture = file.public_id;
+        dbUser.save();
+
         return {
-          __typename: "UpdateUserPictureResponse",
-          picture: args.file,
+          __typename: "UpdateUserPictureSuccessResponse",
+          picture: "default",
         };
       } catch (error) {
         return handleCatchError(error);

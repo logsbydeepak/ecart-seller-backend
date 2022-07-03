@@ -13,6 +13,7 @@ const UserSchema = new Schema<UserModelType>({
   lastName: defaultProperty,
   email: defaultProperty,
   password: defaultProperty,
+  picture: defaultProperty,
 });
 
 UserSchema.post("validate", async function () {

@@ -19,7 +19,7 @@ const ReadUser: GQLResolvers = {
           firstName: dbUser.firstName,
           lastName: dbUser.lastName,
           email: dbUser.email,
-          picture: "default",
+          picture: dbUser.picture,
         };
       } catch (error) {
         return handleCatchError(error);

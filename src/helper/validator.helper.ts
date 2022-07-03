@@ -57,9 +57,9 @@ export const validateBase64 = <T extends GQLResponseType>(
     throw emptyErrorObj;
   }
 
-  if (!isBase64(file, { urlSafe: true })) {
-    throw invalidErrorObj;
-  }
+  // if (!isBase64(file, { urlSafe: true })) {
+  //   throw invalidErrorObj;
+  // }
 
   return file;
 };
