@@ -1,5 +1,4 @@
 import { handleCatchError } from "~/helper/response.helper";
-import { validateEmpty } from "~/helper/validator.helper";
 
 import { GQLResolvers } from "~/types/index";
 import { dbReadUserById } from "~/db/query/user.query";
@@ -20,7 +19,11 @@ const removeUserPicture: GQLResolvers = {
           message: "user do not exist",
         });
 
+        if (dbUser.picture !== "default")
+          await cloudinary.uploader.destroy(dbUser.picture);
+
         dbUser.picture = "default";
+
         await dbUser.save();
 
         return {

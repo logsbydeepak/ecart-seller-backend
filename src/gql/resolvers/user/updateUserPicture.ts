@@ -26,19 +26,30 @@ const updateUserPicture: GQLResolvers = {
           }
         );
 
-        const file = await cloudinary.uploader.upload(image, {
-          folder: `ecart_seller_user_picture`,
-          overwrite: true,
-          public_id: userId,
-        });
-
         const dbUser = await dbReadUserById<"updateUserPicture">(userId, {
           __typename: "TokenError",
           type: "TokenUserDoNotExistError",
           message: "user do not exist",
         });
 
-        dbUser.picture = file.public_id;
+        if (dbUser.picture === "default") {
+          const file = await cloudinary.uploader.upload(image, {
+            folder: `ecart_seller_user_picture`,
+            overwrite: true,
+          });
+
+          dbUser.picture = file.public_id;
+        } else {
+          await cloudinary.uploader.destroy(dbUser.picture);
+
+          const file = await cloudinary.uploader.upload(image, {
+            folder: `ecart_seller_user_picture`,
+            overwrite: true,
+          });
+
+          dbUser.picture = file.public_id;
+        }
+
         await dbUser.save();
 
         return {
