@@ -1,4 +1,4 @@
-import { GQLResponse, GQLResponseType, UserModelType } from "~/types";
+import { GQLResponse, GQLResponseType, UserModelType } from "~/types/graphqlHelper";
 import { dbReadUserById } from "~/db/query/user.query";
 import { handleCatchError } from "~/helper/response.helper";
 import { validatePassword } from "~/helper/validator.helper";

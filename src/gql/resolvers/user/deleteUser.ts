@@ -1,4 +1,4 @@
-import { GQLResolvers } from "~/types";
+import { GQLResolvers } from "~/types/graphqlHelper";
 import { Mutation } from "~/types/graphql";
 
 import { UserModel } from "~/db/model.db";

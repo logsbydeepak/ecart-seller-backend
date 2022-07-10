@@ -1,6 +1,5 @@
-import { Schema } from "mongoose";
+import {  ObjectId, Schema } from "mongoose";
 
-import { UserModelType } from "~/types";
 import { generateHashAndSalt } from "~/helper/security.helper";
 
 const defaultProperty = {
@@ -8,13 +7,24 @@ const defaultProperty = {
   type: String,
 };
 
-const UserSchema = new Schema<UserModelType>({
+
+export interface UserSchemaType extends Document {
+  _id: ObjectId,
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  picture: string;
+}
+
+const UserSchema = new Schema<UserSchemaType>({
   firstName: defaultProperty,
   lastName: defaultProperty,
   email: defaultProperty,
   password: defaultProperty,
   picture: defaultProperty,
 });
+
 
 UserSchema.post("validate", async function () {
   if (!this.isModified("password")) return;

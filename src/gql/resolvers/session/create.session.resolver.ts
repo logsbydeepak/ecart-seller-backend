@@ -1,7 +1,7 @@
 import { redisClient } from "~/config/redis.config";
 import { dbReadUserByEmail } from "~/db/query/user.query";
 
-import { GQLResolvers } from "~/types";
+import { GQLResolvers } from "~/types/graphqlHelper";
 import { Mutation, MutationCreateSessionArgs } from "~/types/graphql";
 
 import { tokenGenerator } from "~/helper/token.helper";

@@ -1,4 +1,4 @@
-import { GQLResolvers } from "~/types";
+import { GQLResolvers } from "~/types/graphqlHelper";
 
 import { redisClient } from "~/config/redis.config";
 import { handleCatchError } from "~/helper/response.helper";

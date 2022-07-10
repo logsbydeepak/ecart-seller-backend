@@ -1,7 +1,7 @@
 import { handleCatchError } from "~/helper/response.helper";
 import { validateEmpty } from "~/helper/validator.helper";
 
-import { GQLResolvers } from "~/types/index";
+import { GQLResolvers } from "~/types/graphqlHelper";
 import { dbReadUserById } from "~/db/query/user.query";
 
 const updateUserName: GQLResolvers = {

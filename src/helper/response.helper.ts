@@ -1,5 +1,5 @@
 import { ApolloError } from "apollo-server-express";
-import { ErrorMessageTitle } from "~/types";
+import { ErrorMessageTitle } from "~/types/graphqlHelper";
 import { ErrorResponse as ErrorResponseType } from "~/types/graphql";
 
 export const ErrorObject = (

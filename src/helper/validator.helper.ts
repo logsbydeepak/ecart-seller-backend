@@ -1,7 +1,7 @@
 import isEmail from "validator/lib/isEmail";
 import isStrongPassword from "validator/lib/isStrongPassword";
 
-import { GQLResponse, GQLResponseType } from "~/types";
+import { GQLResponse, GQLResponseType } from "~/types/graphqlHelper";
 import { ErrorObject } from "~/helper/response.helper";
 import isBase64 from "validator/lib/isBase64";
 

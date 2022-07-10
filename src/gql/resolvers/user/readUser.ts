@@ -1,4 +1,4 @@
-import { GQLResolvers } from "~/types";
+import { GQLResolvers } from "~/types/graphqlHelper";
 import { dbReadUserById } from "~/db/query/user.query";
 import { handleCatchError } from "~/helper/response.helper";
 

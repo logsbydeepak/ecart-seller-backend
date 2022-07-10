@@ -1,4 +1,4 @@
-import { GQLResponse, GQLResponseType, UserModelType } from "~/types";
+import { GQLResponse, GQLResponseType } from "~/types/graphqlHelper";
 import { UserModel } from "~/db/model.db";
 import { ErrorObject } from "~/helper/response.helper";
 import { UserAlreadyExistError } from "~/types/graphql";
@@ -27,7 +27,7 @@ export const dbUserExist = async (userId: string): Promise<void> => {
 export const dbReadUserById = async <T extends GQLResponseType>(
   userId: string,
   errorObj: GQLResponse<T>
-): Promise<UserModelType> => {
+)  => {
   const dbUser = await UserModel.findById(userId);
 
   if (!dbUser) {

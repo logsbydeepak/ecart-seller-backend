@@ -9,7 +9,7 @@ import { handleCatchError } from "~/helper/response.helper";
 
 import { MutationCreateUserArgs } from "~/types/graphql";
 
-import { GQLResolvers } from "~/types";
+import { GQLResolvers } from "~/types/graphqlHelper";
 
 import { UserModel } from "~/db/model.db";
 import { dbEmailExist } from "~/db/query/user.query";
@@ -26,10 +26,10 @@ const CreateUser: GQLResolvers = {
           message: "email already exist",
         });
 
-        const newUser = await new UserModel({
+        const newUser = await UserModel.create({
           ...validatedArgs,
           picture: "default",
-        }).save();
+        })
 
         const token = tokenGenerator(newUser._id);
         await redisClient.SADD(newUser._id.toString(), token);
