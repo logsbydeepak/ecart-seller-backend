@@ -1,4 +1,4 @@
-import {  ObjectId, Schema } from "mongoose";
+import { ObjectId, Schema } from "mongoose";
 
 import { generateHashAndSalt } from "~/helper/security.helper";
 
@@ -7,9 +7,8 @@ const defaultProperty = {
   type: String,
 };
 
-
 export interface UserSchemaType extends Document {
-  _id: ObjectId,
+  _id: ObjectId;
   email: string;
   password: string;
   firstName: string;
@@ -24,7 +23,6 @@ const UserSchema = new Schema<UserSchemaType>({
   password: defaultProperty,
   picture: defaultProperty,
 });
-
 
 UserSchema.post("validate", async function () {
   if (!this.isModified("password")) return;

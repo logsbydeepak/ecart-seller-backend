@@ -3,7 +3,11 @@ import { compare, hash } from "bcryptjs";
 
 import { ErrorObject } from "./response.helper";
 import { ENCRYPT_SECRET } from "~/config/env.config";
-import { ErrorMessageTitle, GQLResponse, GQLResponseType } from "~/types/graphqlHelper";
+import {
+  ErrorMessageTitle,
+  GQLResponse,
+  GQLResponseType,
+} from "~/types/graphqlHelper";
 
 const cryptr = new Cryptr(ENCRYPT_SECRET as string);
 

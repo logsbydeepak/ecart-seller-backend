@@ -27,7 +27,7 @@ export const dbUserExist = async (userId: string): Promise<void> => {
 export const dbReadUserById = async <T extends GQLResponseType>(
   userId: string,
   errorObj: GQLResponse<T>
-)  => {
+) => {
   const dbUser = await UserModel.findById(userId);
 
   if (!dbUser) {

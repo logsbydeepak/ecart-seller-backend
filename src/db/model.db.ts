@@ -5,5 +5,5 @@ import UserSchema, { UserSchemaType } from "./schema/user.schema";
 
 export const UserModel: Model<UserSchemaType> = DBSeller.model(
   "sellerUsers",
-  UserSchema,
+  UserSchema
 );
