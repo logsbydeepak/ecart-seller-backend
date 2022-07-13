@@ -1,19 +1,5 @@
-import { Request, Response } from "express";
+import { GQLContext } from "~/config/server.config";
 import { Mutation, Query, Resolvers, ResolversTypes } from "./graphql";
-
-export type GQLContext = {
-  req: Request;
-  res: Response;
-  validateTokenMiddleware: (
-    req: Request
-  ) => Promise<{ userId: string; token: string }>;
-  validatePasswordMiddleware: <T extends GQLResponseType>(
-    password: string,
-    userId: string,
-    passwordEmptyErrorObj: GQLResponse<T>,
-    passwordInvalidErrorObj: GQLResponse<T>
-  ) => Promise<any>;
-};
 
 export type GQLResolvers = Resolvers<GQLContext>;
 

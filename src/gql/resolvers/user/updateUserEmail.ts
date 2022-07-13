@@ -1,7 +1,7 @@
 import { validateEmail } from "~/helper/validator.helper";
 import { handleCatchError } from "~/helper/response.helper";
 
-import { GQLResolvers } from "~/types/index";
+import { GQLResolvers } from "~/types/graphqlHelper";
 import { dbEmailExist, dbReadUserById } from "~/db/query/user.query";
 
 const updateUserEmail: GQLResolvers = {

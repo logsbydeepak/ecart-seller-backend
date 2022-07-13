@@ -8,6 +8,8 @@ import { handleCatchError } from "~/helper/response.helper";
 import { validatePassword } from "~/helper/validator.helper";
 import { validateHashAndSalt } from "~/helper/security.helper";
 
+export type ValidateTokenMiddlewareType = typeof validatePasswordMiddleware;
+
 const validatePasswordMiddleware = async <T extends GQLResponseType>(
   password: string,
   userId: string,

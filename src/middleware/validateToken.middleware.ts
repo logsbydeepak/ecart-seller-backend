@@ -9,6 +9,8 @@ import { validateEmpty } from "~/helper/validator.helper";
 import { handleCatchError } from "~/helper/response.helper";
 import { generateDecryption } from "~/helper/security.helper";
 
+export type ValidateTokenMiddlewareType = typeof validateTokenMiddleware;
+
 const validateTokenMiddleware = async (req: Request) => {
   try {
     const token: string = validateEmpty<"TokenError">(

@@ -1,11 +1,8 @@
 import { GQLResolvers } from "~/types/graphqlHelper";
-import { Mutation } from "~/types/graphql";
 
 import { UserModel } from "~/db/model.db";
 import { redisClient } from "~/config/redis.config";
 import { handleCatchError } from "~/helper/response.helper";
-
-type ResponseType = Mutation["deleteUser"];
 
 const DeleteUser: GQLResolvers = {
   Mutation: {

@@ -1,7 +1,6 @@
 import path from "path";
-import express, { json, urlencoded } from "express";
+import express from "express";
 import cookieParser from "cookie-parser";
-import { ContextFunction } from "apollo-server-core";
 import { ApolloServer, ExpressContext } from "apollo-server-express";
 
 import { ALLOW_ORIGIN, NODE_ENV, PORT } from "~/config/env.config";
@@ -21,7 +20,7 @@ const loadTypeDefsAndResolvers = async () => {
   return { typeDefs, resolvers };
 };
 
-const context: ContextFunction<ExpressContext> = ({ req, res }) => ({
+const context = ({ req, res }: ExpressContext) => ({
   req,
   res,
   validatePasswordMiddleware,
@@ -56,3 +55,4 @@ const startServer = async () => {
 };
 
 export default startServer;
+export type GQLContext = ReturnType<typeof context>;
