@@ -7,13 +7,12 @@ import { ALLOW_ORIGIN, NODE_ENV, PORT } from "~/config/env.config";
 import validateTokenMiddleware from "~/middleware/validateToken.middleware";
 import validatePasswordMiddleware from "~/middleware/validatePassword.middleware";
 
-const currentPath = __dirname;
-const typeDefsPath = path.join(currentPath, "../gql/typeDefs/**/*");
-const resolverPath = path.join(currentPath, "../gql/resolvers/**/*");
-
 const loadTypeDefsAndResolvers = async () => {
-  const { loadFilesSync } = await import("@graphql-tools/load-files");
+  const currentPath = __dirname;
+  const typeDefsPath = path.join(currentPath, "../gql/typeDefs/**/*");
+  const resolverPath = path.join(currentPath, "../gql/resolvers/**/*");
 
+  const { loadFilesSync } = await import("@graphql-tools/load-files");
   const typeDefs = loadFilesSync(typeDefsPath);
   const resolvers = loadFilesSync(resolverPath);
 
@@ -27,12 +26,12 @@ const context = ({ req, res }: ExpressContext) => ({
   validateTokenMiddleware,
 });
 
-const expressServer = express();
-expressServer.use(cookieParser());
-NODE_ENV === "production" &&
-  expressServer.use(async () => await import("helmet"));
-
 const startServer = async () => {
+  const expressServer = express();
+  expressServer.use(cookieParser());
+  NODE_ENV === "production" &&
+    expressServer.use(async () => await import("helmet"));
+
   const { typeDefs, resolvers } = await loadTypeDefsAndResolvers();
 
   const apolloServer = new ApolloServer({

@@ -22,7 +22,6 @@ const startAllService = async () => {
     logger.info(`Server is listening on http://localhost:${PORT}/graphql`);
   } catch (error: any) {
     console.log(error);
-    process.exit(1);
   }
 };
 
