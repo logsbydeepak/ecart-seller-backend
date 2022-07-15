@@ -29,10 +29,22 @@ const CreateUser: GQLResolvers = {
       try {
         const validatedArgs = await validateCreateUserArgs(args);
 
-        await dbEmailExist<"createUser">(validatedArgs.email, {
-          __typename: "UserAlreadyExistError",
-          message: "email already exist",
-        });
+        if (validatedArgs instanceof yup.ValidationError) {
+          return {
+            __typename: "CreateUserCredentialError",
+            field: validatedArgs.path,
+            message: validatedArgs.message,
+          };
+        }
+
+        const isEmailExist = await UserModel.exists({ email: args.email });
+
+        if (isEmailExist) {
+          return {
+            __typename: "UserAlreadyExistError",
+            message: "email already exist",
+          };
+        }
 
         const newUser = await UserModel.create({
           ...validatedArgs,
@@ -44,7 +56,7 @@ const CreateUser: GQLResolvers = {
 
         return {
           __typename: "Token",
-          token: "hi",
+          token,
         };
       } catch (error: any) {
         return handleCatchError(error);
@@ -59,11 +71,7 @@ const validateCreateUserArgs = async (args: MutationCreateUserArgs) => {
     return validate;
   } catch (error) {
     if (error instanceof yup.ValidationError) {
-      throw {
-        __typename: "CreateUserCredentialError",
-        field: error.path,
-        message: error.message,
-      };
+      return error;
     }
     throw error;
   }
