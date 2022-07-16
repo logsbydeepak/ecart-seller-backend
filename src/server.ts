@@ -5,7 +5,7 @@ import startServer from "~/config/server.config";
 import { connectToRedis } from "~/config/redis.config";
 import { connectToDBuyer, connectToDBSeller } from "~/db/connection.db";
 
-const startAllService = async () => {
+(async () => {
   try {
     checkEnv();
 
@@ -23,6 +23,4 @@ const startAllService = async () => {
   } catch (error: any) {
     console.log(error);
   }
-};
-
-startAllService();
+})();
