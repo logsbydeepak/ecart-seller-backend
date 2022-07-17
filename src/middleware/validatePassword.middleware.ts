@@ -5,7 +5,6 @@ import {
 } from "~/types/graphqlHelper";
 import { dbReadUserById } from "~/db/query/user.query";
 import { handleCatchError } from "~/helper/response.helper";
-import { validatePassword } from "~/helper/validator.helper";
 import { validateHashAndSalt } from "~/helper/security.helper";
 
 export type ValidateTokenMiddlewareType = typeof validatePasswordMiddleware;

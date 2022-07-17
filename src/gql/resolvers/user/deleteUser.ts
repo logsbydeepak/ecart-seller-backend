@@ -12,12 +12,10 @@ const DeleteUser: GQLResolvers = {
       { req, validateTokenMiddleware, validatePasswordMiddleware }
     ) => {
       try {
-        const abc = await validateTokenMiddleware(req);
-        if (!abc.isData) {
-          return abc.error;
-        }
+        const validateToken = await validateTokenMiddleware(req);
+        if (validateToken.isError) return validateToken.error;
 
-        const { userId } = abc;
+        const { userId } = validateToken;
 
         await validatePasswordMiddleware<"deleteUser">(
           args.currentPassword,

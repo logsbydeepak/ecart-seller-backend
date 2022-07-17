@@ -5,36 +5,28 @@ import { redisClient } from "~/config/redis.config";
 import { TokenError } from "~/types/graphql";
 
 import { tokenValidator } from "~/helper/token.helper";
-import { validateEmpty } from "~/helper/validator.helper";
 import { handleCatchError } from "~/helper/response.helper";
 import { generateDecryption } from "~/helper/security.helper";
+
+type TokenErrorType = { isError: true; error: TokenError };
 
 const validateTokenMiddleware = async (
   req: Request
 ): Promise<
-  | { isData: false; error: TokenError }
-  | { isData: true; userId: string; token: string }
+  TokenErrorType | { isError: false; userId: string; token: string }
 > => {
   try {
-    const token: string = validateEmpty<"TokenError">(
-      req.headers.token,
-      TokenRequiredError
-    );
+    const token = req.headers.token;
+    if (!token) return { isError: true, error: TokenRequiredError };
+    if (token !== "string") return { isError: true, error: TokenInvalidError };
 
-    const tokenDecryption = generateDecryption<"TokenError">(
-      token,
-      TokenInvalidError
-    );
+    const tokenDecryption = generateDecryption(token);
+    if (!tokenDecryption) return { isError: true, error: TokenInvalidError };
 
     const tokenData = tokenValidator(tokenDecryption);
-
-    if (!tokenData) {
-      throw TokenInvalidError;
-    }
-
-    if (tokenData === "TokenExpiredError") {
-      throw TokenExpiredError;
-    }
+    if (!tokenData) return { isError: true, error: TokenInvalidError };
+    if (tokenData === "TokenExpiredError")
+      return { isError: true, error: TokenExpiredError };
 
     const userId: string = tokenData.id;
     const userType = tokenData.type;
@@ -45,16 +37,13 @@ const validateTokenMiddleware = async (
       !userType ||
       userType !== "SELLER"
     ) {
-      throw TokenInvalidError;
+      return { isError: true, error: TokenInvalidError };
     }
 
     const isToken = await redisClient.SISMEMBER(userId, token);
+    if (!isToken) return { isError: true, error: TokenInvalidError };
 
-    if (!isToken) {
-      throw TokenInvalidError;
-    }
-
-    return { isData: true, userId, token };
+    return { isError: false, userId, token };
   } catch (error: any) {
     return handleCatchError();
   }

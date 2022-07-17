@@ -24,6 +24,7 @@ const CreateUser: GQLResolvers = {
           ) {
             throw Error();
           }
+
           return {
             __typename: "CreateUserCredentialError",
             field: validatedArgs.path,
@@ -33,12 +34,11 @@ const CreateUser: GQLResolvers = {
 
         const isEmailExist = await UserModel.exists({ email: args.email });
 
-        if (isEmailExist) {
+        if (isEmailExist)
           return {
             __typename: "UserAlreadyExistError",
             message: "email already exist",
           };
-        }
 
         const newUser = await UserModel.create({
           ...validatedArgs,
