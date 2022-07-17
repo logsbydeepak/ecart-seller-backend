@@ -9,9 +9,12 @@ import { validateEmpty } from "~/helper/validator.helper";
 import { handleCatchError } from "~/helper/response.helper";
 import { generateDecryption } from "~/helper/security.helper";
 
-export type ValidateTokenMiddlewareType = typeof validateTokenMiddleware;
-
-const validateTokenMiddleware = async (req: Request) => {
+const validateTokenMiddleware = async (
+  req: Request
+): Promise<
+  | { isData: false; error: TokenError }
+  | { isData: true; userId: string; token: string }
+> => {
   try {
     const token: string = validateEmpty<"TokenError">(
       req.headers.token,
@@ -51,9 +54,9 @@ const validateTokenMiddleware = async (req: Request) => {
       throw TokenInvalidError;
     }
 
-    return { userId, token };
+    return { isData: true, userId, token };
   } catch (error: any) {
-    throw handleCatchError(error);
+    return handleCatchError();
   }
 };
 

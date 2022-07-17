@@ -3,25 +3,11 @@ import * as yup from "yup";
 import { GQLResolvers } from "~/types/graphqlHelper";
 import { MutationCreateUserArgs } from "~/types/graphql";
 
-import { UserModel } from "~/db/model.db";
-import { dbEmailExist } from "~/db/query/user.query";
-
 import { redisClient } from "~/config/redis.config";
 import { tokenGenerator } from "~/helper/token.helper";
-import { handleCatchError } from "~/helper/response.helper";
 
-const validateSchema = yup.object({
-  email: yup.string().required().email("invalid email").trim().lowercase(),
-  password: yup
-    .string()
-    .required()
-    .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
-      "invalid password"
-    ),
-  firstName: yup.string().required().trim(),
-  lastName: yup.string().required().trim(),
-});
+import { UserModel } from "~/db/model.db";
+import { handleCatchError } from "~/helper/response.helper";
 
 const CreateUser: GQLResolvers = {
   Mutation: {
@@ -30,6 +16,14 @@ const CreateUser: GQLResolvers = {
         const validatedArgs = await validateCreateUserArgs(args);
 
         if (validatedArgs instanceof yup.ValidationError) {
+          if (
+            validatedArgs.path !== "email" &&
+            validatedArgs.path !== "password" &&
+            validatedArgs.path !== "firstName" &&
+            validatedArgs.path !== "lastName"
+          ) {
+            throw Error();
+          }
           return {
             __typename: "CreateUserCredentialError",
             field: validatedArgs.path,
@@ -59,11 +53,24 @@ const CreateUser: GQLResolvers = {
           token,
         };
       } catch (error: any) {
-        return handleCatchError(error);
+        return handleCatchError();
       }
     },
   },
 };
+
+const validateSchema = yup.object({
+  email: yup.string().required().email("invalid email").trim().lowercase(),
+  password: yup
+    .string()
+    .required()
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
+      "invalid password"
+    ),
+  firstName: yup.string().required().trim(),
+  lastName: yup.string().required().trim(),
+});
 
 const validateCreateUserArgs = async (args: MutationCreateUserArgs) => {
   try {

@@ -12,7 +12,13 @@ const DeleteUser: GQLResolvers = {
       { req, validateTokenMiddleware, validatePasswordMiddleware }
     ) => {
       try {
-        const { userId } = await validateTokenMiddleware(req);
+        const abc = await validateTokenMiddleware(req);
+        if (!abc.isData) {
+          return abc.error;
+        }
+
+        const { userId } = abc;
+
         await validatePasswordMiddleware<"deleteUser">(
           args.currentPassword,
           userId,
@@ -34,7 +40,7 @@ const DeleteUser: GQLResolvers = {
           message: "user deleted",
         };
       } catch (error) {
-        return handleCatchError(error);
+        return handleCatchError();
       }
     },
   },
