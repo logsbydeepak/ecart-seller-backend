@@ -8,8 +8,8 @@ import validateTokenMiddleware from "~/middleware/validateToken.middleware";
 
 const loadTypeDefsAndResolvers = async () => {
   const currentPath = __dirname;
-  const typeDefsPath = path.join(currentPath, "../gql/typeDefs/**/*");
-  const resolverPath = path.join(currentPath, "../gql/resolvers/**/*");
+  const typeDefsPath = path.join(currentPath, "../gql/**/*.gql");
+  const resolverPath = path.join(currentPath, "../gql/**/*.ts");
 
   const { loadFilesSync } = await import("@graphql-tools/load-files");
   const typeDefs = loadFilesSync(typeDefsPath);

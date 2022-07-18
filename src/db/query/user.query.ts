@@ -1,6 +1,5 @@
 import { GQLResponse, GQLResponseType } from "~/types/graphqlHelper";
 import { UserModel } from "~/db/model.db";
-import { ErrorObject } from "~/helper/response.helper";
 import { UserAlreadyExistError } from "~/types/graphql";
 
 export const dbEmailExist = async <T extends GQLResponseType>(
@@ -22,19 +21,6 @@ export const dbUserExist = async (userId: string): Promise<void> => {
   if (idCount === 0) {
     throw ErrorObject("AUTHENTICATION", "user do not exist");
   }
-};
-
-export const dbReadUserById = async <T extends GQLResponseType>(
-  userId: string,
-  errorObj: GQLResponse<T>
-) => {
-  const dbUser = await UserModel.findById(userId);
-
-  if (!dbUser) {
-    throw errorObj;
-  }
-
-  return dbUser;
 };
 
 export const dbReadUserByEmail = async (email: string) => {

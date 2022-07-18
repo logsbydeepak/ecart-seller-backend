@@ -1,5 +1,5 @@
 overwrite: true
-schema: "src/gql/typeDefs/*.gql"
+schema: "src/gql/**/*.gql"
 documents: null
 generates:
   src/types/graphql.ts:

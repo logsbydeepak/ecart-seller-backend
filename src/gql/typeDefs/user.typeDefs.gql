@@ -3,13 +3,6 @@ type Query {
 }
 
 type Mutation {
-  createUser(
-    firstName: String!
-    lastName: String!
-    email: String!
-    password: String!
-  ): CreateUserResponse!
-
   deleteUser(currentPassword: String!): DeleteUserResponse!
 
   updateUserName(
@@ -34,11 +27,6 @@ type Mutation {
 }
 
 union ReadUserResponse = TokenError | User
-
-union CreateUserResponse =
-    Token
-  | CreateUserCredentialError
-  | UserAlreadyExistError
 
 union DeleteUserResponse =
     SuccessResponse
@@ -156,15 +144,6 @@ enum CreateUserCredentialFiled {
   lastName
   email
   password
-}
-
-type CreateUserCredentialError implements Error {
-  message: String!
-  field: CreateUserCredentialFiled!
-}
-
-type UserAlreadyExistError implements Error {
-  message: String!
 }
 
 type DeleteUserCredentialError implements Error {

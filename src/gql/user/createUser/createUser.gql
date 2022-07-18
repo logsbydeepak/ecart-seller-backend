@@ -1,0 +1,22 @@
+type Mutation {
+  createUser(
+    firstName: String!
+    lastName: String!
+    email: String!
+    password: String!
+  ): CreateUserResponse!
+}
+
+union CreateUserResponse =
+    Token
+  | CreateUserCredentialError
+  | UserAlreadyExistError
+
+type CreateUserCredentialError implements Error {
+  message: String!
+  field: CreateUserCredentialFiled!
+}
+
+type UserAlreadyExistError implements Error {
+  message: String!
+}

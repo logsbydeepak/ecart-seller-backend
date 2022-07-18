@@ -1,18 +1,24 @@
 import { GQLResolvers } from "~/types/graphqlHelper";
-import { dbReadUserById } from "~/db/query/user.query";
 import { handleCatchError } from "~/helper/response.helper";
+import { UserModel } from "~/db/model.db";
 
 const ReadUser: GQLResolvers = {
   Query: {
     readUser: async (_parent, _args, { req, validateTokenMiddleware }) => {
       try {
-        const { userId } = await validateTokenMiddleware(req);
+        const validateToken = await validateTokenMiddleware(req);
+        if (validateToken.isError) return validateToken.error;
+        const { userId } = validateToken;
 
-        const dbUser = await dbReadUserById<"readUser">(userId, {
-          __typename: "TokenError",
-          type: "TokenUserDoNotExistError",
-          message: "user do not exist",
-        });
+        const dbUser = await UserModel.findById(userId);
+
+        if (!dbUser) {
+          return {
+            __typename: "TokenError",
+            type: "TokenUserDoNotExistError",
+            message: "user do not exist",
+          };
+        }
 
         return {
           __typename: "User",
@@ -22,7 +28,7 @@ const ReadUser: GQLResolvers = {
           picture: dbUser.picture,
         };
       } catch (error) {
-        return handleCatchError(error);
+        return handleCatchError();
       }
     },
   },
