@@ -5,7 +5,6 @@ import { ApolloServer, ExpressContext } from "apollo-server-express";
 
 import { ALLOW_ORIGIN, NODE_ENV, PORT } from "~/config/env.config";
 import validateTokenMiddleware from "~/middleware/validateToken.middleware";
-import validatePasswordMiddleware from "~/middleware/validatePassword.middleware";
 
 const loadTypeDefsAndResolvers = async () => {
   const currentPath = __dirname;
@@ -22,7 +21,6 @@ const loadTypeDefsAndResolvers = async () => {
 const context = ({ req, res }: ExpressContext) => ({
   req,
   res,
-  validatePasswordMiddleware,
   validateTokenMiddleware,
 });
 

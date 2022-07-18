@@ -22,14 +22,10 @@ export const generateDecryption = (token: string) => {
   }
 };
 
-export const validateHashAndSalt = async <T extends GQLResponseType>(
-  rawPassword: string,
-  dbPassword: string,
-  errorObj: GQLResponse<T>
-): Promise<void> => {
-  const comparePassword = await compare(rawPassword, dbPassword);
-
-  if (!comparePassword) {
-    throw errorObj;
-  }
-};
+export const validateHashAndSalt = async ({
+  rawPassword,
+  dbPassword,
+}: {
+  rawPassword: string;
+  dbPassword: string;
+}) => await compare(rawPassword, dbPassword);
