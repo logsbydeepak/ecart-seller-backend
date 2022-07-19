@@ -1,0 +1,12 @@
+type Mutation {
+  deleteAllSession(currentPassword: String!): DeleteAllSessionResponse!
+}
+
+union DeleteAllSessionResponse =
+    SuccessResponse
+  | DeleteAllSessionCredentialError
+  | TokenError
+
+type DeleteAllSessionCredentialError implements Error {
+  message: String!
+}
