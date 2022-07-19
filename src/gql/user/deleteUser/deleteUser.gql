@@ -1,0 +1,12 @@
+type Mutation {
+  deleteUser(currentPassword: String!): DeleteUserResponse!
+}
+
+union DeleteUserResponse =
+    SuccessResponse
+  | TokenError
+  | DeleteUserCredentialError
+
+type DeleteUserCredentialError implements Error {
+  message: String!
+}

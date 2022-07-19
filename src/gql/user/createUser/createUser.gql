@@ -17,6 +17,13 @@ type CreateUserCredentialError implements Error {
   field: CreateUserCredentialFiled!
 }
 
+enum CreateUserCredentialFiled {
+  firstName
+  lastName
+  email
+  password
+}
+
 type UserAlreadyExistError implements Error {
   message: String!
 }

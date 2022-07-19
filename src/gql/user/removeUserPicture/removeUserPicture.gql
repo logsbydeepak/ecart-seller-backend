@@ -1,0 +1,5 @@
+type Mutation {
+  removeUserPicture: RemoveUserPictureResponse!
+}
+
+union RemoveUserPictureResponse = TokenError | SuccessResponse

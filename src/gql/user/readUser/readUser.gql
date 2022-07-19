@@ -1,0 +1,5 @@
+type Query {
+  readUser: ReadUserResponse!
+}
+
+union ReadUserResponse = TokenError | User
