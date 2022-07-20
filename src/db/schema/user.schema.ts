@@ -13,7 +13,7 @@ export interface UserSchemaType extends Document {
   password: string;
   firstName: string;
   lastName: string;
-  picture: string;
+  picture: string | "default";
 }
 
 const UserSchema = new Schema<UserSchemaType>({

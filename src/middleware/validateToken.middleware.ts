@@ -18,7 +18,8 @@ const validateTokenMiddleware = async (
   try {
     const token = req.headers.token;
     if (!token) return { isError: true, error: TokenRequiredError };
-    if (token !== "string") return { isError: true, error: TokenInvalidError };
+    if (typeof token !== "string")
+      return { isError: true, error: TokenInvalidError };
 
     const tokenDecryption = generateDecryption(token);
     if (!tokenDecryption) return { isError: true, error: TokenInvalidError };

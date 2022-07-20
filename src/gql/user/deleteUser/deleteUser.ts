@@ -5,6 +5,7 @@ import { redisClient } from "~/config/redis.config";
 import { GQLResolvers } from "~/types/graphqlHelper";
 import { handleCatchError } from "~/helper/response.helper";
 import { validateHashAndSalt } from "~/helper/security.helper";
+import { TokenUserDoNotExistError } from "~/helper/error.helper";
 
 const DeleteUser: GQLResolvers = {
   Mutation: {
@@ -24,11 +25,7 @@ const DeleteUser: GQLResolvers = {
 
         const dbUser = await UserModel.findById(userId);
         if (!dbUser) {
-          return {
-            __typename: "TokenError",
-            type: "TokenUserDoNotExistError",
-            message: "user do not exist",
-          };
+          return TokenUserDoNotExistError;
         }
 
         const validatePassword = await validateHashAndSalt({

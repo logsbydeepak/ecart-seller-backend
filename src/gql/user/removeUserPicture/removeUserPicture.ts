@@ -1,37 +1,41 @@
 import { handleCatchError } from "~/helper/response.helper";
 
-import { GQLResolvers } from "~/types/index";
-import { dbReadUserById } from "~/db/query/user.query";
+import { GQLResolvers } from "~/types/graphqlHelper";
 import cloudinary from "~/config/cloudinary.config";
+import { UserModel } from "~/db/model.db";
+import { TokenUserDoNotExistError } from "~/helper/error.helper";
 
 const removeUserPicture: GQLResolvers = {
   Mutation: {
     removeUserPicture: async (
       _parent,
       args,
-      { req, validateTokenMiddleware, validatePasswordMiddleware }
+      { req, validateTokenMiddleware }
     ) => {
       try {
-        const { userId } = await validateTokenMiddleware(req);
-        const dbUser = await dbReadUserById<"removeUserPicture">(userId, {
-          __typename: "TokenError",
-          type: "TokenUserDoNotExistError",
-          message: "user do not exist",
+        const validateToken = await validateTokenMiddleware(req);
+        if (validateToken.isError) return validateToken.error;
+        const { userId } = validateToken;
+
+        const dbUser = await UserModel.findById(userId, {
+          _id: 0,
+          picture: 1,
         });
 
-        if (dbUser.picture !== "default")
+        if (!dbUser) return TokenUserDoNotExistError;
+
+        if (dbUser.picture !== "default") {
           await cloudinary.uploader.destroy(dbUser.picture);
-
-        dbUser.picture = "default";
-
-        await dbUser.save();
+          dbUser.picture = "default";
+          await dbUser.save();
+        }
 
         return {
           __typename: "SuccessResponse",
-          message: 'picture" has been removed',
+          message: "picture has been removed",
         };
       } catch (error) {
-        return handleCatchError(error);
+        return handleCatchError();
       }
     },
   },
