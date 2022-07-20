@@ -1,8 +1,8 @@
 import { handleCatchError } from "~/helper/response.helper";
-import { GQLResolvers } from "~/types/index";
-import { validateBase64 } from "~/helper/validator.helper";
+import { GQLResolvers } from "~/types/graphqlHelper";
 import cloudinary from "~/config/cloudinary.config";
-import { dbReadUserById } from "~/db/query/user.query";
+import { UserModel } from "~/db/model.db";
+import { TokenUserDoNotExistError } from "~/helper/error.helper";
 
 const updateUserPicture: GQLResolvers = {
   Mutation: {
@@ -12,41 +12,21 @@ const updateUserPicture: GQLResolvers = {
       { req, validateTokenMiddleware }
     ) => {
       try {
-        const { userId } = await validateTokenMiddleware(req);
+        const validateToken = await validateTokenMiddleware(req);
+        if (validateToken.isError) return validateToken.error;
+        const { userId } = validateToken;
 
-        const image = validateBase64<"updateUserPicture">(
-          args.file,
-          {
-            __typename: "UpdateUserPictureCredentialError",
-            message: "image is required",
-          },
-          {
-            __typename: "UpdateUserPictureCredentialError",
-            message: "image is invalid",
-          }
-        );
+        const image = args.file;
 
-        const dbUser = await dbReadUserById<"updateUserPicture">(userId, {
-          __typename: "TokenError",
-          type: "TokenUserDoNotExistError",
-          message: "user do not exist",
-        });
+        const dbUser = await UserModel.findById(userId, { picture: 1, _id: 0 });
+        if (!dbUser) return TokenUserDoNotExistError;
 
         if (dbUser.picture === "default") {
-          const file = await cloudinary.uploader.upload(image, {
-            folder: `ecart_seller_user_picture`,
-            overwrite: true,
-          });
-
+          const file = await uploadUserPictureToCDN(image);
           dbUser.picture = file.public_id;
         } else {
           await cloudinary.uploader.destroy(dbUser.picture);
-
-          const file = await cloudinary.uploader.upload(image, {
-            folder: `ecart_seller_user_picture`,
-            overwrite: true,
-          });
-
+          const file = await uploadUserPictureToCDN(image);
           dbUser.picture = file.public_id;
         }
 
@@ -57,10 +37,16 @@ const updateUserPicture: GQLResolvers = {
           picture: "default",
         };
       } catch (error) {
-        return handleCatchError(error);
+        return handleCatchError();
       }
     },
   },
 };
+
+const uploadUserPictureToCDN = async (image: string) =>
+  await cloudinary.uploader.upload(image, {
+    folder: `ecart_seller_user_picture`,
+    overwrite: true,
+  });
 
 export default updateUserPicture;

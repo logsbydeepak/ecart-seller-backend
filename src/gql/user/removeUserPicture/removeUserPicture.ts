@@ -1,8 +1,8 @@
-import { handleCatchError } from "~/helper/response.helper";
-
-import { GQLResolvers } from "~/types/graphqlHelper";
-import cloudinary from "~/config/cloudinary.config";
 import { UserModel } from "~/db/model.db";
+import cloudinary from "~/config/cloudinary.config";
+import { GQLResolvers } from "~/types/graphqlHelper";
+
+import { handleCatchError } from "~/helper/response.helper";
 import { TokenUserDoNotExistError } from "~/helper/error.helper";
 
 const removeUserPicture: GQLResolvers = {
