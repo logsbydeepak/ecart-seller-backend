@@ -5,8 +5,19 @@ type Mutation {
 union DeleteUserResponse =
     SuccessResponse
   | TokenError
+  | DeleteUserArgsError
   | DeleteUserCredentialError
 
+type DeleteUserArgsError implements Error {
+  field: DeleteUserArgsField!
+  message: String!
+}
+
+enum DeleteUserArgsField {
+  currentPassword
+}
+
 type DeleteUserCredentialError implements Error {
+  field: DeleteUserArgsField!
   message: String!
 }

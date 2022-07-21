@@ -7,17 +7,14 @@ type Mutation {
   ): CreateUserResponse!
 }
 
-union CreateUserResponse =
-    Token
-  | CreateUserCredentialError
-  | UserAlreadyExistError
+union CreateUserResponse = Token | CreateUserArgsError | UserAlreadyExistError
 
-type CreateUserCredentialError implements Error {
+type CreateUserArgsError implements Error {
   message: String!
-  field: CreateUserCredentialFiled!
+  field: CreateUserArgsFiled!
 }
 
-enum CreateUserCredentialFiled {
+enum CreateUserArgsFiled {
   firstName
   lastName
   email

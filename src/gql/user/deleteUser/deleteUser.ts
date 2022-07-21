@@ -18,7 +18,8 @@ const DeleteUser: GQLResolvers = {
         const validatedArgs = await validatePasswordArgs(args.currentPassword);
         if (validatedArgs instanceof yup.ValidationError) {
           return {
-            __typename: "DeleteUserCredentialError",
+            __typename: "DeleteUserArgsError",
+            field: "currentPassword",
             message: validatedArgs.message,
           };
         }
@@ -36,6 +37,7 @@ const DeleteUser: GQLResolvers = {
         if (!validatePassword) {
           return {
             __typename: "DeleteUserCredentialError",
+            field: "currentPassword",
             message: "invalid password",
           };
         }

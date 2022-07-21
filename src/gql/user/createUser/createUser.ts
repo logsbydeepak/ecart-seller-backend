@@ -1,4 +1,5 @@
 import * as yup from "yup";
+import { InferType } from "yup";
 
 import { GQLResolvers } from "~/types/graphqlHelper";
 import { MutationCreateUserArgs } from "~/types/graphql";
@@ -8,27 +9,35 @@ import { tokenGenerator } from "~/helper/token.helper";
 
 import { UserModel } from "~/db/model.db";
 import { handleCatchError } from "~/helper/response.helper";
+import {
+  email,
+  firstName,
+  lastName,
+  password,
+  validateData,
+} from "~/helper/validator.helper";
+
+const validateSchema = yup.object({
+  email,
+  password,
+  firstName,
+  lastName,
+});
 
 const CreateUser: GQLResolvers = {
   Mutation: {
     createUser: async (_parent, args) => {
       try {
-        const validatedArgs = await validateCreateUserArgs(args);
+        const validatedArgs = await validateData<typeof validateSchema>(
+          validateSchema,
+          args
+        );
 
-        if (validatedArgs instanceof yup.ValidationError) {
-          if (
-            validatedArgs.path !== "email" &&
-            validatedArgs.path !== "password" &&
-            validatedArgs.path !== "firstName" &&
-            validatedArgs.path !== "lastName"
-          ) {
-            throw Error();
-          }
-
+        if (validatedArgs.isError) {
           return {
-            __typename: "CreateUserCredentialError",
-            field: validatedArgs.path,
-            message: validatedArgs.message,
+            __typename: "CreateUserArgsError",
+            field: validatedArgs.error.path as keyof MutationCreateUserArgs,
+            message: validatedArgs.error.message,
           };
         }
 
@@ -41,7 +50,7 @@ const CreateUser: GQLResolvers = {
           };
 
         const newUser = await UserModel.create({
-          ...validatedArgs,
+          ...validatedArgs.data,
           picture: "default",
         });
 
@@ -57,31 +66,6 @@ const CreateUser: GQLResolvers = {
       }
     },
   },
-};
-
-const validateSchema = yup.object({
-  email: yup.string().required().email("invalid email").trim().lowercase(),
-  password: yup
-    .string()
-    .required()
-    .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
-      "invalid password"
-    ),
-  firstName: yup.string().required().trim(),
-  lastName: yup.string().required().trim(),
-});
-
-const validateCreateUserArgs = async (args: MutationCreateUserArgs) => {
-  try {
-    const validate = await validateSchema.validate(args);
-    return validate;
-  } catch (error) {
-    if (error instanceof yup.ValidationError) {
-      return error;
-    }
-    throw error;
-  }
 };
 
 export default CreateUser;
