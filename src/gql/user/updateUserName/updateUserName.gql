@@ -1,30 +1,24 @@
 type Mutation {
-  updateUserName(
-    firstName: String!
-    lastName: String!
-    currentPassword: String!
-  ): UpdateUserNameResponse!
+  updateUserName(firstName: String!, lastName: String!): UpdateUserNameResponse!
 }
 
 union UpdateUserNameResponse =
     TokenError
-  | UpdateUserNameCredentialError
+  | UpdateUserNameArgsError
   | UpdateUserNameSuccessResponse
-  | UpdateUserInvalidUserCredentialError
 
 type UpdateUserNameSuccessResponse {
   firstName: String!
   lastName: String!
 }
 
-enum UpdateUserNameCredentialField {
-  currentPassword
+enum UpdateUserNameArgsField {
   firstName
   lastName
 }
 
-type UpdateUserNameCredentialError implements Error {
-  field: UpdateUserNameCredentialField
+type UpdateUserNameArgsError implements Error {
+  field: UpdateUserNameArgsField
   message: String!
 }
 

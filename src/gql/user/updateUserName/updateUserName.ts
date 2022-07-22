@@ -1,54 +1,44 @@
-import { handleCatchError } from "~/helper/response.helper";
-import { validateEmpty } from "~/helper/validator.helper";
+import * as yup from "yup";
+import { UserModel } from "~/db/model.db";
+import { TokenUserDoNotExistError } from "~/helper/error.helper";
 
 import { GQLResolvers } from "~/types/graphqlHelper";
-import { dbReadUserById } from "~/db/query/user.query";
+import { handleCatchError } from "~/helper/response.helper";
+import { MutationUpdateUserNameArgs } from "~/types/graphql";
+import { firstName, lastName, validateData } from "~/helper/validator.helper";
+
+const validateSchema = yup.object({
+  firstName,
+  lastName,
+});
 
 const updateUserName: GQLResolvers = {
   Mutation: {
-    updateUserName: async (
-      _parent,
-      args,
-      { req, validateTokenMiddleware, validatePasswordMiddleware }
-    ) => {
+    updateUserName: async (_parent, args, { req, validateTokenMiddleware }) => {
       try {
-        const { userId } = await validateTokenMiddleware(req);
+        const validateToken = await validateTokenMiddleware(req);
+        if (validateToken.isError) return validateToken.error;
+        const { userId } = validateToken;
 
-        await validatePasswordMiddleware<"updateUserName">(
-          args.currentPassword,
-          userId,
-          {
-            __typename: "UpdateUserNameCredentialError",
-            field: "currentPassword",
-            message: "currentPassword is required",
-          },
-          {
-            __typename: "UpdateUserInvalidUserCredentialError",
-            message: "currentPassword is invalid",
-          }
+        const validatedArgs = await validateData<typeof validateSchema>(
+          validateSchema,
+          args
         );
 
-        const firstName = validateEmpty<"updateUserName">(args.firstName, {
-          __typename: "UpdateUserNameCredentialError",
-          field: "firstName",
-          message: "firstName is required",
+        if (validatedArgs.isError) {
+          return {
+            __typename: "UpdateUserNameArgsError",
+            field: validatedArgs.error.path as keyof MutationUpdateUserNameArgs,
+            message: validatedArgs.error.message,
+          };
+        }
+
+        const dbUser = await UserModel.findByIdAndUpdate(userId, {
+          firstName: validatedArgs.data.firstName,
+          lastName: validatedArgs.data.lastName,
         });
 
-        const lastName = validateEmpty<"updateUserName">(args.lastName, {
-          __typename: "UpdateUserNameCredentialError",
-          field: "lastName",
-          message: "lastName is required",
-        });
-
-        const dbUser = await dbReadUserById<"updateUserName">(userId, {
-          __typename: "TokenError",
-          type: "TokenUserDoNotExistError",
-          message: "user do not exist",
-        });
-
-        dbUser.firstName = firstName;
-        dbUser.lastName = lastName;
-        await dbUser.save();
+        if (!dbUser) return TokenUserDoNotExistError;
 
         return {
           __typename: "UpdateUserNameSuccessResponse",
@@ -56,7 +46,7 @@ const updateUserName: GQLResolvers = {
           lastName: dbUser.lastName,
         };
       } catch (error) {
-        return handleCatchError(error);
+        return handleCatchError();
       }
     },
   },
