@@ -5,7 +5,7 @@ export const validateData = async <T extends yup.AnyObjectSchema>(
   validateSchema: T,
   args: InferType<T>
 ): Promise<
-  | { isError: false; data: T }
+  | { isError: false; data: InferType<T> }
   | { isError: true; error: { message: string; path: string } }
 > => {
   try {

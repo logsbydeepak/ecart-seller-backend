@@ -6,6 +6,11 @@ import { GQLResolvers } from "~/types/graphqlHelper";
 import { handleCatchError } from "~/helper/response.helper";
 import { validateHashAndSalt } from "~/helper/security.helper";
 import { TokenUserDoNotExistError } from "~/helper/error.helper";
+import { password, validateData } from "~/helper/validator.helper";
+
+const validateSchema = yup.object({
+  currentPassword: password,
+});
 
 const DeleteUser: GQLResolvers = {
   Mutation: {
@@ -15,12 +20,16 @@ const DeleteUser: GQLResolvers = {
         if (validateToken.isError) return validateToken.error;
         const { userId } = validateToken;
 
-        const validatedArgs = await validatePasswordArgs(args.currentPassword);
-        if (validatedArgs instanceof yup.ValidationError) {
+        const validatedArgs = await validateData<typeof validateSchema>(
+          validateSchema,
+          args
+        );
+
+        if (validatedArgs.isError) {
           return {
             __typename: "DeleteUserArgsError",
             field: "currentPassword",
-            message: validatedArgs.message,
+            message: validatedArgs.error.message,
           };
         }
 
@@ -30,7 +39,7 @@ const DeleteUser: GQLResolvers = {
         }
 
         const validatePassword = await validateHashAndSalt({
-          rawPassword: validatedArgs.password,
+          rawPassword: validatedArgs.data.currentPassword,
           dbPassword: dbUser.password,
         });
 
@@ -54,28 +63,6 @@ const DeleteUser: GQLResolvers = {
       }
     },
   },
-};
-
-const validateSchema = yup.object({
-  password: yup
-    .string()
-    .required()
-    .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
-      "invalid password"
-    ),
-});
-
-const validatePasswordArgs = async (password: string) => {
-  try {
-    const validate = await validateSchema.validate({ password });
-    return validate;
-  } catch (error) {
-    if (error instanceof yup.ValidationError) {
-      return error;
-    }
-    throw error;
-  }
 };
 
 export default DeleteUser;

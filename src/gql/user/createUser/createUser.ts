@@ -41,7 +41,9 @@ const CreateUser: GQLResolvers = {
           };
         }
 
-        const isEmailExist = await UserModel.exists({ email: args.email });
+        const isEmailExist = await UserModel.exists({
+          email: validatedArgs.data.email,
+        });
 
         if (isEmailExist)
           return {
