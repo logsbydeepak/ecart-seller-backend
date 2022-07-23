@@ -1,66 +1,65 @@
-import { validateEmail } from "~/helper/validator.helper";
-import { handleCatchError } from "~/helper/response.helper";
+import * as yup from "yup";
 
+import { UserModel } from "~/db/model.db";
 import { GQLResolvers } from "~/types/graphqlHelper";
-import { dbEmailExist, dbReadUserById } from "~/db/query/user.query";
+
+import { handleCatchError } from "~/helper/response.helper";
+import { email, validateArgs } from "~/helper/validator.helper";
+import { TokenUserDoNotExistError } from "~/helper/error.helper";
+
+const validateSchema = yup.object({
+  email,
+});
 
 const updateUserEmail: GQLResolvers = {
   Mutation: {
     updateUserEmail: async (
       _parent,
       args,
-      { req, validateTokenMiddleware, validatePasswordMiddleware }
+      { req, validateTokenMiddleware }
     ) => {
       try {
-        const { userId } = await validateTokenMiddleware(req);
-        await validatePasswordMiddleware<"updateUserEmail">(
-          userId,
-          args.currentPassword,
-          {
-            __typename: "UpdateUserEmailCredentialError",
-            field: "currentPassword",
-            message: "currentPassword is required",
-          },
-          {
-            __typename: "UpdateUserInvalidUserCredentialError",
-            message: "currentPassword is invalid",
-          }
-        );
+        const { tokenData, tokenError } = await validateTokenMiddleware(req);
+        if (tokenError) return tokenError;
+        const { userId } = tokenData;
 
-        const email = validateEmail<"updateUserEmail">(
-          args.email,
-          {
-            __typename: "UpdateUserEmailCredentialError",
-            field: "email",
-            message: "email is required",
-          },
-          {
-            __typename: "UpdateUserEmailCredentialError",
-            field: "email",
-            message: "email is invalid",
-          }
+        const { argsData, argsError } = await validateArgs(
+          validateSchema,
+          args
         );
+        if (argsError) {
+          if (argsError.field !== "email") {
+            throw Error();
+          }
 
-        await dbEmailExist<"updateUserEmail">(email, {
-          __typename: "UserAlreadyExistError",
-          message: "email already exist",
+          return {
+            __typename: "UpdateUserEmailArgsError",
+            field: argsError.field,
+            message: argsError.message,
+          };
+        }
+
+        const isEmailExist = await UserModel.exists({
+          email: argsData.email,
         });
 
-        const dbUser = await dbReadUserById<"updateUserEmail">(userId, {
-          __typename: "TokenError",
-          type: "TokenUserDoNotExistError",
-          message: "user do not exist",
-        });
+        if (isEmailExist)
+          return {
+            __typename: "UserAlreadyExistError",
+            message: "email already exist",
+          };
 
-        dbUser.email = email;
-        await dbUser.save();
+        const dbUser = await UserModel.findByIdAndUpdate(userId, {
+          email: argsData.email,
+        });
+        if (!dbUser) return TokenUserDoNotExistError;
 
         return {
           __typename: "UpdateUserEmailSuccessResponse",
           email: dbUser.email,
         };
       } catch (error) {
-        return handleCatchError(error);
+        return handleCatchError();
       }
     },
   },

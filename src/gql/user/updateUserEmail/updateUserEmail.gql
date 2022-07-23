@@ -7,21 +7,19 @@ type Mutation {
 
 union UpdateUserEmailResponse =
     TokenError
-  | UpdateUserEmailCredentialError
-  | UpdateUserEmailSuccessResponse
   | UserAlreadyExistError
-  | UpdateUserInvalidUserCredentialError
+  | UpdateUserEmailArgsError
+  | UpdateUserEmailSuccessResponse
 
-type UpdateUserEmailSuccessResponse {
-  email: String!
-}
-
-enum UpdateUserEmailCredentialField {
-  currentPassword
+enum UpdateUserEmailField {
   email
 }
 
-type UpdateUserEmailCredentialError implements Error {
-  field: UpdateUserEmailCredentialField
+type UpdateUserEmailArgsError implements Error {
+  field: UpdateUserEmailField!
   message: String!
+}
+
+type UpdateUserEmailSuccessResponse {
+  email: String!
 }
