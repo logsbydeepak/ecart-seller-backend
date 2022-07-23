@@ -6,7 +6,7 @@ import { GQLResolvers } from "~/types/graphqlHelper";
 import { handleCatchError } from "~/helper/response.helper";
 import { validateHashAndSalt } from "~/helper/security.helper";
 import { TokenUserDoNotExistError } from "~/helper/error.helper";
-import { password, validateData } from "~/helper/validator.helper";
+import { password, validateArgs } from "~/helper/validator.helper";
 
 const validateSchema = yup.object({
   currentPassword: password,
@@ -16,20 +16,24 @@ const DeleteUser: GQLResolvers = {
   Mutation: {
     deleteUser: async (_parent, args, { req, validateTokenMiddleware }) => {
       try {
-        const validateToken = await validateTokenMiddleware(req);
-        if (validateToken.isError) return validateToken.error;
-        const { userId } = validateToken;
+        const { tokenData, tokenError } = await validateTokenMiddleware(req);
+        if (tokenError) return tokenError;
+        const { userId } = tokenData;
 
-        const validatedArgs = await validateData<typeof validateSchema>(
+        const { argsData, argsError } = await validateArgs(
           validateSchema,
           args
         );
 
-        if (validatedArgs.isError) {
+        if (argsError) {
+          if (argsError.field !== "currentPassword") {
+            throw Error();
+          }
+
           return {
             __typename: "DeleteUserArgsError",
-            field: "currentPassword",
-            message: validatedArgs.error.message,
+            field: argsError.field,
+            message: argsError.message,
           };
         }
 
@@ -39,7 +43,7 @@ const DeleteUser: GQLResolvers = {
         }
 
         const validatePassword = await validateHashAndSalt({
-          rawPassword: validatedArgs.data.currentPassword,
+          rawPassword: argsData.currentPassword,
           dbPassword: dbUser.password,
         });
 

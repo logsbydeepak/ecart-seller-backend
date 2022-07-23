@@ -1,26 +1,25 @@
 import * as yup from "yup";
 import { InferType } from "yup";
 
-export const validateData = async <T extends yup.AnyObjectSchema>(
+export const validateArgs = async <T extends yup.AnyObjectSchema>(
   validateSchema: T,
   args: InferType<T>
-): Promise<
-  | { isError: false; data: InferType<T> }
-  | { isError: true; error: { message: string; path: string } }
-> => {
+) => {
   try {
     const validate = await validateSchema.validate(args);
-    return { isError: false, data: validate };
+    return { argsData: validate, argsError: null };
   } catch (error) {
     if (error instanceof yup.ValidationError) {
       if (!error.path) {
         throw error;
       }
+
       return {
-        isError: true,
-        error: { message: error.message, path: error.path },
+        argsData: null,
+        argsError: { message: error.message, field: error.path },
       };
     }
+
     throw error;
   }
 };

@@ -1,5 +1,4 @@
 import * as yup from "yup";
-import { InferType } from "yup";
 
 import { GQLResolvers } from "~/types/graphqlHelper";
 import { MutationCreateUserArgs } from "~/types/graphql";
@@ -14,7 +13,7 @@ import {
   firstName,
   lastName,
   password,
-  validateData,
+  validateArgs,
 } from "~/helper/validator.helper";
 
 const validateSchema = yup.object({
@@ -28,21 +27,30 @@ const CreateUser: GQLResolvers = {
   Mutation: {
     createUser: async (_parent, args) => {
       try {
-        const validatedArgs = await validateData<typeof validateSchema>(
+        const { argsData, argsError } = await validateArgs(
           validateSchema,
           args
         );
 
-        if (validatedArgs.isError) {
+        if (argsError) {
+          if (
+            argsError.field !== "email" &&
+            argsError.field !== "password" &&
+            argsError.field !== "firstName" &&
+            argsError.field !== "lastName"
+          ) {
+            throw Error();
+          }
+
           return {
             __typename: "CreateUserArgsError",
-            field: validatedArgs.error.path as keyof MutationCreateUserArgs,
-            message: validatedArgs.error.message,
+            field: argsError.field,
+            message: argsError.message,
           };
         }
 
         const isEmailExist = await UserModel.exists({
-          email: validatedArgs.data.email,
+          email: argsData.email,
         });
 
         if (isEmailExist)
@@ -52,7 +60,7 @@ const CreateUser: GQLResolvers = {
           };
 
         const newUser = await UserModel.create({
-          ...validatedArgs.data,
+          ...argsData,
           picture: "default",
         });
 

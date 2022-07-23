@@ -6,9 +6,9 @@ const ReadUser: GQLResolvers = {
   Query: {
     readUser: async (_parent, _args, { req, validateTokenMiddleware }) => {
       try {
-        const validateToken = await validateTokenMiddleware(req);
-        if (validateToken.isError) return validateToken.error;
-        const { userId } = validateToken;
+        const { tokenData, tokenError } = await validateTokenMiddleware(req);
+        if (tokenError) return tokenError;
+        const { userId } = tokenData;
 
         const dbUser = await UserModel.findById(userId);
 
