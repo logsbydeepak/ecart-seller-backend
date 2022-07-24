@@ -13,9 +13,9 @@ const removeUserPicture: GQLResolvers = {
       { req, validateTokenMiddleware }
     ) => {
       try {
-        const validateToken = await validateTokenMiddleware(req);
-        if (validateToken.isError) return validateToken.error;
-        const { userId } = validateToken;
+        const { tokenData, tokenError } = await validateTokenMiddleware(req);
+        if (tokenError) return tokenError;
+        const { userId } = tokenData;
 
         const dbUser = await UserModel.findById(userId, {
           _id: 0,
@@ -31,8 +31,8 @@ const removeUserPicture: GQLResolvers = {
         }
 
         return {
-          __typename: "SuccessResponse",
-          message: "picture has been removed",
+          __typename: "RemoveUserPictureSuccessResponse",
+          picture: "default",
         };
       } catch (error) {
         return handleCatchError();

@@ -2,4 +2,8 @@ type Mutation {
   removeUserPicture: RemoveUserPictureResponse!
 }
 
-union RemoveUserPictureResponse = TokenError | SuccessResponse
+union RemoveUserPictureResponse = TokenError | RemoveUserPictureSuccessResponse
+
+type RemoveUserPictureSuccessResponse {
+  picture: String!
+}

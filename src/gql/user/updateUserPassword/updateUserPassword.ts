@@ -1,61 +1,73 @@
+import * as yup from "yup";
+import { UserModel } from "~/db/model.db";
+import { TokenUserDoNotExistError } from "~/helper/error.helper";
 import { handleCatchError } from "~/helper/response.helper";
-import { validatePassword } from "~/helper/validator.helper";
+import { validatePassword } from "~/helper/security.helper";
+import { password, validateArgs } from "~/helper/validator.helper";
+import { GQLResolvers } from "~/types/graphqlHelper";
 
-import { GQLResolvers } from "~/types/index";
-import { dbReadUserById } from "~/db/query/user.query";
+const validateSchema = yup.object({
+  currentPassword: password,
+  password,
+});
 
 const updateUserPassword: GQLResolvers = {
   Mutation: {
     updateUserPassword: async (
       _parent,
       args,
-      { req, validateTokenMiddleware, validatePasswordMiddleware }
+      { req, validateTokenMiddleware }
     ) => {
       try {
-        const { userId } = await validateTokenMiddleware(req);
-        await validatePasswordMiddleware<"updateUserPassword">(
-          userId,
-          args.currentPassword,
-          {
-            __typename: "UpdateUserPasswordCredentialError",
-            field: "currentPassword",
-            message: "currentPassword is required",
-          },
-          {
-            __typename: "UpdateUserInvalidUserCredentialError",
-            message: "currentPassword is invalid",
-          }
+        const { argsData, argsError } = await validateArgs(
+          validateSchema,
+          args
         );
-
-        const password = validatePassword<"updateUserPassword">(
-          args.password,
-          {
-            __typename: "UpdateUserPasswordCredentialError",
-            field: "password",
-            message: "password is required",
-          },
-          {
-            __typename: "UpdateUserPasswordCredentialError",
-            field: "password",
-            message: "password is invalid",
+        if (argsError) {
+          if (
+            argsError.field !== "currentPassword" &&
+            argsError.field !== "password"
+          ) {
+            throw new Error();
           }
-        );
 
-        const dbUser = await dbReadUserById<"updateUserPassword">(userId, {
-          __typename: "TokenError",
-          type: "TokenUserDoNotExistError",
-          message: "user do not exist",
+          return {
+            __typename: "UpdateUserPasswordArgsError",
+            field: argsError.field,
+            message: argsError.message,
+          };
+        }
+
+        const { tokenData, tokenError } = await validateTokenMiddleware(req);
+        if (tokenError) return tokenError;
+        const { userId } = tokenData;
+
+        const dbUser = await UserModel.findById(userId);
+        if (!dbUser) return TokenUserDoNotExistError;
+
+        const isValidPassword = validatePassword({
+          rawPassword: argsData.currentPassword,
+          dbPassword: dbUser.password,
         });
 
-        dbUser.password = password;
-        await dbUser.save();
+        if (!isValidPassword)
+          return {
+            __typename: "UpdateUserPasswordCredentialError",
+            field: "currentPassword",
+            message: "invalid credential",
+          };
+
+        const updatePassword = await UserModel.findByIdAndUpdate(userId, {
+          password: argsData.password,
+        });
+        if (!updatePassword) return TokenUserDoNotExistError;
 
         return {
-          __typename: "UpdateUserPasswordSuccessResponse",
+          __typename: "SuccessResponse",
           message: "password updated",
         };
       } catch (error) {
-        return handleCatchError(error);
+        return handleCatchError();
       }
     },
   },

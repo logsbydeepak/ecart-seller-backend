@@ -22,7 +22,7 @@ export const generateDecryption = (token: string) => {
   }
 };
 
-export const validateHashAndSalt = async ({
+export const validatePassword = async ({
   rawPassword,
   dbPassword,
 }: {

@@ -5,7 +5,7 @@ import { TokenUserDoNotExistError } from "~/helper/error.helper";
 import { GQLResolvers } from "~/types/graphqlHelper";
 import { handleCatchError } from "~/helper/response.helper";
 import { MutationUpdateUserNameArgs } from "~/types/graphql";
-import { firstName, lastName, validateData } from "~/helper/validator.helper";
+import { firstName, lastName, validateArgs } from "~/helper/validator.helper";
 
 const validateSchema = yup.object({
   firstName,
@@ -16,26 +16,33 @@ const updateUserName: GQLResolvers = {
   Mutation: {
     updateUserName: async (_parent, args, { req, validateTokenMiddleware }) => {
       try {
-        const validateToken = await validateTokenMiddleware(req);
-        if (validateToken.isError) return validateToken.error;
-        const { userId } = validateToken;
+        const { tokenData, tokenError } = await validateTokenMiddleware(req);
+        if (tokenError) return tokenError;
+        const { userId } = tokenData;
 
-        const validatedArgs = await validateData<typeof validateSchema>(
+        const { argsData, argsError } = await validateArgs(
           validateSchema,
           args
         );
 
-        if (validatedArgs.isError) {
+        if (argsError) {
+          if (
+            argsError.field !== "firstName" &&
+            argsError.field !== "lastName"
+          ) {
+            throw new Error();
+          }
+
           return {
             __typename: "UpdateUserNameArgsError",
-            field: validatedArgs.error.path as keyof MutationUpdateUserNameArgs,
-            message: validatedArgs.error.message,
+            field: argsError.field,
+            message: argsError.message,
           };
         }
 
         const dbUser = await UserModel.findByIdAndUpdate(userId, {
-          firstName: validatedArgs.data.firstName,
-          lastName: validatedArgs.data.lastName,
+          firstName: argsData.firstName,
+          lastName: argsData.lastName,
         });
 
         if (!dbUser) return TokenUserDoNotExistError;
