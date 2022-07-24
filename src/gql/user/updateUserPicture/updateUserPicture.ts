@@ -1,7 +1,7 @@
-import { handleCatchError } from "~/helper/response.helper";
-import { GQLResolvers } from "~/types/graphqlHelper";
-import cloudinary from "~/config/cloudinary.config";
 import { UserModel } from "~/db/model.db";
+import cloudinary from "~/config/cloudinary.config";
+import { GQLResolvers } from "~/types/graphqlHelper";
+import { handleCatchError } from "~/helper/response.helper";
 import { TokenUserDoNotExistError } from "~/helper/error.helper";
 
 const updateUserPicture: GQLResolvers = {
@@ -12,9 +12,9 @@ const updateUserPicture: GQLResolvers = {
       { req, validateTokenMiddleware }
     ) => {
       try {
-        const validateToken = await validateTokenMiddleware(req);
-        if (validateToken.isError) return validateToken.error;
-        const { userId } = validateToken;
+        const { tokenData, tokenError } = await validateTokenMiddleware(req);
+        if (tokenError) return tokenError;
+        const { userId } = tokenData;
 
         const image = args.file;
 

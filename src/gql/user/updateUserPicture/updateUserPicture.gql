@@ -1,20 +1,21 @@
 type Mutation {
-  updateUserPicture(file: String!): UpdateUserPictureResponse!
+  updateUserPicture(picture: String!): UpdateUserPictureResponse!
 }
 
 union UpdateUserPictureResponse =
     TokenError
-  | UpdateUserPictureCredentialError
+  | UpdateUserPictureArgsError
   | UpdateUserPictureSuccessResponse
 
 type UpdateUserPictureSuccessResponse {
   picture: String!
 }
 
-type UpdateUserPictureCredentialError implements Error {
-  message: String!
+enum UpdateUserPictureField {
+  picture
 }
 
-type UpdateUserInvalidUserCredentialError implements Error {
+type UpdateUserInvalidUserArgsError implements Error {
+  field: UpdateUserPictureField!
   message: String!
 }
