@@ -6,6 +6,7 @@ union UpdateUserPictureResponse =
     TokenError
   | UpdateUserPictureArgsError
   | UpdateUserPictureSuccessResponse
+  | InvalidCredentialError
 
 type UpdateUserPictureSuccessResponse {
   picture: String!
@@ -15,7 +16,11 @@ enum UpdateUserPictureField {
   picture
 }
 
-type UpdateUserInvalidUserArgsError implements Error {
+type UpdateUserPictureArgsError implements Error {
   field: UpdateUserPictureField!
+  message: String!
+}
+
+type InvalidCredentialError implements Error {
   message: String!
 }
