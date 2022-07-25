@@ -52,8 +52,7 @@ const updateUserPassword: GQLResolvers = {
 
         if (!isValidPassword)
           return {
-            __typename: "UpdateUserPasswordCredentialError",
-            field: "currentPassword",
+            __typename: "InvalidCredentialError",
             message: "invalid credential",
           };
 

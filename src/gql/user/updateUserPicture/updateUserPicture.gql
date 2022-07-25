@@ -20,7 +20,3 @@ type UpdateUserPictureArgsError implements Error {
   field: UpdateUserPictureField!
   message: String!
 }
-
-type InvalidCredentialError implements Error {
-  message: String!
-}

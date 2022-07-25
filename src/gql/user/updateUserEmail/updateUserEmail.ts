@@ -4,11 +4,13 @@ import { UserModel } from "~/db/model.db";
 import { GQLResolvers } from "~/types/graphqlHelper";
 
 import { handleCatchError } from "~/helper/response.helper";
-import { email, validateArgs } from "~/helper/validator.helper";
+import { email, password, validateArgs } from "~/helper/validator.helper";
 import { TokenUserDoNotExistError } from "~/helper/error.helper";
+import { validatePassword } from "~/helper/security.helper";
 
 const validateSchema = yup.object({
   email,
+  currentPassword: password,
 });
 
 const updateUserEmail: GQLResolvers = {
@@ -19,16 +21,15 @@ const updateUserEmail: GQLResolvers = {
       { req, validateTokenMiddleware }
     ) => {
       try {
-        const { tokenData, tokenError } = await validateTokenMiddleware(req);
-        if (tokenError) return tokenError;
-        const { userId } = tokenData;
-
         const { argsData, argsError } = await validateArgs(
           validateSchema,
           args
         );
         if (argsError) {
-          if (argsError.field !== "email") {
+          if (
+            argsError.field !== "email" &&
+            argsError.field !== "currentPassword"
+          ) {
             throw Error();
           }
 
@@ -38,6 +39,24 @@ const updateUserEmail: GQLResolvers = {
             message: argsError.message,
           };
         }
+
+        const { tokenData, tokenError } = await validateTokenMiddleware(req);
+        if (tokenError) return tokenError;
+        const { userId } = tokenData;
+
+        const dbUser = await UserModel.findById(userId);
+        if (!dbUser) return TokenUserDoNotExistError;
+
+        const isValidPassword = validatePassword({
+          rawPassword: argsData.currentPassword,
+          dbPassword: dbUser.password,
+        });
+
+        if (!isValidPassword)
+          return {
+            __typename: "InvalidCredentialError",
+            message: "invalid credential",
+          };
 
         const isEmailExist = await UserModel.exists({
           email: argsData.email,
@@ -49,10 +68,10 @@ const updateUserEmail: GQLResolvers = {
             message: "email already exist",
           };
 
-        const dbUser = await UserModel.findByIdAndUpdate(userId, {
+        const dbUpdateUserEmail = await UserModel.findByIdAndUpdate(userId, {
           email: argsData.email,
         });
-        if (!dbUser) return TokenUserDoNotExistError;
+        if (!dbUpdateUserEmail) return TokenUserDoNotExistError;
 
         return {
           __typename: "UpdateUserEmailSuccessResponse",

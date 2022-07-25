@@ -10,9 +10,11 @@ union UpdateUserEmailResponse =
   | UserAlreadyExistError
   | UpdateUserEmailArgsError
   | UpdateUserEmailSuccessResponse
+  | InvalidCredentialError
 
 enum UpdateUserEmailField {
   email
+  currentPassword
 }
 
 type UpdateUserEmailArgsError implements Error {

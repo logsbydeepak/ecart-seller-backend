@@ -16,7 +16,7 @@ const updateUserPicture: GQLResolvers = {
         if (tokenError) return tokenError;
         const { userId } = tokenData;
 
-        const image = args.file;
+        const image = args.picture;
 
         const dbUser = await UserModel.findById(userId, { picture: 1, _id: 0 });
         if (!dbUser) return TokenUserDoNotExistError;
