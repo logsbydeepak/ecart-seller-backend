@@ -14,7 +14,7 @@ RUN groupadd ssh
 RUN useradd -m -G ssh,sudo -s /usr/bin/zsh app 
 RUN echo "app  ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/app
 
-WORKDIR /home/node/ecart-seller-backend
+WORKDIR /home/app/ecart-seller-backend
 USER app 
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 USER app 

@@ -18,7 +18,7 @@ services:
       context: ../../
       dockerfile: ./docker/dev/Dockerfile.dev
     volumes:
-      - ../../:/home/node/ecart-seller-backend
+      - ../../:/home/app/ecart-seller-backend
     depends_on:
       - mongo_container
     networks:
