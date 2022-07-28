@@ -2,8 +2,17 @@ type Mutation {
   createSession(email: String!, password: String!): CreateSessionResponse!
 }
 
-union CreateSessionResponse = CreateSessionCredentialError | Token
+union CreateSessionResponse =
+    Token
+  | InvalidCredentialError
+  | CreateSessionArgsError
 
-type CreateSessionCredentialError implements Error {
+enum CreateSessionArgsField {
+  email
+  password
+}
+
+type CreateSessionArgsError implements Error {
+  field: CreateSessionArgsField!
   message: String!
 }
