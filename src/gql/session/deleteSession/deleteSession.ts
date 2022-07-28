@@ -1,12 +1,15 @@
+import { redisClient } from "~/config/redis.config";
 import { GQLResolvers } from "~/types/graphqlHelper";
 import { handleCatchError } from "~/helper/response.helper";
-import { redisClient } from "~/config/redis.config";
 
 const DeleteSession: GQLResolvers = {
   Mutation: {
     deleteSession: async (_parent, _args, { req, validateTokenMiddleware }) => {
       try {
-        const { userId, token } = await validateTokenMiddleware(req);
+        const { tokenData, tokenError } = await validateTokenMiddleware(req);
+        if (tokenError) return tokenError;
+        const { userId, token } = tokenData;
+
         await redisClient.SREM(userId, token);
 
         return {
@@ -14,7 +17,7 @@ const DeleteSession: GQLResolvers = {
           message: "logout success",
         };
       } catch (error) {
-        return handleCatchError(error);
+        return handleCatchError();
       }
     },
   },
