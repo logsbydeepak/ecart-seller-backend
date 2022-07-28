@@ -3,8 +3,8 @@ import * as yup from "yup";
 import { UserModel } from "~/db/model.db";
 import { redisClient } from "~/config/redis.config";
 import { GQLResolvers } from "~/types/graphqlHelper";
+import { validatePassword } from "~/helper/security.helper";
 import { handleCatchError } from "~/helper/response.helper";
-import { validateHashAndSalt } from "~/helper/security.helper";
 import { TokenUserDoNotExistError } from "~/helper/error.helper";
 import { password, validateArgs } from "~/helper/validator.helper";
 
@@ -42,18 +42,16 @@ const DeleteUser: GQLResolvers = {
           return TokenUserDoNotExistError;
         }
 
-        const validatePassword = await validateHashAndSalt({
+        const isValidPassword = validatePassword({
           rawPassword: argsData.currentPassword,
           dbPassword: dbUser.password,
         });
 
-        if (!validatePassword) {
+        if (!isValidPassword)
           return {
-            __typename: "DeleteUserCredentialError",
-            field: "currentPassword",
-            message: "invalid password",
+            __typename: "InvalidCredentialError",
+            message: "invalid credential",
           };
-        }
 
         await redisClient.DEL(userId);
         await UserModel.findByIdAndRemove(userId);

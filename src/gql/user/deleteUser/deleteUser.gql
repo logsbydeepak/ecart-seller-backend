@@ -6,7 +6,7 @@ union DeleteUserResponse =
     SuccessResponse
   | TokenError
   | DeleteUserArgsError
-  | DeleteUserCredentialError
+  | InvalidCredentialError
 
 type DeleteUserArgsError implements Error {
   field: DeleteUserArgsField!
@@ -15,9 +15,4 @@ type DeleteUserArgsError implements Error {
 
 enum DeleteUserArgsField {
   currentPassword
-}
-
-type DeleteUserCredentialError implements Error {
-  field: DeleteUserArgsField!
-  message: String!
 }
