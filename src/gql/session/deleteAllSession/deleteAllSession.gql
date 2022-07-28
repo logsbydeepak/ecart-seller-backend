@@ -4,9 +4,15 @@ type Mutation {
 
 union DeleteAllSessionResponse =
     SuccessResponse
-  | DeleteAllSessionCredentialError
+  | DeleteAllSessionArgsError
   | TokenError
+  | InvalidCredentialError
 
-type DeleteAllSessionCredentialError implements Error {
+enum DeleteAllSessionField {
+  currentPassword
+}
+
+type DeleteAllSessionArgsError implements Error {
+  field: DeleteAllSessionField!
   message: String!
 }
