@@ -3,6 +3,7 @@ import cloudinary from "~/config/cloudinary.config";
 import { GQLResolvers } from "~/types/graphqlHelper";
 import { handleCatchError } from "~/helper/response.helper";
 import { TokenUserDoNotExistError } from "~/helper/error.helper";
+import { DEFAULT_USER_PICTURE } from "~/config/env.config";
 
 const updateUserPicture: GQLResolvers = {
   Mutation: {
@@ -21,7 +22,7 @@ const updateUserPicture: GQLResolvers = {
         const dbUser = await UserModel.findById(userId, { picture: 1, _id: 0 });
         if (!dbUser) return TokenUserDoNotExistError;
 
-        if (dbUser.picture === "default") {
+        if (!dbUser.picture) {
           const file = await uploadUserPictureToCDN(image);
           dbUser.picture = file.public_id;
         } else {
@@ -34,7 +35,7 @@ const updateUserPicture: GQLResolvers = {
 
         return {
           __typename: "UpdateUserPictureSuccessResponse",
-          picture: "default",
+          picture: dbUser.picture || (DEFAULT_USER_PICTURE as string),
         };
       } catch (error) {
         return handleCatchError();

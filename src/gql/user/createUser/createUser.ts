@@ -61,7 +61,6 @@ const CreateUser: GQLResolvers = {
 
         const newUser = await UserModel.create({
           ...argsData,
-          picture: "default",
         });
 
         const token = tokenGenerator(newUser._id);

@@ -13,7 +13,7 @@ export interface UserSchemaType extends Document {
   password: string;
   firstName: string;
   lastName: string;
-  picture: string | "default";
+  picture: string | null;
 }
 
 const UserSchema = new Schema<UserSchemaType>({
@@ -21,7 +21,7 @@ const UserSchema = new Schema<UserSchemaType>({
   lastName: defaultProperty,
   email: defaultProperty,
   password: defaultProperty,
-  picture: defaultProperty,
+  picture: { required: false, type: String, default: null },
 });
 
 UserSchema.post("validate", async function () {

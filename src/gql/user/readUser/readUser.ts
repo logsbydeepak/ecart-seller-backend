@@ -1,6 +1,7 @@
 import { GQLResolvers } from "~/types/graphqlHelper";
 import { handleCatchError } from "~/helper/response.helper";
 import { UserModel } from "~/db/model.db";
+import { DEFAULT_USER_PICTURE } from "~/config/env.config";
 
 const ReadUser: GQLResolvers = {
   Query: {
@@ -25,7 +26,7 @@ const ReadUser: GQLResolvers = {
           firstName: dbUser.firstName,
           lastName: dbUser.lastName,
           email: dbUser.email,
-          picture: dbUser.picture,
+          picture: dbUser.picture || (DEFAULT_USER_PICTURE as string),
         };
       } catch (error) {
         return handleCatchError();
